@@ -15,7 +15,6 @@ Group Project with Cody, Brian, and Christian
 	- should be able to specify various artifacts that need to be collected.
 		- enter number of documents needed to submit and then the name of each document
 	- should be able to make reports of what has and hasn’t been submitted for students
-	- the “Check off” system for validating submitted student artifacts
 - Staff login:
 	- the “Check off” system for validating submitted student artifacts
 	- should be able to submit artifacts to save to the database

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MUSMModelsLibrary", "MUSMMo
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MUSMDataTools", "MUSMDataTools\MUSMDataTools.sqlproj", "{22735234-70B9-4581-B023-E201379AE6DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MUSMDataLibrary", "MUSMDataLibrary\MUSMDataLibrary.csproj", "{75573D43-E4D1-42A0-B57F-5AD752B3C637}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{22735234-70B9-4581-B023-E201379AE6DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22735234-70B9-4581-B023-E201379AE6DB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22735234-70B9-4581-B023-E201379AE6DB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{75573D43-E4D1-42A0-B57F-5AD752B3C637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75573D43-E4D1-42A0-B57F-5AD752B3C637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75573D43-E4D1-42A0-B57F-5AD752B3C637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75573D43-E4D1-42A0-B57F-5AD752B3C637}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{EC9C1238-B2BE-4A94-A5D2-2F715070A636}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{EC9C1238-B2BE-4A94-A5D2-2F715070A636}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MUSMModelsLibrary", "MUSMModelsLibrary\MUSMModelsLibrary.csproj", "{CFC6B7EB-6D3E-49CF-B4EC-D942D6F3714B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MUSMModelsLibrary", "MUSMModelsLibrary\MUSMModelsLibrary.csproj", "{CFC6B7EB-6D3E-49CF-B4EC-D942D6F3714B}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MUSMDataTools", "MUSMDataTools\MUSMDataTools.sqlproj", "{22735234-70B9-4581-B023-E201379AE6DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MUSMDataLibrary", "MUSMDataLibrary\MUSMDataLibrary.csproj", "{75573D43-E4D1-42A0-B57F-5AD752B3C637}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MUSMDataLibrary", "MUSMDataLibrary\MUSMDataLibrary.csproj", "{75573D43-E4D1-42A0-B57F-5AD752B3C637}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MUSMDatabaseServicesAPI", "MUSMDatabaseServicesAPI\MUSMDatabaseServicesAPI.csproj", "{54E590B1-BC31-42D4-BE22-93AF25EF441A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MUSMDatabaseServicesAPI", "MUSMDatabaseServicesAPI\MUSMDatabaseServicesAPI.csproj", "{54E590B1-BC31-42D4-BE22-93AF25EF441A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MUSMWebApplication", "MUSMWebApplication\MUSMWebApplication.csproj", "{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{54E590B1-BC31-42D4-BE22-93AF25EF441A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54E590B1-BC31-42D4-BE22-93AF25EF441A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54E590B1-BC31-42D4-BE22-93AF25EF441A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 {
     public class StudentProcessor
     {
-        public static async Task<int> CreateStudentAndReturnIdAsync(string connString, string hostIp, string hostServicesAPISocketAddress, bool isActive)
+        public static async Task<int> CreateStudentAndReturnIdAsync(string connString, string firstName, string lastName)
         {
             throw new NotImplementedException();
         }
@@ -23,5 +23,6 @@ namespace MUSMDataLibrary.BuisinessLogic
         {
             throw new NotImplementedException();
         }
+
     }
 }

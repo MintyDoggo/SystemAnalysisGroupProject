@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MUSMModelsLibrary
 {
-    class StaffModel
+    public class StaffModel
     {
 
     }

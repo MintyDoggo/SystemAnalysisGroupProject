@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MUSMDataLibrary.BuisinessLogic
 {
-    public class StudentProcessor
+    public class StaffProcessor
     {
 
     }

@@ -1,81 +1,56 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.Net;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace MUSMDatabaseServicesAPI
 {
     public static class StudentController
     {
-        [FunctionName("CreateStudentAndReturnId")]
-        public static async Task<IActionResult> CreateStudentAndReturnId(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-            ILogger log)
+        [Function("CreateStudentAndReturnId")]
+        public static HttpResponseData CreateStudentAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req,
+            FunctionContext executionContext)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            var logger = executionContext.GetLogger("StudentController");
+            logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            response.WriteString("Welcome to Azure Functions!");
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+            return response;
         }
 
-
-
-
-
-
-        [FunctionName("DeleteStudentById")]
-        public static async Task<IActionResult> DeleteStudentById(
-    [HttpTrigger(AuthorizationLevel.Function, "delete", Route = null)] HttpRequest req,
-    ILogger log)
+        [Function("DeleteStudentById")]
+        public static HttpResponseData DeleteStudentById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req,
+    FunctionContext executionContext)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            var logger = executionContext.GetLogger("StudentController");
+            logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            response.WriteString("Welcome to Azure Functions!");
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+            return response;
         }
 
-
-        [FunctionName("GetStudents")]
-        public static async Task<IActionResult> GetStudents(
-[HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
-ILogger log)
+        [Function("GetStudents")]
+        public static HttpResponseData GetStudents([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+FunctionContext executionContext)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            var logger = executionContext.GetLogger("StudentController");
+            logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            response.WriteString("Welcome to Azure Functions!");
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+            return response;
         }
     }
 }

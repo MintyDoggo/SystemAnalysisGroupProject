@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{EC9C1238-B2BE-4A94-A5D2-2F715070A636}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MUSMWebApplication", "MUSMWebApplication\MUSMWebApplication.csproj", "{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MUSMModelsLibrary", "MUSMModelsLibrary\MUSMModelsLibrary.csproj", "{CFC6B7EB-6D3E-49CF-B4EC-D942D6F3714B}"
 EndProject
@@ -13,18 +13,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MUSMDataLibrary", "MUSMData
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MUSMDatabaseServicesAPI", "MUSMDatabaseServicesAPI\MUSMDatabaseServicesAPI.csproj", "{54E590B1-BC31-42D4-BE22-93AF25EF441A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MUSMWebApplication", "MUSMWebApplication\MUSMWebApplication.csproj", "{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EC9C1238-B2BE-4A94-A5D2-2F715070A636}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC9C1238-B2BE-4A94-A5D2-2F715070A636}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC9C1238-B2BE-4A94-A5D2-2F715070A636}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC9C1238-B2BE-4A94-A5D2-2F715070A636}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CFC6B7EB-6D3E-49CF-B4EC-D942D6F3714B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CFC6B7EB-6D3E-49CF-B4EC-D942D6F3714B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFC6B7EB-6D3E-49CF-B4EC-D942D6F3714B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -43,10 +41,6 @@ Global
 		{54E590B1-BC31-42D4-BE22-93AF25EF441A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54E590B1-BC31-42D4-BE22-93AF25EF441A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54E590B1-BC31-42D4-BE22-93AF25EF441A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96A3EF89-E71B-40F8-A0E0-CCA00281DADE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

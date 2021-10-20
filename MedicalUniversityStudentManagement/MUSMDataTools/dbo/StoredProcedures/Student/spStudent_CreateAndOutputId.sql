@@ -8,5 +8,6 @@ BEGIN
 	INSERT INTO tblStudent([FirstName], [LastName])
 	SELECT [FirstName], [LastName] FROM @inStudent;
 	SELECT @outId = SCOPE_IDENTITY();		-- SCOPE_IDENTITY() returns the most recent modified Id within the scope of this procedure (last identity created in the same session and the same scope)
+
 END
 RETURN 0

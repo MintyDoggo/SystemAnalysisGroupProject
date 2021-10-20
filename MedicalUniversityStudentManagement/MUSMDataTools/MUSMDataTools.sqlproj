@@ -60,13 +60,19 @@
     <Folder Include="dbo\StoredProcedures" />
     <Folder Include="dbo\Tables" />
     <Folder Include="dbo\Types" />
+    <Folder Include="PublishProfiles\" />
+    <Folder Include="dbo\StoredProcedures\Student" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\tblAdmin.sql" />
     <Build Include="dbo\Tables\tblStaff.sql" />
     <Build Include="dbo\Tables\tblStaffStudentMap.sql" />
     <Build Include="dbo\Tables\tblStudent.sql" />
-    <Build Include="dbo\StoredProcedures\spStudent_CreateAndOutputId.sql" />
     <Build Include="dbo\Types\udtStudent.sql" />
+    <Build Include="dbo\StoredProcedures\Student\spStudent_DeleteById.sql" />
+    <Build Include="dbo\StoredProcedures\Student\spStudent_CreateAndOutputId.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-# Come the website in its latest state!
+# Come visit the website in its latest state!
 https://musmwebapplication20211023213531.azurewebsites.net/
 
 # SystemAnalysisGroupProject

@@ -17,6 +17,8 @@ namespace MUSMModelsLibrary
         public string Address { get; set; }
         public string Major { get; set; }
         public int FirstYearEnrolled { get; set; }
-        public string HighSchoolAtended { get; set; }
+        public string HighSchoolAttended { get; set; }
+        public string UndergraduateSchoolAttended { get; set; }
+
     }
 }

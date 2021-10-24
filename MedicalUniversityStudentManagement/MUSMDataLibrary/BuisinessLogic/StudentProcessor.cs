@@ -12,18 +12,25 @@ namespace MUSMDataLibrary.BuisinessLogic
 {
     public class StudentProcessor
     {
-        public static async Task<int> CreateStudentAndReturnIdAsync(string connString, string firstName, string lastName)
+        public static async Task<int> CreateStudentAndReturnIdAsync(string connString, StudentModel student)
         {
-            // Name of stored procedure to execute
+            // Name of our stored procedure to execute
             string procedureName = "spStudent_CreateAndOutputId";
 
 
             // Create the Data Table representation of the user defined Student table
             DataTable studentTable = new DataTable("@inStudent");
+            studentTable.Columns.Add("StudentIdNumber", typeof(int));
             studentTable.Columns.Add("FirstName", typeof(string));
             studentTable.Columns.Add("LastName", typeof(string));
+            studentTable.Columns.Add("Birthday", typeof(DateTime));
+            studentTable.Columns.Add("Address", typeof(string));
+            studentTable.Columns.Add("Major", typeof(string));
+            studentTable.Columns.Add("FirstYearEnrolled", typeof(int));
+            studentTable.Columns.Add("HighSchoolAttended", typeof(string));
+            studentTable.Columns.Add("UndergraduateSchoolAttended", typeof(string));
             // Fill in the data
-            studentTable.Rows.Add(firstName, lastName);
+            studentTable.Rows.Add(student.StudentIdNumber, student.FirstName, student.LastName, student.Birthday, student.Address, student.Major, student.FirstYearEnrolled, student.HighSchoolAttended, student.UndergraduateSchoolAttended);
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();

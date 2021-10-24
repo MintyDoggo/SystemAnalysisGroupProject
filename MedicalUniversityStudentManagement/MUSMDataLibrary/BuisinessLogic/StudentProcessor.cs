@@ -40,7 +40,13 @@ namespace MUSMDataLibrary.BuisinessLogic
 
         public static async Task<int> DeleteStudentByIdAsync(string connString, int id)
         {
-            throw new NotImplementedException();
+            string procedureName = "spStudent_DeleteById";
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inId", id, dbType: DbType.Int32);
+
+            return await SqlDataAccess.ModifyDataAsync(connString, procedureName, parameters);
         }
 
         public static async Task<IEnumerable<StudentModel>> GetStudentsAsync(string connString)

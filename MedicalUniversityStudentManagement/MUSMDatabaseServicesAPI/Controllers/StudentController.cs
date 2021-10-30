@@ -9,8 +9,7 @@ namespace MUSMDatabaseServicesAPI
     public static class StudentController
     {
         [Function("CreateStudentAndReturnId")]
-        public static HttpResponseData CreateStudentAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req,
-            FunctionContext executionContext)
+        public static HttpResponseData CreateStudentAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
         {
             var logger = executionContext.GetLogger("StudentController");
             logger.LogInformation("C# HTTP trigger function processed a request.");

@@ -13,6 +13,24 @@ namespace MUSMDatabaseServicesAPI
 {
     public static class StudentController
     {
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "StudentIdNumber": 23,
+    "FirstName": "Clyde",
+    "LastName": "Clyde",
+    "Birthday": "1993-11-08",
+    "Address": "clyde lives in miami",
+    "Major": "computer",
+    "FirstYearEnrolled": 2001,
+    "HighSchoolAttended": "Bane Bay",
+    "UndergraduateSchoolAttended": "homeschool o ya"
+}
+         * 
+         */
         [Function("CreateStudentAndReturnId")]
         public static async Task<HttpResponseData> CreateStudentAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -27,15 +45,6 @@ namespace MUSMDatabaseServicesAPI
             try
             {
                 student = JsonSerializer.Deserialize<StudentModel>(requestBody);
-                //student.StudentIdNumber = jsonBody.GetProperty("StudentIdNumber").GetInt32();
-                //student.FirstName = jsonBody.GetProperty("FirstName").GetString();
-                //student.LastName = jsonBody.GetProperty("LastName").GetString();
-                //student.Birthday = jsonBody.GetProperty("Birthday").GetDateTime();
-                //student.Address = jsonBody.GetProperty("Address").GetString();
-                //student.Major = jsonBody.GetProperty("Major").GetString();
-                //student.FirstYearEnrolled = jsonBody.GetProperty("FirstYearEnrolled").GetInt32();
-                //student.HighSchoolAttended = jsonBody.GetProperty("HighSchoolAttended").GetString();
-                //student.UndergraduateSchoolAttended = jsonBody.GetProperty("UndergraduateSchoolAttended").GetString();
             }
             catch (Exception e)
             {
@@ -50,12 +59,12 @@ namespace MUSMDatabaseServicesAPI
             try
             {
                 // Hard-coded development connection string for now
-                const string connectionString = "Data Source=(localdb)/MSSQLLocalDB;Initial Catalog=MedicalUniversityStudentManagementDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+                const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MedicalUniversityStudentManagementDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
                 int id = await StudentProcessor.CreateStudentAndReturnIdAsync(connectionString, student);
                 
                 // Successfully added the Student to the database
                 var response = req.CreateResponse(HttpStatusCode.OK);
-                response.WriteString(id.ToString());
+                await response.WriteAsJsonAsync(id);
                 return response;
             }
             catch (Exception e)
@@ -63,7 +72,7 @@ namespace MUSMDatabaseServicesAPI
                 logger.LogError(e, e.Message);
 
                 var response = req.CreateResponse(HttpStatusCode.Conflict);
-                response.WriteString("Conflict when inserting into the database");
+                await response.WriteStringAsync("Conflict when inserting into the database");
                 return response;
             }
 

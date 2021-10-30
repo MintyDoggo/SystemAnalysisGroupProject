@@ -2,11 +2,16 @@
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+
+    // Add any extra environment variables here. Any of these values can be overrided in azure portal so that the final value doesn't get checked into souce control
+
+    // Put your local connection string here
+    "SQLConnectionString": ""
+
   },
+  "Host": {
+    "CORS": "*" // We will make CORS allow all domains (but just for development). This makes for easy testing of the API since we can just run the solution and it will accept all domains. We can specify more strict policies for CORS in production in the Azure Portal
+  }
 
-
-
-
-  "SQLConnectionString": "Value"  // <------- Put your local connection string here
 }

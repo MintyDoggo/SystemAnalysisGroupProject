@@ -11,6 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MUSMDataLibrary\MUSMDataLibrary.csproj" />
+    <ProjectReference Include="..\MUSMModelsLibrary\MUSMModelsLibrary.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

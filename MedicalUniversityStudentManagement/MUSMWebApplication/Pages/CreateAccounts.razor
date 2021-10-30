@@ -1,0 +1,16 @@
+﻿@page "/createaccounts"
+@inject HttpClient Http
+
+<h3>@value</h3>
+
+<Button Color="Color.Info" Clicked="@OnButtonClickedAsync">Button</Button>
+
+@code
+{
+    private string value = "Create some accounts";
+
+    async void OnButtonClickedAsync()
+    {
+        value = "Lets start creating accounts ye";
+    }
+}

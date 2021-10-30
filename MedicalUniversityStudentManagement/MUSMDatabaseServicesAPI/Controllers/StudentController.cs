@@ -58,8 +58,7 @@ Example request body:
             // Call on the data processor and return the Id
             try
             {
-                // Hard-coded development connection string for now
-                const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MedicalUniversityStudentManagementDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
                 int id = await StudentProcessor.CreateStudentAndReturnIdAsync(connectionString, student);
                 
                 // Successfully added the Student to the database
@@ -95,16 +94,15 @@ Example request body:
         }
 
         [Function("GetStudents")]
-        public static HttpResponseData GetStudents([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+        public static async Task<HttpResponseData> GetStudents([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
 FunctionContext executionContext)
         {
-            var logger = executionContext.GetLogger("StudentController");
-            logger.LogInformation("C# HTTP trigger function processed a request.");
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+            IEnumerable<StudentModel> Students = await StudentProcessor.GetStudentsAsync(connectionString);
 
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+            await response.WriteAsJsonAsync<IEnumerable<StudentModel>>(Students);
 
-            response.WriteString("Welcome to Azure Functions!");
 
             return response;
         }

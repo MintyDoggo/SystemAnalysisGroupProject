@@ -1,4 +1,4 @@
-﻿@page "/student"
+﻿@page "/artifactreports"
 @inject HttpClient Http
 
 <h3>@value</h3>
@@ -7,10 +7,10 @@
 
 @code
 {
-    private string value = "Welcome Student.";
+    private string value = "Artifact Reports";
 
     async void OnButtonClickedAsync()
     {
-        value = "Fortnite";
+        value = "Run report on artifacts";
     }
 }

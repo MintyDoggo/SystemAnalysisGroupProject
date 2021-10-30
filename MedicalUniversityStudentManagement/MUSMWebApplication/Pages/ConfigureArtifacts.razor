@@ -1,0 +1,16 @@
+﻿@page "/configureartifacts"
+@inject HttpClient Http
+
+<h3>@value</h3>
+
+<Button Color="Color.Info" Clicked="@OnButtonClickedAsync">Button</Button>
+
+@code
+{
+    private string value = "Configure your artifacts here";
+
+    async void OnButtonClickedAsync()
+    {
+        value = "configure those artifacts";
+    }
+}

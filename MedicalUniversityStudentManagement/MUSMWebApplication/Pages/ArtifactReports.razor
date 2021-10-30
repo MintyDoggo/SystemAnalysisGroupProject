@@ -1,0 +1,16 @@
+﻿@page "/artifactreports"
+@inject HttpClient Http
+
+<h3>@value</h3>
+
+<Button Color="Color.Info" Clicked="@OnButtonClickedAsync">Button</Button>
+
+@code
+{
+    private string value = "Artifact Reports";
+
+    async void OnButtonClickedAsync()
+    {
+        value = "Run report on artifacts";
+    }
+}

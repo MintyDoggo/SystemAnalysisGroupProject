@@ -1,0 +1,16 @@
+﻿@page "/mystudents"
+@inject HttpClient Http
+
+<h3>@value</h3>
+
+<Button Color="Color.Info" Clicked="@OnButtonClickedAsync">Button</Button>
+
+@code
+{
+    private string value = "Here are all of the students you are in charge of";
+
+    async void OnButtonClickedAsync()
+    {
+        value = "Fortnite";
+    }
+}

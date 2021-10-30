@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorAnimate" Version="3.0.0" />
     <PackageReference Include="Blazorise" Version="0.9.4.6" />
     <PackageReference Include="Blazorise.Bootstrap" Version="0.9.4.6" />
     <PackageReference Include="Blazorise.DataGrid" Version="0.9.4.6" />

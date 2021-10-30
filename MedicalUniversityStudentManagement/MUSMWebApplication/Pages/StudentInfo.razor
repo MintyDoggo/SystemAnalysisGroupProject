@@ -1,0 +1,17 @@
+﻿@page "/studentinfo"
+@inject HttpClient Http
+
+<h3>@value</h3>
+<p>Upload and view your student documents. You may also edit any student info.</p>
+
+<Button Color="Color.Info" Clicked="@OnButtonClickedAsync">Button</Button>
+
+@code
+{
+    private string value = "Student Info";
+
+    async void OnButtonClickedAsync()
+    {
+        value = "Fortnite";
+    }
+}

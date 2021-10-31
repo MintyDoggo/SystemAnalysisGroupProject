@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spHost_SelectAll]
+﻿CREATE PROCEDURE [dbo].[spStudent_SelectAll]
 AS
 BEGIN
 	SET NOCOUNT ON;		--Don't give how many rows affected

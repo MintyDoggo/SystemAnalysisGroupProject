@@ -11,7 +11,7 @@ using MUSMModelsLibrary;
 
 namespace MUSMDatabaseServicesAPI
 {
-    public static class StudentController
+    public static class StaffController
     {
         /**
          * 
@@ -19,31 +19,24 @@ namespace MUSMDatabaseServicesAPI
 Example request body:
 
 {
-    "StudentIdNumber": 23,
-    "FirstName": "Clyde",
-    "LastName": "Clyde",
-    "Birthday": "1993-11-08",
-    "Address": "clyde lives in miami",
-    "Major": "computer",
-    "FirstYearEnrolled": 2001,
-    "HighSchoolAttended": "Bane Bay",
-    "UndergraduateSchoolAttended": "homeschool o ya"
+    "FirstName": "Paul",
+    "LastName": "Morton"
 }
          * 
          */
-        [Function("CreateStudentAndReturnId")]
-        public static async Task<HttpResponseData> CreateStudentAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
+        [Function("CreateStaffAndReturnId")]
+        public static async Task<HttpResponseData> CreateStaffAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
         {
-            ILogger logger = executionContext.GetLogger("StudentController");
+            ILogger logger = executionContext.GetLogger("StaffController");
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
 
-            // Get the StudentModel from the request body
-            StudentModel student;
+            // Get the StaffModel from the request body
+            StaffModel staff;
             try
             {
-                student = JsonSerializer.Deserialize<StudentModel>(requestBody);
+                staff = JsonSerializer.Deserialize<StaffModel>(requestBody);
             }
             catch (Exception e)
             {
@@ -59,7 +52,7 @@ Example request body:
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-                retVal = await StudentProcessor.CreateStudentAndReturnIdAsync(connectionString, student);
+                retVal = await StaffProcessor.CreateStaffAndReturnIdAsync(connectionString, staff);
             }
             catch (Exception e)
             {
@@ -71,29 +64,29 @@ Example request body:
             }
 
 
-            // Successfully added the Student to the database
+            // Successfully added the Staff to the database
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(retVal);
             return response;
         }
 
-        [Function("DeleteStudentById")]
-        public static async Task<HttpResponseData> DeleteStudentById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
+        [Function("DeleteStaffById")]
+        public static async Task<HttpResponseData> DeleteStaffById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
         {
-            ILogger logger = executionContext.GetLogger("StudentController");
+            ILogger logger = executionContext.GetLogger("StaffController");
 
             // Get the body of the request and deserialize it to json
             string requestBody = await req.ReadAsStringAsync();
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
-            // Get the id of the Student to delete from the request body
+            // Get the id of the Staff to delete from the request body
             int id = jsonBody.GetInt32();
 
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
 
-                await StudentProcessor.DeleteStudentByIdAsync(connectionString, id);
+                await StaffProcessor.DeleteStaffByIdAsync(connectionString, id);
             }
             catch (Exception e)
             {
@@ -106,19 +99,6 @@ Example request body:
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteStringAsync("Row successfully deleted");
-            return response;
-        }
-
-        [Function("GetStudents")]
-        public static async Task<HttpResponseData> GetStudents([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
-        {
-            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
-            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-            IEnumerable<StudentModel> Students = await StudentProcessor.GetStudentsAsync(connectionString);
-
-            await response.WriteAsJsonAsync<IEnumerable<StudentModel>>(Students);
-
-
             return response;
         }
 

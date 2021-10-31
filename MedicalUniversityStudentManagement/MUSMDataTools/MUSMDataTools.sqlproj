@@ -68,7 +68,6 @@
   <ItemGroup>
     <Build Include="dbo\Tables\tblAdmin.sql" />
     <Build Include="dbo\Tables\tblStaff.sql" />
-    <Build Include="dbo\Tables\tblStaffStudentMap.sql" />
     <Build Include="dbo\Tables\tblStudent.sql" />
     <Build Include="dbo\Types\udtStudent.sql" />
     <Build Include="dbo\StoredProcedures\Student\spStudent_DeleteById.sql" />
@@ -76,8 +75,8 @@
     <Build Include="dbo\StoredProcedures\Student\spStudent_SelectAll.sql" />
     <Build Include="dbo\StoredProcedures\Staff\spStaff_SelectAll.sql" />
     <Build Include="dbo\Tables\tblLogin.sql" />
-    <Build Include="dbo\StoredProcedures\Staff\spStudent_CreateAndOutputId.sql" />
-    <Build Include="dbo\StoredProcedures\Staff\spStudent_DeleteById.sql" />
+    <Build Include="dbo\StoredProcedures\Staff\spStaff_CreateAndOutputId.sql" />
+    <Build Include="dbo\StoredProcedures\Staff\spStaff_DeleteById.sql" />
     <Build Include="dbo\Types\udtStaff.sql" />
   </ItemGroup>
   <ItemGroup>

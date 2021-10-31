@@ -19,6 +19,7 @@ namespace MUSMDatabaseServicesAPI
 Example request body:
 
 {
+    "StaffId": 3,
     "StudentIdNumber": 23,
     "FirstName": "Clyde",
     "LastName": "Clyde",
@@ -29,6 +30,7 @@ Example request body:
     "HighSchoolAttended": "Bane Bay",
     "UndergraduateSchoolAttended": "homeschool o ya"
 }
+
          * 
          */
         [Function("CreateStudentAndReturnId")]

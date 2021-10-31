@@ -1,5 +1,6 @@
 ﻿CREATE TYPE [dbo].[udtStudent] AS TABLE
 (
+	[StaffId] INT NOT NULL,
 	[StudentIdNumber] INT NOT NULL,
 	[FirstName] VARCHAR(64) NOT NULL,
 	[LastName] VARCHAR(64) NOT NULL,

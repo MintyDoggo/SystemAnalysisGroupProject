@@ -20,6 +20,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 
             // Create the Data Table representation of the user defined Student table
             DataTable studentTable = new DataTable("@inStudent");
+            studentTable.Columns.Add("StaffId", typeof(int));
             studentTable.Columns.Add("StudentIdNumber", typeof(int));
             studentTable.Columns.Add("FirstName", typeof(string));
             studentTable.Columns.Add("LastName", typeof(string));
@@ -30,7 +31,7 @@ namespace MUSMDataLibrary.BuisinessLogic
             studentTable.Columns.Add("HighSchoolAttended", typeof(string));
             studentTable.Columns.Add("UndergraduateSchoolAttended", typeof(string));
             // Fill in the data
-            studentTable.Rows.Add(student.StudentIdNumber, student.FirstName, student.LastName, student.Birthday, student.Address, student.Major, student.FirstYearEnrolled, student.HighSchoolAttended, student.UndergraduateSchoolAttended);
+            studentTable.Rows.Add(student.StaffId, student.StudentIdNumber, student.FirstName, student.LastName, student.Birthday, student.Address, student.Major, student.FirstYearEnrolled, student.HighSchoolAttended, student.UndergraduateSchoolAttended);
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();

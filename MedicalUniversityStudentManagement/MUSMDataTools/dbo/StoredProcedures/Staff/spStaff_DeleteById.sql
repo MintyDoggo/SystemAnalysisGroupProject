@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[spStaff_DeleteById]
-	@inId int
+	@inId INT
 AS
 BEGIN
 	SET NOCOUNT ON;		-- don't give how many rows affected

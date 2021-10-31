@@ -10,7 +10,6 @@
                     <FieldBody>
                         <Inline>
                             <Button Color="Color.Primary" Clicked="@ReloadTable" Margin="Margin.Is1" Size="Size.Small" Disabled="RefreshButtonDisabed" Loading="RefreshButtonDisabed"> Refresh</Button>
-                            <TextEdit @bind-Text="@customFilterValue" Margin="Margin.Is1" Size="Size.Small" Placeholder="Search" />
                         </Inline>
                     </FieldBody>
                 </Field>
@@ -25,38 +24,13 @@
                       Filterable="true"
                       PageSize="10"
                       ShowPager="@true"
-                      SelectedRowChanged="@OnSelectedRowChanged"
+                      SelectedRowChanged="@OnSelectedRowChanged">
                 <EmptyTemplate>No records...</EmptyTemplate>
                 <DataGridColumns>
                     <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Id)" Caption="Id" Editable="true">
-                        <FilterTemplate>
-                            <TextEdit Placeholder="Search by Id" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
-                        </FilterTemplate>
+
                     </DataGridColumn>
-                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.StudentIp)" Caption="StudentIp" Editable="true">
-                        <CaptionTemplate>
-                            <Icon Name="IconName.Server" /> @context.Caption
-                        </CaptionTemplate>
-                        <FilterTemplate>
-                            <TextEdit Placeholder="Search by Ip" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
-                        </FilterTemplate>
-                    </DataGridColumn>
-                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.StudentServicesAPISocketAddress)" Caption="StudentServicesAPISocketAddress" Editable="true" PopupFieldColumnSize="ColumnSize.IsFull.OnDesktop">
-                        <CaptionTemplate>
-                            <Icon Name="IconName.Server" /> @context.Caption
-                        </CaptionTemplate>
-                        <FilterTemplate>
-                            <TextEdit Placeholder="Search by StudentServicesAPISocketAddress" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
-                        </FilterTemplate>
-                    </DataGridColumn>
-                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.IsActive)" Caption="IsActive" Editable="true">
-                        <CaptionTemplate>
-                            <Icon Name="IconName.GripLines" /> @context.Caption
-                        </CaptionTemplate>
-                        <FilterTemplate>
-                            <TextEdit Placeholder="Search by IsActive" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
-                        </FilterTemplate>
-                    </DataGridColumn>
+
                 </DataGridColumns>
             </DataGrid>
         </Column>
@@ -68,6 +42,7 @@
 {
     DataGrid<StudentModel> dataGrid;
     List<StudentModel> studentModels;
+    bool RefreshButtonDisabed;
 
 
     protected override async Task OnInitializedAsync()
@@ -92,4 +67,11 @@
     {
         StateHasChanged();
     }
+
+
+
+
+
+
+
 }

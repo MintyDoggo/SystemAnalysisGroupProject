@@ -1,34 +1,17 @@
 ﻿@page "/studentinfo"
 @inject HttpClient Http
 
-<h3>@value</h3>
-<p>Upload and view your student documents. You may also edit any student info.</p>
-
-<Button Color="Color.Info" Clicked="@OnButtonClickedAsync">Button</Button>
-
 <Card>
-    @* FirstName: <TextEdit Placeholder="Some text value..." />
-        LastName: <TextEdit Text="@LastName" TextChanged="@OnLastName" Placeholder="Some text value..." />
-        Birthday: <TextEdit Text="@Birthday" TextChanged="@OnBirthday" Placeholder="Some text value..." />
-        Address: <TextEdit Text="@Address" TextChanged="@OnAddress" Placeholder="Some text value..." />
-        Major: <TextEdit Text="@Major" TextChanged="@OnMajor" Placeholder="Some text value..." />
-        FirstYearEnrolled: <TextEdit Text="@FirstYearEnrolled" TextChanged="@OnFirstYearEnrolled" Placeholder="Some text value..." />
-        HighSchoolAttended: <TextEdit Text="@HighSchoolAttended" TextChanged="@OnHighSchoolAttended" Placeholder="Some text value..." />
-        HighSchoolAttended: <TextEdit Text="@UndergraduateSchoolAttended" TextChanged="@OnUndergraduateSchoolAttended" Placeholder="Some text value..." />
-    *@
     <CardBody>
         <CardTitle Size="5">Edit Student Info here:</CardTitle>
-        @*        StudentIdNumber: <TextEdit Text="@myStudent.StudentIdNumber.ToString()" TextChanged="@OnIdChange" Placeholder="Some text value..." />
-        *@
-        StudentIdNumber: <TextEdit Placeholder="Some text value..." />
-        FirstName: <TextEdit Placeholder="Some text value..." />
-        LastName: <TextEdit Placeholder="Some text value..." />
-        Birthday: <TextEdit Placeholder="Some text value..." />
-        Address: <TextEdit Placeholder="Some text value..." />
-        Major: <TextEdit Placeholder="Some text value..." />
-        FirstYearEnrolled: <TextEdit Placeholder="Some text value..." />
-        HighSchoolAttended: <TextEdit Placeholder="Some text value..." />
-        HighSchoolAttended: <TextEdit Placeholder="Some text value..." />
+        StudentIdNumber: <TextEdit Placeholder="@myStudent?.StudentIdNumber.ToString()" />
+        FirstName: <TextEdit Placeholder="@myStudent?.FirstName" />
+        LastName: <TextEdit Placeholder="@myStudent?.LastName" />
+        Birthday: <TextEdit Placeholder="@myStudent?.Birthday.ToString()" />
+        Address: <TextEdit Placeholder="@myStudent?.Address" />
+        Major: <TextEdit Placeholder="@myStudent?.Major" />
+        FirstYearEnrolled: <TextEdit Placeholder="@myStudent?.FirstYearEnrolled.ToString()" />
+        HighSchoolAttended: <TextEdit Placeholder="@myStudent?.HighSchoolAttended" />
 
         <CardText>
             Some quick example text to build on the card title and make up the bulk of the card's content.
@@ -41,20 +24,6 @@
 
 @code
 {
-    private string value = "Student Info";
-    StudentModel myStudent;
-
-    async void OnButtonClickedAsync()
-    {
-        value = "Fortnite";
-        Console.WriteLine(myStudent.StudentIdNumber);
-    }
-
- @*   async void OnIdChange(string val)
-    {
-        Console.WriteLine(myStudent.StudentIdNumber);
-        myStudent.StudentIdNumber = val;
-        Console.WriteLine(myStudent.StudentIdNumber);
-    }*@
-
+    [Parameter]
+    public StudentModel myStudent { get; set; }
 }

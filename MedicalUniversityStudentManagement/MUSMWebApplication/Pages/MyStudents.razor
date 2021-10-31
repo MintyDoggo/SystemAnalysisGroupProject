@@ -55,12 +55,15 @@
 </CardBody>
 
 
+<StudentInfo myStudent="@dataGrid?.SelectedRow"/>
 
 @code
 {
     DataGrid<StudentModel> dataGrid;
     List<StudentModel> studentModels;
     bool RefreshButtonDisabed;
+
+
 
 
     // Blazor event

@@ -23,10 +23,9 @@
                       Bordered="true"
                       Hoverable="true"
                       Filterable="true"
-                      PageSize="@pageSize"
+                      PageSize="10"
                       ShowPager="@true"
                       SelectedRowChanged="@OnSelectedRowChanged"
-                      CustomFilter="@OnCustomFilter">
                 <EmptyTemplate>No records...</EmptyTemplate>
                 <DataGridColumns>
                     <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Id)" Caption="Id" Editable="true">
@@ -67,5 +66,30 @@
 
 @code
 {
-    
+    DataGrid<StudentModel> dataGrid;
+    List<StudentModel> studentModels;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReloadTable();
+    }
+
+    async Task ReloadTable()
+    {
+        // Update our Students list
+        IEnumerable<StudentModel> getStudentsResponse = await Http.GetFromJsonAsync<IEnumerable<StudentModel>>(@"GetStudents");
+        studentModels = new List<StudentModel>(getStudentsResponse);
+
+
+
+
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+
+    void OnSelectedRowChanged()
+    {
+        StateHasChanged();
+    }
 }

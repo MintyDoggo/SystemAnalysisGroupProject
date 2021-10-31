@@ -45,10 +45,18 @@
     bool RefreshButtonDisabed;
 
 
+    // Blazor event
     protected override async Task OnInitializedAsync()
     {
         await ReloadTable();
     }
+
+
+
+
+
+
+
 
     async Task ReloadTable()
     {

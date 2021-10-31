@@ -58,7 +58,9 @@ namespace MUSMDataLibrary.BuisinessLogic
 
         public static async Task<IEnumerable<StudentModel>> GetStudentsAsync(string connString)
         {
-            throw new NotImplementedException();
+            string procedureName = "spStudent_SelectAll";
+
+            return await SqlDataAccess.LoadDataAsync<StudentModel>(connString, procedureName);    
         }
 
     }

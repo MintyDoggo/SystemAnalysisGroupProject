@@ -80,7 +80,7 @@ Example request body:
             string requestBody = await req.ReadAsStringAsync();
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
-            // Get the id of the Staff to delete from the request body
+            // Get the Id of the Staff to delete from the request body
             int id = jsonBody.GetInt32();
 
             try
@@ -102,6 +102,7 @@ Example request body:
             await response.WriteStringAsync("Row successfully deleted");
             return response;
         }
+
 
     }
 }

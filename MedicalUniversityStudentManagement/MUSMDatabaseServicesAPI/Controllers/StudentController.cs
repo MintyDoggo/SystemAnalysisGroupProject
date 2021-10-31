@@ -19,6 +19,7 @@ namespace MUSMDatabaseServicesAPI
 Example request body:
 
 {
+    "StaffId": 3,
     "StudentIdNumber": 23,
     "FirstName": "Clyde",
     "LastName": "Clyde",
@@ -29,6 +30,7 @@ Example request body:
     "HighSchoolAttended": "Bane Bay",
     "UndergraduateSchoolAttended": "homeschool o ya"
 }
+
          * 
          */
         [Function("CreateStudentAndReturnId")]
@@ -86,7 +88,7 @@ Example request body:
             string requestBody = await req.ReadAsStringAsync();
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
-            // Get the id of the Student to delete from the request body
+            // Get the Id of the Student to delete from the request body
             int id = jsonBody.GetInt32();
 
             try
@@ -112,15 +114,35 @@ Example request body:
         [Function("GetStudents")]
         public static async Task<HttpResponseData> GetStudents([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
         {
-            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
             IEnumerable<StudentModel> Students = await StudentProcessor.GetStudentsAsync(connectionString);
 
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync<IEnumerable<StudentModel>>(Students);
-
-
             return response;
         }
+
+        [Function("GetStudentsByStaffId")]
+        public static async Task<HttpResponseData> GetStudentsByStaffId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("StudentController");
+
+            // Get the body of the request and deserialize it to json
+            string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
+
+            // Get the Id of the Staff from the request body
+            int staffId = jsonBody.GetInt32();
+
+
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+            IEnumerable<StudentModel> Students = await StudentProcessor.GetStudentsByStaffIdAsync(connectionString, staffId);
+
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync<IEnumerable<StudentModel>>(Students);
+            return response;
+        }
+
 
     }
 }

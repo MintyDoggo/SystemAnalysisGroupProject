@@ -10,6 +10,7 @@ namespace MUSMModelsLibrary
     public class StudentModel
     {
         public int Id { get; set; }
+        public int StaffId { get; set; }
         public int StudentIdNumber { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

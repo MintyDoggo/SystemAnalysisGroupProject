@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[spStudent_SelectAll]
 AS
 BEGIN
-	SET NOCOUNT ON;		--Don't give how many rows affected
+	SET NOCOUNT ON;		-- don't give how many rows affected
 
 	SELECT * FROM [tblStudent];
 END

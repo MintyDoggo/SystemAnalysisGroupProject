@@ -36,12 +36,11 @@ Example request body:
         {
             ILogger logger = executionContext.GetLogger("StudentController");
 
-            // Get the body of the request and deserialize it to json
+            // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the StudentModel from the request body
-            StudentModel student = new StudentModel();
+            StudentModel student;
             try
             {
                 student = JsonSerializer.Deserialize<StudentModel>(requestBody);
@@ -50,46 +49,63 @@ Example request body:
             {
                 logger.LogError(e, e.Message);
 
-                var response = req.CreateResponse(HttpStatusCode.BadRequest);
-                await response.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
-                return response;
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
+                return badRequestResponse;
             }
 
             // Call on the data processor and return the Id
+            int retVal;
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-                int id = await StudentProcessor.CreateStudentAndReturnIdAsync(connectionString, student);
-                
-                // Successfully added the Student to the database
-                var response = req.CreateResponse(HttpStatusCode.OK);
-                await response.WriteAsJsonAsync(id);
-                return response;
+                retVal = await StudentProcessor.CreateStudentAndReturnIdAsync(connectionString, student);
             }
             catch (Exception e)
             {
                 logger.LogError(e, e.Message);
 
-                var response = req.CreateResponse(HttpStatusCode.Conflict);
-                await response.WriteStringAsync("Conflict when inserting into the database");
-                return response;
+                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
+                await conflictResponse.WriteStringAsync("Conflict when inserting into the database");
+                return conflictResponse;
             }
 
 
+            // Successfully added the Student to the database
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(retVal);
+            return response;
         }
 
         [Function("DeleteStudentById")]
-        public static HttpResponseData DeleteStudentById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req,
-    FunctionContext executionContext)
+        public static async Task<HttpResponseData> DeleteStudentById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
         {
-            var logger = executionContext.GetLogger("StudentController");
-            logger.LogInformation("C# HTTP trigger function processed a request.");
+            ILogger logger = executionContext.GetLogger("StudentController");
+
+            // Get the body of the request and deserialize it to json
+            string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
+
+            // Get the id of the Student to delete from the request body
+            int id = jsonBody.GetInt32();
+
+            try
+            {
+                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+
+                await StudentProcessor.DeleteStudentByIdAsync(connectionString, id);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
+                await conflictResponse.WriteStringAsync("Tried to delete row that didn't exist");
+                return conflictResponse;
+            }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-
-            response.WriteString("Welcome to Azure Functions!");
-
+            await response.WriteStringAsync("Row successfully deleted");
             return response;
         }
 

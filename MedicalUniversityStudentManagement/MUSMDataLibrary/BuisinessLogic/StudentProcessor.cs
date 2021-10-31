@@ -10,9 +10,9 @@ using MUSMModelsLibrary;
 
 namespace MUSMDataLibrary.BuisinessLogic
 {
-    public class StudentProcessor
+    public static class StudentProcessor
     {
-        public static async Task<int> CreateStudentAndReturnIdAsync(string connString, StudentModel student)
+        public static async Task<int> CreateStudentAndReturnIdAsync(string connectionString, StudentModel student)
         {
             // Name of our stored procedure to execute
             string procedureName = "spStudent_CreateAndOutputId";
@@ -39,13 +39,13 @@ namespace MUSMDataLibrary.BuisinessLogic
 
 
             // Execute our stored procedure with the parameters we made
-            await SqlDataAccess.ModifyDataAsync(connString, procedureName, parameters);
+            await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
 
             // Return the outputed id from the stored procedure
             return parameters.Get<int>("@outId");
         }
 
-        public static async Task<int> DeleteStudentByIdAsync(string connString, int id)
+        public static async Task<int> DeleteStudentByIdAsync(string connectionString, int id)
         {
             string procedureName = "spStudent_DeleteById";
 
@@ -53,12 +53,14 @@ namespace MUSMDataLibrary.BuisinessLogic
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@inId", id, dbType: DbType.Int32);
 
-            return await SqlDataAccess.ModifyDataAsync(connString, procedureName, parameters);
+            return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
         }
 
-        public static async Task<IEnumerable<StudentModel>> GetStudentsAsync(string connString)
+        public static async Task<IEnumerable<StudentModel>> GetStudentsAsync(string connectionString)
         {
-            throw new NotImplementedException();
+            string procedureName = "spStudent_SelectAll";
+
+            return await SqlDataAccess.LoadDataAsync<StudentModel>(connectionString, procedureName);    
         }
 
     }

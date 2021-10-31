@@ -1,17 +1,72 @@
 ﻿@page "/mystudents"
 @inject HttpClient Http
 
-<h3>@value</h3>
+<CardBody>
+    <Row>
+        <Column>
+            <h3>Students</h3>
+            <Fields>
+                <Field>
+                    <FieldBody>
+                        <Inline>
+                            <Button Color="Color.Primary" Clicked="@ReloadTable" Margin="Margin.Is1" Size="Size.Small" Disabled="RefreshButtonDisabed" Loading="RefreshButtonDisabed"> Refresh</Button>
+                            <TextEdit @bind-Text="@customFilterValue" Margin="Margin.Is1" Size="Size.Small" Placeholder="Search" />
+                        </Inline>
+                    </FieldBody>
+                </Field>
+            </Fields>
+            <DataGrid TItem="StudentModel"
+                      @ref="dataGrid"
+                      Data="@studentModels"
+                      SortMode="DataGridSortMode.Multiple"
+                      Striped="true"
+                      Bordered="true"
+                      Hoverable="true"
+                      Filterable="true"
+                      PageSize="@pageSize"
+                      ShowPager="@true"
+                      SelectedRowChanged="@OnSelectedRowChanged"
+                      CustomFilter="@OnCustomFilter">
+                <EmptyTemplate>No records...</EmptyTemplate>
+                <DataGridColumns>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Id)" Caption="Id" Editable="true">
+                        <FilterTemplate>
+                            <TextEdit Placeholder="Search by Id" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
+                        </FilterTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.StudentIp)" Caption="StudentIp" Editable="true">
+                        <CaptionTemplate>
+                            <Icon Name="IconName.Server" /> @context.Caption
+                        </CaptionTemplate>
+                        <FilterTemplate>
+                            <TextEdit Placeholder="Search by Ip" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
+                        </FilterTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.StudentServicesAPISocketAddress)" Caption="StudentServicesAPISocketAddress" Editable="true" PopupFieldColumnSize="ColumnSize.IsFull.OnDesktop">
+                        <CaptionTemplate>
+                            <Icon Name="IconName.Server" /> @context.Caption
+                        </CaptionTemplate>
+                        <FilterTemplate>
+                            <TextEdit Placeholder="Search by StudentServicesAPISocketAddress" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
+                        </FilterTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.IsActive)" Caption="IsActive" Editable="true">
+                        <CaptionTemplate>
+                            <Icon Name="IconName.GripLines" /> @context.Caption
+                        </CaptionTemplate>
+                        <FilterTemplate>
+                            <TextEdit Placeholder="Search by IsActive" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
+                        </FilterTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+            </DataGrid>
+        </Column>
+    </Row>
+</CardBody>
 
-<Button Color="Color.Info" Clicked="@OnButtonClickedAsync">Button</Button>
 
 
 @code
 {
-    private string value = "Here are all of the students you are in charge of";
-
-    async void OnButtonClickedAsync()
-    {
-        value = "Fortnite";
-    }
+    
 }

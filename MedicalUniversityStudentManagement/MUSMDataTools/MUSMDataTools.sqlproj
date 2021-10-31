@@ -62,6 +62,8 @@
     <Folder Include="dbo\Types" />
     <Folder Include="PublishProfiles\" />
     <Folder Include="dbo\StoredProcedures\Student" />
+    <Folder Include="dbo\StoredProcedures\Staff" />
+    <Folder Include="dbo\StoredProcedures\Admin" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\tblAdmin.sql" />
@@ -71,8 +73,15 @@
     <Build Include="dbo\Types\udtStudent.sql" />
     <Build Include="dbo\StoredProcedures\Student\spStudent_DeleteById.sql" />
     <Build Include="dbo\StoredProcedures\Student\spStudent_CreateAndOutputId.sql" />
+    <Build Include="dbo\StoredProcedures\Student\spStudent_SelectAll.sql" />
+    <Build Include="dbo\StoredProcedures\Staff\spStaff_SelectAll.sql" />
+    <Build Include="dbo\Tables\tblLogin.sql" />
+    <Build Include="dbo\StoredProcedures\Staff\spStudent_CreateAndOutputId.sql" />
+    <Build Include="dbo\StoredProcedures\Staff\spStudent_DeleteById.sql" />
+    <Build Include="dbo\Types\udtStaff.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />
+    <None Include="MUSMDataTools.publish.xml" />
   </ItemGroup>
 </Project>

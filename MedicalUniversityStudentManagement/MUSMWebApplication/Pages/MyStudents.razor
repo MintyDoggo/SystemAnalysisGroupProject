@@ -10,7 +10,6 @@
                     <FieldBody>
                         <Inline>
                             <Button Color="Color.Primary" Clicked="@ReloadTable" Margin="Margin.Is1" Size="Size.Small" Disabled="RefreshButtonDisabed" Loading="RefreshButtonDisabed"> Refresh</Button>
-                            <TextEdit @bind-Text="@customFilterValue" Margin="Margin.Is1" Size="Size.Small" Placeholder="Search" />
                         </Inline>
                     </FieldBody>
                 </Field>
@@ -23,41 +22,32 @@
                       Bordered="true"
                       Hoverable="true"
                       Filterable="true"
-                      PageSize="@pageSize"
+                      PageSize="10"
                       ShowPager="@true"
-                      SelectedRowChanged="@OnSelectedRowChanged"
-                      CustomFilter="@OnCustomFilter">
+                      SelectedRowChanged="@OnSelectedRowChanged">
                 <EmptyTemplate>No records...</EmptyTemplate>
                 <DataGridColumns>
                     <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Id)" Caption="Id" Editable="true">
-                        <FilterTemplate>
-                            <TextEdit Placeholder="Search by Id" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
-                        </FilterTemplate>
                     </DataGridColumn>
-                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.StudentIp)" Caption="StudentIp" Editable="true">
-                        <CaptionTemplate>
-                            <Icon Name="IconName.Server" /> @context.Caption
-                        </CaptionTemplate>
-                        <FilterTemplate>
-                            <TextEdit Placeholder="Search by Ip" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
-                        </FilterTemplate>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.StudentIdNumber)" Caption="StudentIdNumber" Editable="true">
                     </DataGridColumn>
-                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.StudentServicesAPISocketAddress)" Caption="StudentServicesAPISocketAddress" Editable="true" PopupFieldColumnSize="ColumnSize.IsFull.OnDesktop">
-                        <CaptionTemplate>
-                            <Icon Name="IconName.Server" /> @context.Caption
-                        </CaptionTemplate>
-                        <FilterTemplate>
-                            <TextEdit Placeholder="Search by StudentServicesAPISocketAddress" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
-                        </FilterTemplate>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.FirstName)" Caption="FirstName" Editable="true">
                     </DataGridColumn>
-                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.IsActive)" Caption="IsActive" Editable="true">
-                        <CaptionTemplate>
-                            <Icon Name="IconName.GripLines" /> @context.Caption
-                        </CaptionTemplate>
-                        <FilterTemplate>
-                            <TextEdit Placeholder="Search by IsActive" Text="@context.SearchValue" TextChanged="@(v => context.TriggerFilterChange(v))" />
-                        </FilterTemplate>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.LastName)" Caption="LastName" Editable="true">
                     </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Birthday)" Caption="Birthday" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Address)" Caption="Address" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Major)" Caption="Major" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.FirstYearEnrolled)" Caption="FirstYearEnrolled" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.HighSchoolAttended)" Caption="HighSchoolAttended" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.UndergraduateSchoolAttended)" Caption="UndergraduateSchoolAttended" Editable="true">
+                    </DataGridColumn>
+
                 </DataGridColumns>
             </DataGrid>
         </Column>
@@ -67,5 +57,53 @@
 
 @code
 {
-    
+    DataGrid<StudentModel> dataGrid;
+    List<StudentModel> studentModels;
+    bool RefreshButtonDisabed;
+
+
+    // Blazor event
+    protected override async Task OnInitializedAsync()
+    {
+        await ReloadTable();
+    }
+
+
+
+
+
+
+
+
+    async Task ReloadTable()
+    {
+        // Update our Students list
+        try
+        {
+            IEnumerable<StudentModel> getStudentsResponse = await Http.GetFromJsonAsync<IEnumerable<StudentModel>>(@"www.endpointhere.com");
+            studentModels = new List<StudentModel>(getStudentsResponse);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
+
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+
+    void OnSelectedRowChanged()
+    {
+        StateHasChanged();
+    }
+
+
+
+
+
+
+
 }

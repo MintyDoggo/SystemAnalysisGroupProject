@@ -5,8 +5,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;		-- don't give how many rows affected
 
-	INSERT INTO tblStudent([StudentIdNumber], [FirstName], [LastName], [Birthday], [Address], [Major], [FirstYearEnrolled], [HighSchoolAttended], [UndergraduateSchoolAttended])
-	SELECT [StudentIdNumber], [FirstName], [LastName], [Birthday], [Address], [Major], [FirstYearEnrolled], [HighSchoolAttended], [UndergraduateSchoolAttended] FROM @inStudent;
+	INSERT INTO tblStudent([StudentIdNumber], [FirstName], [LastName], [Birthday], [Address], [Major], [FirstYearEnrolled], [HighSchoolAttended], [UndergraduateSchoolAttended]) SELECT [StudentIdNumber], [FirstName], [LastName], [Birthday], [Address], [Major], [FirstYearEnrolled], [HighSchoolAttended], [UndergraduateSchoolAttended] FROM @inStudent;
 	SELECT @outId = SCOPE_IDENTITY();		-- SCOPE_IDENTITY() returns the most recent modified Id within the scope of this procedure (last identity created in the same session and the same scope)
 
 END

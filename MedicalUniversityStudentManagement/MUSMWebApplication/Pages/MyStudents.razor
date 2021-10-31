@@ -28,7 +28,6 @@
                 <EmptyTemplate>No records...</EmptyTemplate>
                 <DataGridColumns>
                     <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Id)" Caption="Id" Editable="true">
-
                     </DataGridColumn>
 
                 </DataGridColumns>
@@ -61,7 +60,8 @@
     async Task ReloadTable()
     {
         // Update our Students list
-        IEnumerable<StudentModel> getStudentsResponse = await Http.GetFromJsonAsync<IEnumerable<StudentModel>>(@"GetStudents");
+        string getStudentsEndpoint = ;
+        IEnumerable<StudentModel> getStudentsResponse = await Http.GetFromJsonAsync<IEnumerable<StudentModel>>(getStudentsEndpoint);
         studentModels = new List<StudentModel>(getStudentsResponse);
 
 

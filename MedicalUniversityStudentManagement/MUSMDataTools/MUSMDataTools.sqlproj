@@ -71,8 +71,10 @@
     <Build Include="dbo\Types\udtStudent.sql" />
     <Build Include="dbo\StoredProcedures\Student\spStudent_DeleteById.sql" />
     <Build Include="dbo\StoredProcedures\Student\spStudent_CreateAndOutputId.sql" />
+    <Build Include="dbo\StoredProcedures\Student\spStudent_SelectAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />
+    <None Include="MUSMDataTools.publish.xml" />
   </ItemGroup>
 </Project>

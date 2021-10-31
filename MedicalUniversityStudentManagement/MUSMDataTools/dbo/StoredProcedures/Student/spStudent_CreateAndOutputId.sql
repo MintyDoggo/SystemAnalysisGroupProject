@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[spStudent_CreateAndOutputId]
 	@inStudent udtStudent READONLY,
-	@outId int OUT		-- our out parameter so we can keep track of it in C# for when we want to destroy it
+	@outId INT OUT		-- our out parameter so we can keep track of it in C# for when we want to destroy it
 AS
 BEGIN
 	SET NOCOUNT ON;		-- don't give how many rows affected

@@ -75,6 +75,7 @@
     <Build Include="dbo\StoredProcedures\Student\spStudent_CreateAndOutputId.sql" />
     <Build Include="dbo\StoredProcedures\Student\spStudent_SelectAll.sql" />
     <Build Include="dbo\StoredProcedures\Staff\spStaff_SelectAll.sql" />
+    <Build Include="dbo\Tables\tblLogin.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />

@@ -86,6 +86,7 @@
     <Build Include="dbo\StoredProcedures\Artifact\spArtifact_CreateAndOutputId.sql" />
     <Build Include="dbo\Types\udtArtifact.sql" />
     <Build Include="dbo\StoredProcedures\Artifact\spArtifact_SelectByStudentId.sql" />
+    <Build Include="dbo\StoredProcedures\Artifact\spArtifact_DeleteById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />

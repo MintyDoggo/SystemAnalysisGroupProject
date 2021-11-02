@@ -92,6 +92,7 @@
     <Build Include="dbo\StoredProcedures\RequiredArtifact\spRequiredArtifact_DeleteById.sql" />
     <Build Include="dbo\Types\udtRequiredArtifact.sql" />
     <Build Include="dbo\StoredProcedures\RequiredArtifact\spRequiredArtifact_SelectAll.sql" />
+    <Build Include="dbo\StoredProcedures\Artifact\spArtifact_UpdateById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />

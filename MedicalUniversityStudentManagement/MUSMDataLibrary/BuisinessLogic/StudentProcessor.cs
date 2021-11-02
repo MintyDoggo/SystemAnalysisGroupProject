@@ -52,7 +52,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inId", id, dbType: DbType.Int32);
+            parameters.Add("@inId", id, DbType.Int32);
 
             return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
         }
@@ -70,22 +70,17 @@ namespace MUSMDataLibrary.BuisinessLogic
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inStaffId", staffId, dbType: DbType.Int32);
+            parameters.Add("@inStaffId", staffId, DbType.Int32);
 
             return await SqlDataAccess.LoadDataAsync<StudentModel>(connectionString, procedureName, parameters);
         }
 
 
-
-
-
-
-
         // Does not provide ability to change the student's database id (for good reason)
-        public static async Task UpdateStudentById(string connectionString, int idToModify, StudentModel student)
+        public static async Task UpdateStudentById(string connectionString, int id, StudentModel student)
         {
             // Name of our stored procedure to execute
-            string procedureName = "[spStudent_UpdateById]";
+            string procedureName = "spStudent_UpdateById";
 
 
             // Create the Data Table representation of the user defined Student table
@@ -105,6 +100,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inId", id, DbType.Int32);
             parameters.Add("@inStudent", studentTable.AsTableValuedParameter("udtStudent"), DbType.Object);
 
 

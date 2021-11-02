@@ -46,7 +46,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inId", id, dbType: DbType.Int32);
+            parameters.Add("@inId", id, DbType.Int32);
 
             return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
         }
@@ -57,11 +57,35 @@ namespace MUSMDataLibrary.BuisinessLogic
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inStudentId", studentId, dbType: DbType.Int32);
+            parameters.Add("@inStudentId", studentId, DbType.Int32);
 
             return await SqlDataAccess.LoadDataAsync<ArtifactModel>(connectionString, procedureName, parameters);
         }
 
 
+        public static async Task UpdateArtifactById(string connectionString, int id, ArtifactModel artifact)
+        {
+            // Name of our stored procedure to execute
+            string procedureName = "spArtifact_UpdateById";
+
+
+            // Create the Data Table representation of the user defined Artifact table
+            DataTable artifactTable = new DataTable("@inArtifact");
+            artifactTable.Columns.Add("RequiredArtifactId", typeof(int));
+            artifactTable.Columns.Add("StudentId", typeof(int));
+            artifactTable.Columns.Add("DocumentReference", typeof(string));
+            artifactTable.Columns.Add("CheckedOff", typeof(bool));
+            // Fill in the data
+            artifactTable.Rows.Add(artifact.RequiredArtifactId, artifact.StudentId, artifact.DocumentReference, artifact.CheckedOff);
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inId", id, DbType.Int32);
+            parameters.Add("@inArtifact", artifactTable.AsTableValuedParameter("udtArtifact"), DbType.Object);
+
+
+            // Execute our stored procedure with the parameters we made
+            await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
+        }
     }
 }

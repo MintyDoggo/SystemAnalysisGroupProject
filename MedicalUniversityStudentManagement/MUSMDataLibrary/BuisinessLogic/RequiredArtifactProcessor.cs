@@ -43,7 +43,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inId", id, dbType: DbType.Int32);
+            parameters.Add("@inId", id, DbType.Int32);
 
             return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
         }

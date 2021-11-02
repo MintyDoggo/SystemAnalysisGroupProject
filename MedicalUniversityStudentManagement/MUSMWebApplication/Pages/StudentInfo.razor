@@ -63,8 +63,16 @@
         isEditable = false;
     }
 
-    void OnSubmitButtonClicked()
+    async Task OnSubmitButtonClicked()
     {
-        
+        // Update this Student
+        try
+        {
+            await Http.GetAsync(@"www.endpointhere.com");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
     }
 }

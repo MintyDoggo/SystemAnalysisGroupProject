@@ -5,9 +5,20 @@ AS
 BEGIN
 	SET NOCOUNT ON;		-- don't give how many rows affected
 
-	UPDATE tblStudent
-	SET StaffId = [StaffId], StudentIdNumber = [StudentIdNumber], FirstName = [FirstName], LastName = [LastName], Birthday = [Birthday], Address = [Address], Major = [Major], FirstYearEnrolled = [FirstYearEnrolled], HighSchoolAttended = [HighSchoolAttended], UndergraduateSchoolAttended = [UndergraduateSchoolAttended]
-	WHERE Id = @inId;
+	UPDATE [tblStudent]
+	SET
+	tblStudent.StaffId = inStudent.StaffId,
+	tblStudent.StudentIdNumber = inStudent.StudentIdNumber,
+	tblStudent.FirstName = inStudent.FirstName,
+	tblStudent.LastName = inStudent.LastName,
+	tblStudent.Birthday = inStudent.Birthday,
+	tblStudent.Address = inStudent.Address,
+	tblStudent.Major = inStudent.Major,
+	tblStudent.FirstYearEnrolled = inStudent.FirstYearEnrolled,
+	tblStudent.HighSchoolAttended = inStudent.HighSchoolAttended,
+	tblStudent.UndergraduateSchoolAttended = inStudent.UndergraduateSchoolAttended
+	FROM @inStudent inStudent
+	WHERE tblStudent.Id = @inId;
 
 END
 RETURN 0

@@ -63,7 +63,7 @@ namespace MUSMDataLibrary.BuisinessLogic
         }
 
 
-        public static async Task UpdateArtifactById(string connectionString, int id, ArtifactModel artifact)
+        public static async Task UpdateArtifactByIdAsync(string connectionString, int id, ArtifactModel artifact)
         {
             // Name of our stored procedure to execute
             string procedureName = "spArtifact_UpdateById";

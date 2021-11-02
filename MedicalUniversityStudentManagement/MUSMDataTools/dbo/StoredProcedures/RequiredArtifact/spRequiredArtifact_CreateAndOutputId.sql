@@ -5,7 +5,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;		-- don't give how many rows affected
 
-	INSERT INTO tblRequiredArtifact([Name]) SELECT [Name] FROM @inRequiredArtifact;
+
+	INSERT INTO tblRequiredArtifact([Name])
+	SELECT [Name] FROM @inRequiredArtifact;
+
 	SELECT @outId = SCOPE_IDENTITY();
 
 END

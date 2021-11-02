@@ -5,8 +5,12 @@ AS
 BEGIN
 	SET NOCOUNT ON;		-- don't give how many rows affected
 
-	INSERT INTO tblStaff([FirstName], [LastName]) SELECT [FirstName], [LastName] FROM @inStaff;
-	SELECT @outId = SCOPE_IDENTITY();		-- SCOPE_IDENTITY() returns the most recent modified Id within the scope of this procedure (last identity created in the same session and the same scope)
+
+	INSERT INTO tblStaff(FirstName, LastName)
+	SELECT FirstName, LastName FROM @inStaff;
+	
+	-- SCOPE_IDENTITY() returns the most recent modified Id within the scope of this procedure (last identity created in the same session and the same scope)
+	SELECT @outId = SCOPE_IDENTITY();
 
 END
 RETURN 0

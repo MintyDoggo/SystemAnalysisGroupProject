@@ -19,16 +19,18 @@ namespace MUSMDatabaseServicesAPI
 Example request body:
 
 {
-    "StaffId": 3,
-    "StudentIdNumber": 23,
-    "FirstName": "Clyde",
-    "LastName": "Clyde",
-    "Birthday": "1993-11-08",
-    "Address": "clyde lives in miami",
-    "Major": "computer",
-    "FirstYearEnrolled": 2001,
-    "HighSchoolAttended": "Bane Bay",
-    "UndergraduateSchoolAttended": "homeschool o ya"
+    "Student": {
+        "StaffId": 3,
+        "StudentIdNumber": 23,
+        "FirstName": "Clyde",
+        "LastName": "Clyde",
+        "Birthday": "1993-11-08",
+        "Address": "clyde lives in miami",
+        "Major": "computer",
+        "FirstYearEnrolled": 2001,
+        "HighSchoolAttended": "Bane Bay",
+        "UndergraduateSchoolAttended": "homeschool o ya"
+    }
 }
 
          * 
@@ -40,12 +42,13 @@ Example request body:
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the StudentModel from the request body
             StudentModel student;
             try
             {
-                student = JsonSerializer.Deserialize<StudentModel>(requestBody);
+                student = JsonSerializer.Deserialize<StudentModel>(jsonBody.GetProperty("Student").GetRawText());
             }
             catch (Exception e)
             {
@@ -143,19 +146,45 @@ Example request body:
             return response;
         }
 
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "Id": 4,
+    "Student": {
+        "StaffId": 3,
+        "StudentIdNumber": 23,
+        "FirstName": "Anthony",
+        "LastName": "Anthony",
+        "Birthday": "1995-07-23",
+        "Address": "ohio",
+        "Major": "computer",
+        "FirstYearEnrolled": 2003,
+        "HighSchoolAttended": "Bane Bay",
+        "UndergraduateSchoolAttended": "homeschool o ya"
+    }
+}
+
+         * 
+         */
         [Function("UpdateStudentById")]
-        public static async Task<HttpResponseData> UpdateStudentById([HttpTrigger(AuthorizationLevel.Function, "update")] HttpRequestData req, FunctionContext executionContext)
+        public static async Task<HttpResponseData> UpdateStudentById([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req, FunctionContext executionContext)
         {
             ILogger logger = executionContext.GetLogger("StudentController");
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
-            // Get the StudentModel from the request body
+            // Get the Id and StudentModel from the request body
+            int id;
             StudentModel student;
             try
             {
-                student = JsonSerializer.Deserialize<StudentModel>(requestBody);
+                id = jsonBody.GetProperty("Id").GetInt32();
+                student = JsonSerializer.Deserialize<StudentModel>(jsonBody.GetProperty("Student").GetRawText());
             }
             catch (Exception e)
             {
@@ -170,19 +199,19 @@ Example request body:
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-                await StudentProcessor.UpdateStudentById(connectionString, student.Id, student);
+                await StudentProcessor.UpdateStudentByIdAsync(connectionString, id, student);
             }
             catch (Exception e)
             {
                 logger.LogError(e, e.Message);
 
                 var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
-                await conflictResponse.WriteStringAsync("Conflict when updating into the database");
+                await conflictResponse.WriteStringAsync("Conflict when inserting into the database");
                 return conflictResponse;
             }
 
 
-            // Successfully updated student
+            // Successfully updated the Student in the database
             var response = req.CreateResponse(HttpStatusCode.OK);
             return response;
         }

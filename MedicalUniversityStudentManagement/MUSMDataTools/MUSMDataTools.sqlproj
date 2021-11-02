@@ -100,6 +100,9 @@
     <Build Include="dbo\StoredProcedures\RequiredArtifact\spRequiredArtifact_SelectAll.sql" />
     <Build Include="dbo\StoredProcedures\Artifact\spArtifact_UpdateById.sql" />
     <Build Include="dbo\StoredProcedures\Login\spLogin_UpdateById.sql" />
+    <Build Include="dbo\StoredProcedures\Artifact\spArtifact_SelectByRequiredArtifactId.sql" />
+    <Build Include="dbo\StoredProcedures\Staff\spStaff_UpdateById.sql" />
+    <Build Include="dbo\StoredProcedures\RequiredArtifact\spRequiredArtifact_UpdateById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />

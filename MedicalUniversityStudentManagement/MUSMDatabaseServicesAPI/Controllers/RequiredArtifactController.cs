@@ -19,7 +19,9 @@ namespace MUSMDatabaseServicesAPI
 Example request body:
 
 {
-    "Name": "Final High School Transcript"
+    "RequiredArtifact": {
+        "Name": "Final High School Transcript"
+    }
 }
 
          * 
@@ -31,12 +33,13 @@ Example request body:
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the RequiredArtifactModel from the request body
             RequiredArtifactModel requiredArtifact;
             try
             {
-                requiredArtifact = JsonSerializer.Deserialize<RequiredArtifactModel>(requestBody);
+                requiredArtifact = JsonSerializer.Deserialize<RequiredArtifactModel>(jsonBody.GetProperty("RequiredArtifact").GetRawText());
             }
             catch (Exception e)
             {

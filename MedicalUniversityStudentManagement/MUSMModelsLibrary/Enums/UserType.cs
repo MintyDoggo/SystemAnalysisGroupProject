@@ -8,6 +8,7 @@ namespace MUSMModelsLibrary.Enums
 {
     public enum UserType
     {
+        Unset,
         Admin,
         Staff,
         Student

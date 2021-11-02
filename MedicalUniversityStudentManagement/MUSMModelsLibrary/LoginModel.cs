@@ -13,6 +13,6 @@ namespace MUSMModelsLibrary
         public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public UserType UserType { get; set; }  // 0 = Admin, 1 = Staff, 2 = Student
+        public UserType UserType { get; set; }  // 0 = Unset, 1 = Admin, 2 = Staff, 3 = Student
     }
 }

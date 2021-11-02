@@ -64,6 +64,7 @@
     <Folder Include="dbo\StoredProcedures\Student" />
     <Folder Include="dbo\StoredProcedures\Staff" />
     <Folder Include="dbo\StoredProcedures\Admin" />
+    <Folder Include="dbo\StoredProcedures\Artifact" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\tblAdmin.sql" />
@@ -82,6 +83,8 @@
     <Build Include="dbo\StoredProcedures\Student\spStudent_UpdateById.sql" />
     <Build Include="dbo\Tables\tblArtifact.sql" />
     <Build Include="dbo\Tables\tblRequiredArtifact.sql" />
+    <Build Include="dbo\StoredProcedures\Artifact\spArtifact_CreateAndOutputId.sql" />
+    <Build Include="dbo\Types\udtArtifact.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />

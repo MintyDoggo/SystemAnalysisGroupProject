@@ -54,8 +54,12 @@
     </Row>
 </CardBody>
 
+<hr />
 
-<StudentInfo myStudent="@dataGrid?.SelectedRow"/>
+@if (dataGrid != null && dataGrid.SelectedRow != null)
+{
+    <StudentInfo myStudent="@dataGrid?.SelectedRow" />
+}
 
 @code
 {

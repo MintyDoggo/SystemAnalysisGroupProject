@@ -12,7 +12,7 @@ BEGIN
 	tblArtifact.DocumentReference = inArtifact.DocumentReference,
 	tblArtifact.CheckedOff = inArtifact.CheckedOff
 	FROM @inArtifact inArtifact
-	WHERE tblStudent.Id = @inId;
+	WHERE tblArtifact.Id = @inId;
 
 END
 RETURN 0

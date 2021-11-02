@@ -19,10 +19,12 @@ namespace MUSMDatabaseServicesAPI
 Example request body:
 
 {
-    "RequiredArtifactId": 1,
-    "StudentId": 2,
-    "DocumentReference": "my document is here",
-    "CheckedOff": false
+    "Artifact": {
+        "RequiredArtifactId": 1,
+        "StudentId": 2,
+        "DocumentReference": "my document is here",
+        "CheckedOff": false
+    }
 }
 
          * 
@@ -34,12 +36,13 @@ Example request body:
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the ArtifactModel from the request body
             ArtifactModel artifact;
             try
             {
-                artifact = JsonSerializer.Deserialize<ArtifactModel>(requestBody);
+                artifact = JsonSerializer.Deserialize<ArtifactModel>(jsonBody.GetProperty("Artifact").GetRawText());
             }
             catch (Exception e)
             {
@@ -123,6 +126,70 @@ Example request body:
 
             HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync<IEnumerable<ArtifactModel>>(Artifacts);
+            return response;
+        }
+
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "Id": 2,
+    "Artifact": {
+        "RequiredArtifactId": 1,
+        "StudentId": 2,
+        "DocumentReference": "my document is there",
+        "CheckedOff": true
+    }
+}
+
+         * 
+         */
+        [Function("UpdateArtifactById")]
+        public static async Task<HttpResponseData> UpdateArtifactById([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("ArtifactController");
+
+            // Get the body of the request
+            string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
+
+            // Get the Id and ArtifactModel from the request body
+            int id;
+            ArtifactModel artifact;
+            try
+            {
+                id = jsonBody.GetProperty("Id").GetInt32();
+                artifact = JsonSerializer.Deserialize<ArtifactModel>(jsonBody.GetProperty("Artifact").GetRawText());
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
+                return badRequestResponse;
+            }
+
+            // Call on the data processor
+            try
+            {
+                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+                await ArtifactProcessor.UpdateArtifactByIdAsync(connectionString, id, artifact);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
+                await conflictResponse.WriteStringAsync("Conflict when inserting into the database");
+                return conflictResponse;
+            }
+
+
+            // Successfully updated the Artifact in the database
+            var response = req.CreateResponse(HttpStatusCode.OK);
             return response;
         }
 

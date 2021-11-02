@@ -143,6 +143,49 @@ Example request body:
             return response;
         }
 
+        [Function("GetStudents")]
+        public static async Task<HttpResponseData> UpdateStudentById([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("StudentController");
+
+            // Get the body of the request
+            string requestBody = await req.ReadAsStringAsync();
+
+            // Get the StudentModel from the request body
+            StudentModel student;
+            try
+            {
+                student = JsonSerializer.Deserialize<StudentModel>(requestBody);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
+                return badRequestResponse;
+            }
+
+            // Call on the data processor
+            try
+            {
+                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+                await StudentProcessor.UpdateStudentById(connectionString, student.Id, student);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
+                await conflictResponse.WriteStringAsync("Conflict when updating into the database");
+                return conflictResponse;
+            }
+
+
+            // Successfully updated student
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            return response;
+        }
 
     }
 }

@@ -82,7 +82,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 
 
         // Does not provide ability to change the student's database id (for good reason)
-        public static async Task UpdateStudent(string connectionString, int idToModify, StudentModel student)
+        public static async Task UpdateStudentById(string connectionString, int idToModify, StudentModel student)
         {
             // Name of our stored procedure to execute
             string procedureName = "[spStudent_UpdateById]";

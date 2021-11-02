@@ -82,70 +82,6 @@ Example request body:
             return response;
         }
 
-        [Function("DeleteStudentById")]
-        public static async Task<HttpResponseData> DeleteStudentById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
-        {
-            ILogger logger = executionContext.GetLogger("StudentController");
-
-            // Get the body of the request and deserialize it to json
-            string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
-
-            // Get the Id of the Student to delete from the request body
-            int id = jsonBody.GetInt32();
-
-            try
-            {
-                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-
-                await StudentProcessor.DeleteStudentByIdAsync(connectionString, id);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-
-                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
-                await conflictResponse.WriteStringAsync("Tried to delete row that didn't exist");
-                return conflictResponse;
-            }
-
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteStringAsync("Row successfully deleted");
-            return response;
-        }
-
-        [Function("GetStudents")]
-        public static async Task<HttpResponseData> GetStudents([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
-        {
-            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-            IEnumerable<StudentModel> Students = await StudentProcessor.GetStudentsAsync(connectionString);
-
-            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync<IEnumerable<StudentModel>>(Students);
-            return response;
-        }
-
-        [Function("GetStudentsByStaffId")]
-        public static async Task<HttpResponseData> GetStudentsByStaffId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
-        {
-            ILogger logger = executionContext.GetLogger("StudentController");
-
-            // Get the body of the request and deserialize it to json
-            string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
-
-            // Get the Id of the Staff from the request body
-            int staffId = jsonBody.GetInt32();
-
-
-            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-            IEnumerable<StudentModel> Students = await StudentProcessor.GetStudentsByStaffIdAsync(connectionString, staffId);
-
-            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync<IEnumerable<StudentModel>>(Students);
-            return response;
-        }
-
         /**
          * 
          * 
@@ -215,6 +151,72 @@ Example request body:
             var response = req.CreateResponse(HttpStatusCode.OK);
             return response;
         }
+
+        [Function("DeleteStudentById")]
+        public static async Task<HttpResponseData> DeleteStudentById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("StudentController");
+
+            // Get the body of the request and deserialize it to json
+            string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
+
+            // Get the Id of the Student to delete from the request body
+            int id = jsonBody.GetInt32();
+
+            try
+            {
+                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+
+                await StudentProcessor.DeleteStudentByIdAsync(connectionString, id);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
+                await conflictResponse.WriteStringAsync("Tried to delete row that didn't exist");
+                return conflictResponse;
+            }
+
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteStringAsync("Row successfully deleted");
+            return response;
+        }
+
+
+        [Function("GetStudents")]
+        public static async Task<HttpResponseData> GetStudents([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        {
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+            IEnumerable<StudentModel> Students = await StudentProcessor.GetStudentsAsync(connectionString);
+
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync<IEnumerable<StudentModel>>(Students);
+            return response;
+        }
+
+        [Function("GetStudentsByStaffId")]
+        public static async Task<HttpResponseData> GetStudentsByStaffId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("StudentController");
+
+            // Get the body of the request and deserialize it to json
+            string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
+
+            // Get the Id of the Staff from the request body
+            int staffId = jsonBody.GetInt32();
+
+
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+            IEnumerable<StudentModel> Students = await StudentProcessor.GetStudentsByStaffIdAsync(connectionString, staffId);
+
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync<IEnumerable<StudentModel>>(Students);
+            return response;
+        }
+
 
     }
 }

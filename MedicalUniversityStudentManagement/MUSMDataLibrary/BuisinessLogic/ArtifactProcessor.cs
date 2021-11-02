@@ -40,29 +40,6 @@ namespace MUSMDataLibrary.BuisinessLogic
             return parameters.Get<int>("@outId");
         }
 
-        public static async Task<int> DeleteArtifactByIdAsync(string connectionString, int id)
-        {
-            string procedureName = "spArtifact_DeleteById";
-
-            // Make parameters to pass to the stored procedure
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inId", id, DbType.Int32);
-
-            return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
-        }
-
-        public static async Task<IEnumerable<ArtifactModel>> GetArtifactsByStudentIdAsync(string connectionString, int studentId)
-        {
-            string procedureName = "spArtifact_SelectByStudentId";
-
-            // Make parameters to pass to the stored procedure
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inStudentId", studentId, DbType.Int32);
-
-            return await SqlDataAccess.LoadDataAsync<ArtifactModel>(connectionString, procedureName, parameters);
-        }
-
-
         public static async Task UpdateArtifactByIdAsync(string connectionString, int id, ArtifactModel artifact)
         {
             // Name of our stored procedure to execute
@@ -87,5 +64,39 @@ namespace MUSMDataLibrary.BuisinessLogic
             // Execute our stored procedure with the parameters we made
             await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
         }
+
+        public static async Task<int> DeleteArtifactByIdAsync(string connectionString, int id)
+        {
+            string procedureName = "spArtifact_DeleteById";
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inId", id, DbType.Int32);
+
+            return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
+        }
+
+        public static async Task<IEnumerable<ArtifactModel>> GetArtifactsByStudentIdAsync(string connectionString, int studentId)
+        {
+            string procedureName = "spArtifact_SelectByStudentId";
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inStudentId", studentId, DbType.Int32);
+
+            return await SqlDataAccess.LoadDataAsync<ArtifactModel>(connectionString, procedureName, parameters);
+        }
+        public static async Task<IEnumerable<ArtifactModel>> GetArtifactsByRequiredArtifactIdAsync(string connectionString, int requiredArtifactId)
+        {
+            string procedureName = "spArtifact_SelectByRequiredArtifactId";
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inRequiredArtifactId", requiredArtifactId, DbType.Int32);
+
+            return await SqlDataAccess.LoadDataAsync<ArtifactModel>(connectionString, procedureName, parameters);
+        }
+
+
     }
 }

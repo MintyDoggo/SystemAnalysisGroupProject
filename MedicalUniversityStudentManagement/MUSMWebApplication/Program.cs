@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using MUSMWebApplication.Objects;
 
 namespace MUSMWebApplication
 {
@@ -21,6 +22,7 @@ namespace MUSMWebApplication
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddSingleton(LoggedInUser => new LoggedInUser());
 
             builder.Services
       .AddBlazorise(options =>

@@ -8,7 +8,7 @@ namespace MUSMWebApplication.Objects
 {
     public class LoggedInUser
     {
-        public LoginModel Login { get; set; }
+        public LoginModel Login { get; set; } = new LoginModel();
 
 
     }

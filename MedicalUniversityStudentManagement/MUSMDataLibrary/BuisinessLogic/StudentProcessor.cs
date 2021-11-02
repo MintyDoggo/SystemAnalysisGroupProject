@@ -66,7 +66,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 
         public static async Task<IEnumerable<StudentModel>> GetStudentsByStaffIdAsync(string connectionString, int staffId)
         {
-            string procedureName = "spStudent_SelectStudentsByStaffId";
+            string procedureName = "spStudent_SelectByStaffId";
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();

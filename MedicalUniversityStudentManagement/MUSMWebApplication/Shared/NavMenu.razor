@@ -9,64 +9,53 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
-        @*        <li class="nav-item px-3">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                    <span class="oi oi-home" aria-hidden="true"></span> Home
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="counter">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Counter
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="fetchdata">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-                </NavLink>
-            </li>*@
-
-        @*If user is Admin*@
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="createaccounts">
-                <span class="oi oi-home" aria-hidden="true"></span> Create Accounts (A)
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="configureartifacts">
-                <span class="oi oi-script" aria-hidden="true"></span> Configure Artifacts (A)
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="artifactreports">
-                <span class="oi oi-home" aria-hidden="true"></span> Artifact Reports (A)
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="mystaff">
-                <span class="oi oi-home" aria-hidden="true"></span> MyStaff (A)
-            </NavLink>
-        </li>
-
-        @*If user type is a staff*@
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="mystudents">
-                <span class="oi oi-people" aria-hidden="true"></span> My Students (S)@*shows all 30 students*@
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="staff">
-                <span class="oi oi-briefcase" aria-hidden="true"></span> Staff Page (S)
-            </NavLink>
-        </li>
-
-
-        @*If user is student, show this option in sidebar. If user is staff, do not show this item here,
-            but show it next to each student when you search for your student in the "My Students" page.*@
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="studentinfo">
-                <span class="oi oi-home" aria-hidden="true"></span> Student Info (Stud)
-            </NavLink>
-        </li>
+        @switch (loggedInUser.Login.UserType)
+        {
+            case UserType.Admin:
+               //If user is Admin
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="createaccounts">
+                        <span class="oi oi-home" aria-hidden="true"></span> Create Accounts
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="configureartifacts">
+                        <span class="oi oi-script" aria-hidden="true"></span> Configure Artifacts
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="artifactreports">
+                        <span class="oi oi-home" aria-hidden="true"></span> Artifact Reports
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="mystaff">
+                        <span class="oi oi-home" aria-hidden="true"></span> MyStaff
+                    </NavLink>
+                </li>
+                break;
+            case UserType.Staff:
+                //If user type is a staff
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="mystudents">
+                        <span class="oi oi-people" aria-hidden="true"></span> My Students
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="staff">
+                        <span class="oi oi-briefcase" aria-hidden="true"></span> Staff Page
+                    </NavLink>
+                </li>
+                break;
+            case UserType.Student:
+                //If user type is student
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="studentinfo">
+                        <span class="oi oi-home" aria-hidden="true"></span> Student Info
+                    </NavLink>
+                </li>
+                break;
+        }
     </ul>
 </div>
 
@@ -74,10 +63,10 @@
 {
     private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+            private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
+            private void ToggleNavMenu()
+            {
+                collapseNavMenu = !collapseNavMenu;
+            }
+        }

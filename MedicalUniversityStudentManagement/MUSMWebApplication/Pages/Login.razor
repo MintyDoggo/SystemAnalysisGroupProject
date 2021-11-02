@@ -1,0 +1,53 @@
+﻿@page "/login"
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<h3>Login</h3>
+
+<CardBody>
+    <CardTitle Size="5">Edit Student Info here:</CardTitle>
+    Username: <TextEdit @ref="@username_textbox" Placeholder="@myLogin?.Username" />
+    Password: <TextEdit @ref="@password_textbox" Placeholder="@myLogin?.Password" />
+</CardBody>
+
+
+<Button Color="Color.Primary" Clicked="@OnSubmitButtonClicked">Submit</Button>
+
+<p style="color:#FF0000">@info</p>
+
+@code
+{
+    public LoginModel myLogin { get; set; } = new LoginModel();
+
+    String info = "";
+    public TextEdit username_textbox;
+    public TextEdit password_textbox;
+
+    void OnSubmitButtonClicked()
+    {
+        myLogin.Username = username_textbox.Text;
+        myLogin.Password = password_textbox.Text;
+
+        if (myLogin.Username != /*check if user exists in database*/"Carter")
+        {
+            info = "Invalid Username. Please try again.";
+            return;
+        }
+
+        if (myLogin.Password != /*check if password corresponds with myLogin.Username in database*/"123")
+        {
+            info = "Invalid Password. Please try again.";
+            return;
+        }
+
+        //set Id using primary key for the user here:
+        //myLogin.Id = // get from database
+
+        //set user type here
+        //myLogin.UserType = //get from database
+
+        NavManager.NavigateTo("");
+    }
+
+
+}

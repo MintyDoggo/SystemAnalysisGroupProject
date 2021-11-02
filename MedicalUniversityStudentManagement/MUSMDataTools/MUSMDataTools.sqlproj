@@ -65,6 +65,7 @@
     <Folder Include="dbo\StoredProcedures\Staff" />
     <Folder Include="dbo\StoredProcedures\Admin" />
     <Folder Include="dbo\StoredProcedures\Artifact" />
+    <Folder Include="dbo\StoredProcedures\Login" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\tblAdmin.sql" />
@@ -87,6 +88,11 @@
     <Build Include="dbo\Types\udtArtifact.sql" />
     <Build Include="dbo\StoredProcedures\Artifact\spArtifact_SelectByStudentId.sql" />
     <Build Include="dbo\StoredProcedures\Artifact\spArtifact_DeleteById.sql" />
+    <Build Include="dbo\StoredProcedures\Login\spLogin_ReturnLoginIdByUsernameAndPassword.sql" />
+    <Build Include="dbo\Types\udtLogin.sql" />
+    <Build Include="dbo\StoredProcedures\Login\spLogin_CreateAndOutputId.sql" />
+    <Build Include="dbo\StoredProcedures\Login\spLogin_DeleteById.sql" />
+    <Build Include="dbo\StoredProcedures\Login\spLogin_SelectAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />

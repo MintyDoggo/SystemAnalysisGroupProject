@@ -79,6 +79,7 @@
     <Build Include="dbo\StoredProcedures\Staff\spStaff_DeleteById.sql" />
     <Build Include="dbo\Types\udtStaff.sql" />
     <Build Include="dbo\StoredProcedures\Student\spStudent_SelectStudentsByStaffId.sql" />
+    <Build Include="dbo\StoredProcedures\Student\spStudent_UpdateById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />

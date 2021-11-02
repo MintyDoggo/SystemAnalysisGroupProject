@@ -76,5 +76,40 @@ namespace MUSMDataLibrary.BuisinessLogic
         }
 
 
+
+
+
+
+
+        // Does not provide ability to change the student's database id (for good reason)
+        public static async Task UpdateStudent(string connectionString, int idToModify, StudentModel student)
+        {
+            // Name of our stored procedure to execute
+            string procedureName = "[spStudent_UpdateById]";
+
+
+            // Create the Data Table representation of the user defined Student table
+            DataTable studentTable = new DataTable("@inStudent");
+            studentTable.Columns.Add("StaffId", typeof(int));
+            studentTable.Columns.Add("StudentIdNumber", typeof(int));
+            studentTable.Columns.Add("FirstName", typeof(string));
+            studentTable.Columns.Add("LastName", typeof(string));
+            studentTable.Columns.Add("Birthday", typeof(DateTime));
+            studentTable.Columns.Add("Address", typeof(string));
+            studentTable.Columns.Add("Major", typeof(string));
+            studentTable.Columns.Add("FirstYearEnrolled", typeof(int));
+            studentTable.Columns.Add("HighSchoolAttended", typeof(string));
+            studentTable.Columns.Add("UndergraduateSchoolAttended", typeof(string));
+            // Fill in the data
+            studentTable.Rows.Add(student.StaffId, student.StudentIdNumber, student.FirstName, student.LastName, student.Birthday, student.Address, student.Major, student.FirstYearEnrolled, student.HighSchoolAttended, student.UndergraduateSchoolAttended);
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inStudent", studentTable.AsTableValuedParameter("udtStudent"), DbType.Object);
+
+
+            // Execute our stored procedure with the parameters we made
+            await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
+        }
     }
 }

@@ -1,16 +1,28 @@
 ﻿@page "/artifactreports"
 @inject HttpClient Http
 
-<h3>@value</h3>
 
-<Button Color="Color.Info" Clicked="@OnButtonClickedAsync">Button</Button>
+<Button Color="Color.Info" Clicked="@OnButtonClickedAsync1">Generate a List of Students</Button>
+<Button Color="Color.Info" Clicked="@OnButtonClickedAsync2">Submission Status of Required Documents</Button>
+<Button Color="Color.Info" Clicked="@OnButtonClickedAsync3">List of Required Documents</Button>
+<h3>@value</h3>
 
 @code
 {
-    private string value = "Artifact Reports";
+    private string value = "";
 
-    async void OnButtonClickedAsync()
+    async void OnButtonClickedAsync1()
     {
-        value = "Run report on artifacts";
+        value = "Here is your list of students:\n";
+    }
+
+    async void OnButtonClickedAsync2()
+    {
+        value = "Here is the status of all required documents:\n";
+    }
+
+    async void OnButtonClickedAsync3()
+    {
+        value = "Here is a list of all required documents:\n";
     }
 }

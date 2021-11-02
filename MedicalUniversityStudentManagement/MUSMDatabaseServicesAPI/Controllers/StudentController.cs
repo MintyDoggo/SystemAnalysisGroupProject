@@ -143,7 +143,7 @@ Example request body:
             return response;
         }
 
-        [Function("GetStudents")]
+        [Function("UpdateStudentById")]
         public static async Task<HttpResponseData> UpdateStudentById([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
         {
             ILogger logger = executionContext.GetLogger("StudentController");

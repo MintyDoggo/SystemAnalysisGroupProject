@@ -79,12 +79,14 @@
     <Build Include="dbo\StoredProcedures\Staff\spStaff_CreateAndOutputId.sql" />
     <Build Include="dbo\StoredProcedures\Staff\spStaff_DeleteById.sql" />
     <Build Include="dbo\Types\udtStaff.sql" />
-    <Build Include="dbo\StoredProcedures\Student\spStudent_SelectStudentsByStaffId.sql" />
+    <Build Include="dbo\StoredProcedures\Student\spStudent_SelectByStaffId.sql" />
     <Build Include="dbo\StoredProcedures\Student\spStudent_UpdateById.sql" />
     <Build Include="dbo\Tables\tblArtifact.sql" />
     <Build Include="dbo\Tables\tblRequiredArtifact.sql" />
     <Build Include="dbo\StoredProcedures\Artifact\spArtifact_CreateAndOutputId.sql" />
     <Build Include="dbo\Types\udtArtifact.sql" />
+    <Build Include="dbo\StoredProcedures\Artifact\spArtifact_SelectByStudentId.sql" />
+    <Build Include="dbo\StoredProcedures\Artifact\spArtifact_DeleteById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />

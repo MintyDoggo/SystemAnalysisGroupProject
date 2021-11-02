@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spStudent_SelectStudentsByStaffId]
+﻿CREATE PROCEDURE [dbo].[spStudent_SelectByStaffId]
 	@inStaffId INT
 AS
 BEGIN

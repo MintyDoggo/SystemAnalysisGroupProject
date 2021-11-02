@@ -73,9 +73,9 @@
 {
     [Parameter]
     public LoginModel newUser { get; set; } = new LoginModel();
-    public TextEdit user_textbox_student, user_textbox_staff, pass_textbox_student, pass_textbox_staff;
 
-    string info = "";
+    public TextEdit user_textbox_student, user_textbox_staff, pass_textbox_student, pass_textbox_staff;
+    String info = "";
 
     bool isEditable = false;
     bool createStaff = false;
@@ -129,6 +129,10 @@
 
         //TODO: store STAFF user in database
 
+
+
+
+
         // Update this Student
         try
         {
@@ -138,6 +142,9 @@
         {
             Console.WriteLine("Database services must be offline");
         }
+
+
+
 
         Console.WriteLine("Student Info:\nUsername: ");
         Console.WriteLine(newUser.Username);
@@ -170,6 +177,10 @@
 
         //TODO: store STUDENT user in database
 
+
+
+
+
         // Update this Student
         try
         {
@@ -179,6 +190,10 @@
         {
             Console.WriteLine("Database services must be offline");
         }
+
+
+
+
 
         Console.WriteLine("Student Info:\nUsername: ");
         Console.WriteLine(newUser.Username);

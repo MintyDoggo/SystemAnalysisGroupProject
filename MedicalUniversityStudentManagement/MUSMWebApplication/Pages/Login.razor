@@ -1,21 +1,20 @@
-﻿@page "/login"
+﻿@page "/"
 @inject HttpClient Http
 @inject NavigationManager NavManager
 @inject LoggedInUser loggedInUser
 
-
-<h3>Login</h3>
-
 <CardBody>
-    <CardTitle Size="5">Edit Student Info here:</CardTitle>
+    <CardTitle Size="5">Welcome</CardTitle>
     Username: <TextEdit @ref="@username_textbox" Placeholder="@myLogin?.Username" />
     Password: <TextEdit @ref="@password_textbox" Placeholder="@myLogin?.Password" />
 </CardBody>
 
 
 <Button Color="Color.Primary" Clicked="@OnSubmitButtonClicked">Submit</Button>
-
 <p style="color:#FF0000">@info</p>
+<Button Color="Color.Warning" Clicked="@BypassAdmin">Admin</Button>
+<Button Color="Color.Warning" Clicked="@BypassStaff">Staff</Button>
+<Button Color="Color.Warning" Clicked="@BypassStudent">Student</Button>
 
 @code
 {
@@ -52,8 +51,26 @@
         loggedInUser.Login.Username = myLogin.Username;
         loggedInUser.Login.Password = myLogin.Password;
         loggedInUser.Login.UserType = myLogin.UserType;
-        NavManager.NavigateTo("");
+        NavManager.NavigateTo("/home");
     }
 
 
+    //DELETE ALL 3 OF THESE LATER
+    void BypassAdmin()
+    {
+        loggedInUser.Login.UserType = UserType.Admin;
+        NavManager.NavigateTo("/home");
+    }
+
+    void BypassStaff()
+    {
+        loggedInUser.Login.UserType = UserType.Staff;
+        NavManager.NavigateTo("/home");
+    }
+
+    void BypassStudent()
+    {
+        loggedInUser.Login.UserType = UserType.Student;
+        NavManager.NavigateTo("/home");
+    }
 }

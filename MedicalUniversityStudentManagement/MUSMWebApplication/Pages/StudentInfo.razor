@@ -2,22 +2,46 @@
 @inject HttpClient Http
 
 <Card>
-    <CardBody>
-        <CardTitle Size="5">Edit Student Info here:</CardTitle>
-        StudentIdNumber: <TextEdit Placeholder="@myStudent?.StudentIdNumber.ToString()" />
-        FirstName: <TextEdit Placeholder="@myStudent?.FirstName" />
-        LastName: <TextEdit Placeholder="@myStudent?.LastName" />
-        Birthday: <TextEdit Placeholder="@myStudent?.Birthday.ToString()" />
-        Address: <TextEdit Placeholder="@myStudent?.Address" />
-        Major: <TextEdit Placeholder="@myStudent?.Major" />
-        FirstYearEnrolled: <TextEdit Placeholder="@myStudent?.FirstYearEnrolled.ToString()" />
-        HighSchoolAttended: <TextEdit Placeholder="@myStudent?.HighSchoolAttended" />
-
-        <CardText>
-            Some quick example text to build on the card title and make up the bulk of the card's content.
-        </CardText>
-        <Button Color="Color.Primary">Button</Button>
-    </CardBody>
+    @{
+        if (isEditable)
+        {
+            <CardBody>
+                <CardTitle Size="5">Edit Student Info here:</CardTitle>
+                StudentIdNumber: <TextEdit Placeholder="@myStudent?.StudentIdNumber.ToString()" />
+                FirstName: <TextEdit Placeholder="@myStudent?.FirstName" />
+                LastName: <TextEdit Placeholder="@myStudent?.LastName" />
+                Birthday: <TextEdit Placeholder="@myStudent?.Birthday.ToString()" />
+                Address: <TextEdit Placeholder="@myStudent?.Address" />
+                Major: <TextEdit Placeholder="@myStudent?.Major" />
+                FirstYearEnrolled: <TextEdit Placeholder="@myStudent?.FirstYearEnrolled.ToString()" />
+                HighSchoolAttended: <TextEdit Placeholder="@myStudent?.HighSchoolAttended" />
+            </CardBody>
+            <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@OnSubmitButtonClicked">Submit</Button>
+        }
+        else
+        {
+            <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
+            <CardBody>
+                <CardTitle Size="5">Student Info</CardTitle>
+                StudentIdNumber: @myStudent?.StudentIdNumber.ToString()
+                <br />
+                FirstName: @myStudent?.FirstName
+                <br />
+                LastName: @myStudent?.LastName
+                <br />
+                Birthday: @myStudent?.Birthday.ToString()
+                <br />
+                Address: @myStudent?.Address
+                <br />
+                Major: @myStudent?.Major
+                <br />
+                FirstYearEnrolled: @myStudent?.FirstYearEnrolled.ToString()
+                <br />
+                HighSchoolAttended: @myStudent?.HighSchoolAttended
+            </CardBody>
+        }
+    }
 </Card>
 
 
@@ -26,4 +50,21 @@
 {
     [Parameter]
     public StudentModel myStudent { get; set; }
+
+    bool isEditable = false;
+
+    void OnEditableButtonClicked()
+    {
+        isEditable = true;
+    }
+
+    void OnCancelButtonClicked()
+    {
+        isEditable = false;
+    }
+
+    void OnSubmitButtonClicked()
+    {
+        
+    }
 }

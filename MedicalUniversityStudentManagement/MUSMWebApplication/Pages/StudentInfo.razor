@@ -7,14 +7,8 @@
         {
             <CardBody>
                 <CardTitle Size="5">Edit Student Info here:</CardTitle>
-                StudentIdNumber: <TextEdit Placeholder="@myStudent?.StudentIdNumber.ToString()" />
-                FirstName: <TextEdit Placeholder="@myStudent?.FirstName" />
-                LastName: <TextEdit Placeholder="@myStudent?.LastName" />
-                Birthday: <TextEdit Placeholder="@myStudent?.Birthday.ToString()" />
-                Address: <TextEdit Placeholder="@myStudent?.Address" />
-                Major: <TextEdit Placeholder="@myStudent?.Major" />
-                FirstYearEnrolled: <TextEdit Placeholder="@myStudent?.FirstYearEnrolled.ToString()" />
-                HighSchoolAttended: <TextEdit Placeholder="@myStudent?.HighSchoolAttended" />
+                FirstName: <TextEdit Placeholder="@myStaff?.FirstName" />
+                LastName: <TextEdit Placeholder="@myStaff?.LastName" />
             </CardBody>
             <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
             <Button Color="Color.Primary" Clicked="@OnSubmitButtonClicked">Submit</Button>
@@ -24,8 +18,6 @@
             <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
             <CardBody>
                 <CardTitle Size="5">Student Info</CardTitle>
-                StudentIdNumber: @myStudent?.StudentIdNumber.ToString()
-                <br />
                 FirstName: @myStudent?.FirstName
                 <br />
                 LastName: @myStudent?.LastName
@@ -50,6 +42,9 @@
 {
     [Parameter]
     public StudentModel myStudent { get; set; }
+
+    [Parameter]
+    public StaffModel myStaff { get; set; }
 
     bool isEditable = false;
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime;
+using MUSMModelsLibrary.Enums;
 
 namespace MUSMModelsLibrary
 {
@@ -12,6 +13,6 @@ namespace MUSMModelsLibrary
         public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public string UserType { get; set; }
+        public UserType UserType { get; set; }  // 0 = Admin, 1 = Staff, 2 = Student
     }
 }

@@ -87,35 +87,33 @@ namespace MUSMDataLibrary.BuisinessLogic
 
 
 
-        /*        // Does not provide ability to change the student's database id (for good reason)
-                public static async Task UpdateLoginById(string connectionString, int idToModify, LoginModel student)
-                {
-                    // Name of our stored procedure to execute
-                    string procedureName = "[spLogin_UpdateById]";
+
+        // Does not provide ability to change the Login's database id (for good reason)
+        public static async Task UpdateLoginByIdAsync(string connectionString, int id, LoginModel login)
+        {
+            // Name of our stored procedure to execute
+            string procedureName = "spLogin_UpdateById";
 
 
-                    // Create the Data Table representation of the user defined Login table
-                    DataTable studentTable = new DataTable("@inLogin");
-                    studentTable.Columns.Add("StaffId", typeof(int));
-                    studentTable.Columns.Add("LoginIdNumber", typeof(int));
-                    studentTable.Columns.Add("FirstName", typeof(string));
-                    studentTable.Columns.Add("LastName", typeof(string));
-                    studentTable.Columns.Add("Birthday", typeof(DateTime));
-                    studentTable.Columns.Add("Address", typeof(string));
-                    studentTable.Columns.Add("Major", typeof(string));
-                    studentTable.Columns.Add("FirstYearEnrolled", typeof(int));
-                    studentTable.Columns.Add("HighSchoolAttended", typeof(string));
-                    studentTable.Columns.Add("UndergraduateSchoolAttended", typeof(string));
-                    // Fill in the data
-                    studentTable.Rows.Add(student.StaffId, student.LoginIdNumber, student.FirstName, student.LastName, student.Birthday, student.Address, student.Major, student.FirstYearEnrolled, student.HighSchoolAttended, student.UndergraduateSchoolAttended);
+            // Create the Data Table representation of the user defined Login table
+            DataTable loginTable = new DataTable("@inLogin");
+            loginTable.Columns.Add("Username", typeof(string));
+            loginTable.Columns.Add("Password", typeof(string));
+            loginTable.Columns.Add("UserType", typeof(int));
+            
+            // Fill in the data
+            loginTable.Rows.Add(login.Username, login.Password, login.UserType);
 
-                    // Make parameters to pass to the stored procedure
-                    DynamicParameters parameters = new DynamicParameters();
-                    parameters.Add("@inLogin", studentTable.AsTableValuedParameter("udtLogin"), DbType.Object);
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inId", id, DbType.Int32);
+            parameters.Add("@inLogin", loginTable.AsTableValuedParameter("udtLogin"), DbType.Object);
 
 
-                    // Execute our stored procedure with the parameters we made
-                    await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
-                }*/
+            // Execute our stored procedure with the parameters we made
+            await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
+        }
+
+
     }
 }

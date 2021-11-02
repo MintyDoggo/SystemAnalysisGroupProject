@@ -110,12 +110,13 @@ namespace MUSMDatabaseServicesAPI
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the LoginModel from the request body
             LoginModel login;
             try
             {
-                login = JsonSerializer.Deserialize<LoginModel>(requestBody);
+                login = JsonSerializer.Deserialize<LoginModel>(jsonBody.GetProperty("Login").GetRawText());
             }
             catch (Exception e)
             {
@@ -151,6 +152,51 @@ namespace MUSMDatabaseServicesAPI
 
 
 
+        [Function("UpdateLoginById")]
+        public static async Task<HttpResponseData> UpdateLoginById([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("LoginController");
 
+            // Get the body of the request
+            string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
+
+            // Get the Id and LoginModel from the request body
+            int id;
+            LoginModel login;
+            try
+            {
+                id = jsonBody.GetProperty("Id").GetInt32();
+                login = JsonSerializer.Deserialize<LoginModel>(jsonBody.GetProperty("Login").GetRawText());
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
+                return badRequestResponse;
+            }
+
+            // Call on the data processor
+            try
+            {
+                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+                await LoginProcessor.UpdateLoginByIdAsync(connectionString, id, login);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
+                await conflictResponse.WriteStringAsync("Conflict when inserting into the database");
+                return conflictResponse;
+            }
+
+
+            // Successfully updated the Login in the database
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            return response;
+        }
     }
 }

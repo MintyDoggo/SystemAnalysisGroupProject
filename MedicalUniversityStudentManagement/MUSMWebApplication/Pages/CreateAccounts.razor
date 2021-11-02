@@ -1,16 +1,145 @@
 ﻿@page "/createaccounts"
 @inject HttpClient Http
 
-<h3>@value</h3>
+@{
+    if (!createStaff && !createStudent)
+    {
+        <Button Color="Color.Success" Clicked="@OnAddStaffButtonClicked">Create Staff Account</Button>
+        <Button Color="Color.Success" Clicked="@OnAddStudentButtonClicked">Create Student Account</Button>
+    }
+    else
+    {
+        <Button Color="Color.Danger" Clicked="@OnBackButtonClicked">Back</Button>
+    }
+}
 
-<Button Color="Color.Info" Clicked="@OnButtonClickedAsync">Button</Button>
+
+<Card>
+    @{
+        if (createStaff)
+        {
+            if (isEditable)
+            {
+                <CardBody>
+                    <CardTitle Size="5">New Staff Member</CardTitle>
+                    FirstName: <TextEdit Placeholder="@myStaff?.FirstName" />
+                    LastName: <TextEdit Placeholder="@myStaff?.LastName" />
+                </CardBody>
+                <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
+                <Button Color="Color.Success" Clicked="@OnSubmitButtonClicked">Add</Button>
+            }
+            else
+            {
+                <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
+                <CardBody>
+                    <CardTitle Size="5">New Staff Member</CardTitle>
+                    FirstName: @myStaff?.FirstName
+                    <br />
+                    LastName: @myStaff?.LastName
+                    <br />
+                </CardBody>
+            }
+        }
+        else if (createStudent)
+        {
+            if (isEditable)
+            {
+                <CardBody>
+                    <CardTitle Size="5">New Student</CardTitle>
+                    StudentIdNumber: <TextEdit Placeholder="@myStudent?.StudentIdNumber.ToString()" />
+                    FirstName: <TextEdit Placeholder="@myStudent?.FirstName" />
+                    LastName: <TextEdit Placeholder="@myStudent?.LastName" />
+                    Birthday: <TextEdit Placeholder="@myStudent?.Birthday.ToString()" />
+                    Address: <TextEdit Placeholder="@myStudent?.Address" />
+                    Major: <TextEdit Placeholder="@myStudent?.Major" />
+                    FirstYearEnrolled: <TextEdit Placeholder="@myStudent?.FirstYearEnrolled.ToString()" />
+                    HighSchoolAttended: <TextEdit Placeholder="@myStudent?.HighSchoolAttended" />
+                </CardBody>
+                <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
+                <Button Color="Color.Success" Clicked="@OnSubmitButtonClicked">Add</Button>
+            }
+            else
+            {
+                <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
+                <CardBody>
+                    <CardTitle Size="5">New Student</CardTitle>
+                    StudentIdNumber: @myStudent?.StudentIdNumber.ToString()
+                    <br />
+                    FirstName: @myStudent?.FirstName
+                    <br />
+                    LastName: @myStudent?.LastName
+                    <br />
+                    Birthday: @myStudent?.Birthday.ToString()
+                    <br />
+                    Address: @myStudent?.Address
+                    <br />
+                    Major: @myStudent?.Major
+                    <br />
+                    FirstYearEnrolled: @myStudent?.FirstYearEnrolled.ToString()
+                    <br />
+                    HighSchoolAttended: @myStudent?.HighSchoolAttended
+                </CardBody>
+            }
+        }
+    }
+</Card>
 
 @code
 {
-    private string value = "Create some accounts";
+    [Parameter]
+    public StudentModel myStudent { get; set; }
 
-    async void OnButtonClickedAsync()
+    [Parameter]
+    public StaffModel myStaff { get; set; }
+
+    bool isEditable = false;
+    bool createStaff = false;
+    bool createStudent = false;
+
+    void OnEditableButtonClicked()
     {
-        value = "Lets start creating accounts ye";
+        isEditable = true;
+    }
+
+    void OnCancelButtonClicked()
+    {
+        isEditable = false;
+    }
+
+    void OnAddStaffButtonClicked()
+    {
+        createStaff = true;
+        createStudent = false;
+    }
+
+    void OnAddStudentButtonClicked()
+    {
+        createStudent = true;
+        createStaff = false;
+    }
+
+    void OnBackButtonClicked()
+    {
+        isEditable = false;
+        createStudent = false;
+        createStaff = false;
+    }
+
+    async Task OnSubmitButtonClicked()
+    {
+        // Update this Student
+        try
+        {
+            await Http.GetAsync(@"www.endpointhere.com");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+        // basically, puts you back to the default CreateAccounts page when you submit
+        isEditable = false;
+        createStudent = false;
+        createStaff = false;
     }
 }

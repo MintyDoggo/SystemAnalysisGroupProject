@@ -11,7 +11,7 @@ using MUSMModelsLibrary;
 
 namespace MUSMDatabaseServicesAPI
 {
-    public static class ArtifactController
+    public static class RequiredArtifactController
     {
         /**
          * 
@@ -19,27 +19,24 @@ namespace MUSMDatabaseServicesAPI
 Example request body:
 
 {
-    "RequiredArtifactId": 1,
-    "StudentId": 2,
-    "DocumentReference": "my document is here",
-    "CheckedOff": false
+    "Name": "Final High School Transcript"
 }
 
          * 
          */
-        [Function("CreateArtifactAndReturnId")]
-        public static async Task<HttpResponseData> CreateArtifactAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
+        [Function("CreateRequiredArtifactAndReturnId")]
+        public static async Task<HttpResponseData> CreateRequiredArtifactAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
         {
-            ILogger logger = executionContext.GetLogger("ArtifactController");
+            ILogger logger = executionContext.GetLogger("RequiredArtifactController");
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
 
-            // Get the ArtifactModel from the request body
-            ArtifactModel artifact;
+            // Get the RequiredArtifactModel from the request body
+            RequiredArtifactModel requiredArtifact;
             try
             {
-                artifact = JsonSerializer.Deserialize<ArtifactModel>(requestBody);
+                requiredArtifact = JsonSerializer.Deserialize<RequiredArtifactModel>(requestBody);
             }
             catch (Exception e)
             {
@@ -55,7 +52,7 @@ Example request body:
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-                retVal = await ArtifactProcessor.CreateArtifactAndReturnIdAsync(connectionString, artifact);
+                retVal = await RequiredArtifactProcessor.CreateRequiredArtifactAndReturnIdAsync(connectionString, requiredArtifact);
             }
             catch (Exception e)
             {
@@ -67,29 +64,29 @@ Example request body:
             }
 
 
-            // Successfully added the Artifact to the database
+            // Successfully added the RequiredArtifact to the database
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(retVal);
             return response;
         }
 
-        [Function("DeleteArtifactById")]
-        public static async Task<HttpResponseData> DeleteArtifactById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
+        [Function("DeleteRequiredArtifactById")]
+        public static async Task<HttpResponseData> DeleteRequiredArtifactById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
         {
-            ILogger logger = executionContext.GetLogger("ArtifactController");
+            ILogger logger = executionContext.GetLogger("RequiredArtifactController");
 
             // Get the body of the request and deserialize it to json
             string requestBody = await req.ReadAsStringAsync();
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
-            // Get the Id of the Artifact to delete from the request body
+            // Get the Id of the RequiredArtifact to delete from the request body
             int id = jsonBody.GetInt32();
 
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
 
-                await ArtifactProcessor.DeleteArtifactByIdAsync(connectionString, id);
+                await RequiredArtifactProcessor.DeleteRequiredArtifactByIdAsync(connectionString, id);
             }
             catch (Exception e)
             {
@@ -102,27 +99,6 @@ Example request body:
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteStringAsync("Row successfully deleted");
-            return response;
-        }
-
-        [Function("GetArtifactsByStudentId")]
-        public static async Task<HttpResponseData> GetArtifactsByStudentId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
-        {
-            ILogger logger = executionContext.GetLogger("ArtifactController");
-
-            // Get the body of the request and deserialize it to json
-            string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
-
-            // Get the Id of the Student from the request body
-            int studentId = jsonBody.GetInt32();
-
-
-            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-            IEnumerable<ArtifactModel> Artifacts = await ArtifactProcessor.GetArtifactsByStudentIdAsync(connectionString, studentId);
-
-            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync<IEnumerable<ArtifactModel>>(Artifacts);
             return response;
         }
 

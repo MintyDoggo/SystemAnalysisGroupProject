@@ -26,7 +26,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inArtifact", artifactTable.AsTableValuedParameter("udtArtifact"), DbType.Object);
+            parameters.Add("@inRequiredArtifact", artifactTable.AsTableValuedParameter("udtRequiredArtifact"), DbType.Object);
             parameters.Add("@outId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
 
@@ -46,6 +46,13 @@ namespace MUSMDataLibrary.BuisinessLogic
             parameters.Add("@inId", id, dbType: DbType.Int32);
 
             return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
+        }
+
+        public static async Task<IEnumerable<RequiredArtifactModel>> GetRequiredArtifactsAsync(string connectionString)
+        {
+            string procedureName = "spRequiredArtifact_SelectAll";
+
+            return await SqlDataAccess.LoadDataAsync<RequiredArtifactModel>(connectionString, procedureName);
         }
 
 

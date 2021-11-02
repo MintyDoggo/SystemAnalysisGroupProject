@@ -1,6 +1,8 @@
 ﻿@page "/login"
 @inject HttpClient Http
 @inject NavigationManager NavManager
+@inject LoggedInUser loggedInUser
+
 
 <h3>Login</h3>
 
@@ -34,18 +36,22 @@
             return;
         }
 
-        if (myLogin.Password != /*check if password corresponds with myLogin.Username in database*/"123")
+        //set Id using primary key for the user here:
+        //myLogin.Id = // get from database
+
+        if (myLogin.Password != /*check if password corresponds with myLogin.Id in database*/"123")
         {
             info = "Invalid Password. Please try again.";
             return;
         }
 
-        //set Id using primary key for the user here:
-        //myLogin.Id = // get from database
-
         //set user type here
         //myLogin.UserType = //get from database
 
+        loggedInUser.Login.Id = myLogin.Id;
+        loggedInUser.Login.Username = myLogin.Username;
+        loggedInUser.Login.Password = myLogin.Password;
+        loggedInUser.Login.UserType = myLogin.UserType;
         NavManager.NavigateTo("");
     }
 

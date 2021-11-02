@@ -1,6 +1,5 @@
 ﻿CREATE TABLE [dbo].[tblStudent]
 (
-	-- Maybe make some of these NULL as part of the extra information the Students need to fill out
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[StaffId] INT NOT NULL FOREIGN KEY REFERENCES tblStaff(Id), -- the associated staff for this student
 	[StudentIdNumber] INT,

@@ -85,16 +85,19 @@
 
     async Task ReloadTable()
     {
+        studentModels = new List<StudentModel>();
         // Update our Students list
         try
         {
             IEnumerable<StudentModel> getStudentsResponse = await Http.GetFromJsonAsync<IEnumerable<StudentModel>>(@"www.endpointhere.com");
-            studentModels = new List<StudentModel>(getStudentsResponse);
+            studentModels.Clear();
+            studentModels.AddRange(getStudentsResponse);
         }
         catch (Exception e)
         {
             Console.WriteLine("Database services must be offline");
         }
+
 
 
 

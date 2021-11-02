@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace MUSMModelsLibrary.Enums
 {
-    public class UserType
+    public enum UserType
     {
-        public enum Game
-        {
-            Admin,
-            Staff,
-            Student
-        }
+        Admin,
+        Staff,
+        Student
     }
 }

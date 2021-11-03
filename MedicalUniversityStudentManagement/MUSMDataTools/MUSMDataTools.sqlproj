@@ -89,7 +89,7 @@
     <Build Include="dbo\Types\udtArtifact.sql" />
     <Build Include="dbo\StoredProcedures\Artifact\spArtifact_SelectByStudentId.sql" />
     <Build Include="dbo\StoredProcedures\Artifact\spArtifact_DeleteById.sql" />
-    <Build Include="dbo\StoredProcedures\Login\spLogin_ReturnLoginIdByUsernameAndPassword.sql" />
+    <Build Include="dbo\StoredProcedures\Login\spLogin_GetIdByUsernameAndPassword.sql" />
     <Build Include="dbo\Types\udtLogin.sql" />
     <Build Include="dbo\StoredProcedures\Login\spLogin_CreateAndOutputId.sql" />
     <Build Include="dbo\StoredProcedures\Login\spLogin_DeleteById.sql" />

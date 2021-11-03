@@ -1,0 +1,220 @@
+﻿@page "/createaccounts"
+@inject HttpClient Http
+@inject NavigationManager NavManager
+@inject LoggedInUser loggedInUser
+
+
+@{
+    if (!createStaff && !createStudent)
+    {
+        <Button Color="Color.Success" Clicked="@OnAddStaffButtonClicked">Create Staff Account</Button>
+        <Button Color="Color.Success" Clicked="@OnAddStudentButtonClicked">Create Student Account</Button>
+    }
+    else
+    {
+        <Button Color="Color.Danger" Clicked="@OnBackButtonClicked">Back</Button>
+    }
+}
+
+
+<Card>
+    @{
+        if (createStaff)
+        {
+            if (isEditable)
+            {
+                <CardBody>
+                    <CardTitle Size="5">New Staff Member</CardTitle>
+                    Username: <TextEdit @ref="@user_textbox_staff" Placeholder="Create Username" />
+                    Password: <TextEdit @ref="@pass_textbox_staff" Placeholder="Create Password" />
+                </CardBody>
+                <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
+                <Button Color="Color.Success" Clicked="@OnAddButtonClickedStaff">Add</Button>
+            }
+            else
+            {
+                <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
+                <CardBody>
+                    <CardTitle Size="5">New Staff Member</CardTitle>
+                    Username: @newUser?.Username
+                    <br />
+                    Password: ******
+                    <br />
+                </CardBody>
+            }
+        }
+        else if (createStudent)
+        {
+            if (isEditable)
+            {
+                <CardBody>
+                    <CardTitle Size="5">New Student</CardTitle>
+                    Username: <TextEdit @ref="@user_textbox_student" Placeholder="Create Username" />
+                    Password: <TextEdit @ref="@pass_textbox_student" Placeholder="Create Password" />
+                </CardBody>
+                <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
+                <Button Color="Color.Success" Clicked="@OnAddButtonClickedStudent">Add</Button>
+            }
+            else
+            {
+                <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
+                <CardBody>
+                    <CardTitle Size="5">New Student</CardTitle>
+                    Username: @newUser?.Username
+                    <br />
+                    Password: ******
+                    <br />
+                </CardBody>
+            }
+        }
+    }
+</Card>
+<p style="color:#FF0000">@info</p>
+
+
+@code
+{
+    [Parameter]
+    public LoginModel newUser { get; set; } = new LoginModel();
+
+    public TextEdit user_textbox_student, user_textbox_staff, pass_textbox_student, pass_textbox_staff;
+    String info = "";
+
+    bool isEditable = false;
+    bool createStaff = false;
+    bool createStudent = false;
+
+    void OnEditableButtonClicked()
+    {
+        isEditable = true;
+    }
+
+    void OnCancelButtonClicked()
+    {
+        isEditable = false;
+        info = "";
+    }
+
+    void OnAddStaffButtonClicked()
+    {
+        createStaff = true;
+        createStudent = false;
+    }
+
+    void OnAddStudentButtonClicked()
+    {
+        createStudent = true;
+        createStaff = false;
+    }
+
+    void OnBackButtonClicked()
+    {
+        isEditable = false;
+        createStudent = false;
+        createStaff = false;
+        info = "";
+        newUser.Username = "";
+        newUser.Password = "";
+    }
+
+    async Task OnAddButtonClickedStaff()
+    {
+        newUser.Username = user_textbox_staff.Text;
+        newUser.Password = pass_textbox_staff.Text;
+
+        if (newUser.Username == null || newUser.Password == null)
+        {
+            info = "Please enter a username and password.";
+            newUser.Username = "";
+            newUser.Password = "";
+            return;
+        }
+
+        newUser.UserType = UserType.Staff;
+
+        //TODO: store STAFF user in database
+
+
+        //database stuff here!!
+
+
+        // Update this Student
+        try
+        {
+            await Http.GetAsync(@"www.endpointhere.com");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
+
+        Console.WriteLine("Student Info:\nUsername: ");
+        Console.WriteLine(newUser.Username);
+        Console.WriteLine("Password: ");
+        Console.WriteLine(newUser.Password);
+        Console.WriteLine("UserType: ");
+        Console.WriteLine(newUser.UserType.ToString());
+
+        // basically, puts you back to the default CreateAccounts page when you submit
+        isEditable = false;
+        createStudent = false;
+        createStaff = false;
+        info = "";
+        newUser.Username = "";
+        newUser.Password = "";
+    }
+
+    async Task OnAddButtonClickedStudent()
+    {
+        newUser.Username = user_textbox_student.Text;
+        newUser.Password = pass_textbox_student.Text;
+
+        if (newUser.Username == null || newUser.Password == null)
+        {
+            info = "Please enter a username and password.";
+            newUser.Username = "";
+            newUser.Password = "";
+            return;
+        }
+
+        newUser.UserType = UserType.Student;
+
+        //TODO: store STUDENT user in database
+
+
+        //database stuff here!!
+
+
+        // Update this Student
+        try
+        {
+            await Http.GetAsync(@"www.endpointhere.com");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
+
+
+        Console.WriteLine("Student Info:\nUsername: ");
+        Console.WriteLine(newUser.Username);
+        Console.WriteLine("Password: ");
+        Console.WriteLine(newUser.Password);
+        Console.WriteLine("UserType: ");
+        Console.WriteLine(newUser.UserType.ToString());
+
+        // basically, puts you back to the default CreateAccounts page when you submit
+        isEditable = false;
+        createStudent = false;
+        createStaff = false;
+        info = "";
+        newUser.Username = "";
+        newUser.Password = "";
+    }
+}

@@ -87,7 +87,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 
         public static async Task<int> GetLoginIdByUsernameAndPassword(string connectionString, string username, string password)
         {
-            string procedureName = "spLogin_GetIdByUsernameAndPassword";
+            string procedureName = "spLogin_SelectIdByUsernameAndPassword";
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();

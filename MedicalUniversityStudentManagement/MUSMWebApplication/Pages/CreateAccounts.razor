@@ -22,20 +22,20 @@
             {
                 <CardBody>
                     <CardTitle Size="5">New Staff Member</CardTitle>
-                    FirstName: <TextEdit Placeholder="@myStaff?.FirstName" />
-                    LastName: <TextEdit Placeholder="@myStaff?.LastName" />
+                    Username: <TextEdit @ref="@user_textbox_staff" Placeholder="@newUser?.Username" />
+                    Password: <TextEdit @ref="@pass_textbox_staff" Placeholder="@newUser?.Password" />
                 </CardBody>
                 <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
-                <Button Color="Color.Success" Clicked="@OnSubmitButtonClicked">Add</Button>
+                <Button Color="Color.Success" Clicked="@OnAddButtonClickedStaff">Add</Button>
             }
             else
             {
                 <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
                 <CardBody>
                     <CardTitle Size="5">New Staff Member</CardTitle>
-                    FirstName: @myStaff?.FirstName
+                    Username: @newUser?.Username
                     <br />
-                    LastName: @myStaff?.LastName
+                    Password: ******
                     <br />
                 </CardBody>
             }
@@ -46,51 +46,36 @@
             {
                 <CardBody>
                     <CardTitle Size="5">New Student</CardTitle>
-                    StudentIdNumber: <TextEdit Placeholder="@myStudent?.StudentIdNumber.ToString()" />
-                    FirstName: <TextEdit Placeholder="@myStudent?.FirstName" />
-                    LastName: <TextEdit Placeholder="@myStudent?.LastName" />
-                    Birthday: <TextEdit Placeholder="@myStudent?.Birthday.ToString()" />
-                    Address: <TextEdit Placeholder="@myStudent?.Address" />
-                    Major: <TextEdit Placeholder="@myStudent?.Major" />
-                    FirstYearEnrolled: <TextEdit Placeholder="@myStudent?.FirstYearEnrolled.ToString()" />
-                    HighSchoolAttended: <TextEdit Placeholder="@myStudent?.HighSchoolAttended" />
+                    Username: <TextEdit @ref="@user_textbox_student" Placeholder="@newUser?.Username" />
+                    Password: <TextEdit @ref="@pass_textbox_student" Placeholder="@newUser?.Password" />
                 </CardBody>
                 <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
-                <Button Color="Color.Success" Clicked="@OnSubmitButtonClicked">Add</Button>
+                <Button Color="Color.Success" Clicked="@OnAddButtonClickedStudent">Add</Button>
             }
             else
             {
                 <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
                 <CardBody>
                     <CardTitle Size="5">New Student</CardTitle>
-                    StudentIdNumber: @myStudent?.StudentIdNumber.ToString()
+                    Username: @newUser?.Username
                     <br />
-                    FirstName: @myStudent?.FirstName
+                    Password: ******
                     <br />
-                    LastName: @myStudent?.LastName
-                    <br />
-                    Birthday: @myStudent?.Birthday.ToString()
-                    <br />
-                    Address: @myStudent?.Address
-                    <br />
-                    Major: @myStudent?.Major
-                    <br />
-                    FirstYearEnrolled: @myStudent?.FirstYearEnrolled.ToString()
-                    <br />
-                    HighSchoolAttended: @myStudent?.HighSchoolAttended
                 </CardBody>
             }
         }
     }
 </Card>
+<p style="color:#FF0000">@info</p>
+
 
 @code
 {
     [Parameter]
-    public StudentModel myStudent { get; set; }
+    public LoginModel newUser { get; set; } = new LoginModel();
 
-    [Parameter]
-    public StaffModel myStaff { get; set; }
+    public TextEdit user_textbox_student, user_textbox_staff, pass_textbox_student, pass_textbox_staff;
+    String info = "";
 
     bool isEditable = false;
     bool createStaff = false;
@@ -104,6 +89,7 @@
     void OnCancelButtonClicked()
     {
         isEditable = false;
+        info = "";
     }
 
     void OnAddStaffButtonClicked()
@@ -123,10 +109,30 @@
         isEditable = false;
         createStudent = false;
         createStaff = false;
+        info = "";
+        newUser.Username = "";
+        newUser.Password = "";
     }
 
-    async Task OnSubmitButtonClicked()
+    async Task OnAddButtonClickedStaff()
     {
+        newUser.Username = user_textbox_staff.Text;
+        newUser.Password = pass_textbox_staff.Text;
+
+        if (newUser.Username == null || newUser.Password == null)
+        {
+            info = "Please enter a username and password.";
+            return;
+        }
+
+        newUser.UserType = UserType.Staff;
+
+        //TODO: store STAFF user in database
+
+
+
+
+
         // Update this Student
         try
         {
@@ -137,9 +143,71 @@
             Console.WriteLine("Database services must be offline");
         }
 
+
+
+
+        Console.WriteLine("Student Info:\nUsername: ");
+        Console.WriteLine(newUser.Username);
+        Console.WriteLine("Password: ");
+        Console.WriteLine(newUser.Password);
+        Console.WriteLine("UserType: ");
+        Console.WriteLine(newUser.UserType.ToString());
+
         // basically, puts you back to the default CreateAccounts page when you submit
         isEditable = false;
         createStudent = false;
         createStaff = false;
+        info = "";
+        newUser.Username = "";
+        newUser.Password = "";
+    }
+
+    async Task OnAddButtonClickedStudent()
+    {
+        newUser.Username = user_textbox_student.Text;
+        newUser.Password = pass_textbox_student.Text;
+
+        if (newUser.Username == null || newUser.Password == null)
+        {
+            info = "Please enter a username and password.";
+            return;
+        }
+
+        newUser.UserType = UserType.Student;
+
+        //TODO: store STUDENT user in database
+
+
+
+
+
+        // Update this Student
+        try
+        {
+            await Http.GetAsync(@"www.endpointhere.com");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
+
+
+        Console.WriteLine("Student Info:\nUsername: ");
+        Console.WriteLine(newUser.Username);
+        Console.WriteLine("Password: ");
+        Console.WriteLine(newUser.Password);
+        Console.WriteLine("UserType: ");
+        Console.WriteLine(newUser.UserType.ToString());
+
+        // basically, puts you back to the default CreateAccounts page when you submit
+        isEditable = false;
+        createStudent = false;
+        createStaff = false;
+        info = "";
+        newUser.Username = "";
+        newUser.Password = "";
     }
 }

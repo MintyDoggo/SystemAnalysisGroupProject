@@ -11,6 +11,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
+
+
 namespace MUSMWebApp
 {
     public class Startup
@@ -26,6 +31,13 @@ namespace MUSMWebApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddBlazorise(options =>
+            {
+                options.ChangeTextOnKeyPress = true; // optional
+            })
+      .AddBootstrapProviders()
+      .AddFontAwesomeIcons();
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
@@ -49,6 +61,8 @@ namespace MUSMWebApp
             app.UseStaticFiles();
 
             app.UseRouting();
+
+
 
             app.UseEndpoints(endpoints =>
             {

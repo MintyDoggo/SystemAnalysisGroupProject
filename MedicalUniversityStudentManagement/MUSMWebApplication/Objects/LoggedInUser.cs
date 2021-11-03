@@ -8,7 +8,12 @@ namespace MUSMWebApplication.Objects
 {
     public class LoggedInUser
     {
-        public LoginModel Login { get; set; } = new LoginModel() /*{ UserType = MUSMModelsLibrary.Enums.UserType.Student }*/;
+        public LoginModel Login { get; set; }
 
+        public LoggedInUser()
+        {
+            Console.WriteLine("ddddddddddddddddddddddddd");
+            Login = new LoginModel();
+        }
     }
 }

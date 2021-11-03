@@ -13,6 +13,19 @@ namespace MUSMDatabaseServicesAPI
 {
     public static class LoginController
     {
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "Username": "PaulMorton27",
+    "Password": "ihaveasecurepassword",
+    "UserType": 2
+}
+
+         * 
+         */
         [Function("CreateLoginAndReturnId")]
         public static async Task<HttpResponseData> CreateLoginAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -59,6 +72,67 @@ namespace MUSMDatabaseServicesAPI
             return response;
         }
 
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "Id": 3,
+    "Username": "PaulMorton27",
+    "Password": "nowmypasswordisreallysecure",
+    "UserType": 2
+}
+
+         * 
+         */
+        [Function("UpdateLoginById")]
+        public static async Task<HttpResponseData> UpdateLoginById([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("LoginController");
+
+            // Get the body of the request
+            string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
+
+            // Get the Id and LoginModel from the request body
+            int id;
+            LoginModel login;
+            try
+            {
+                login = JsonSerializer.Deserialize<LoginModel>(requestBody);
+                id = login.Id;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
+                return badRequestResponse;
+            }
+
+            // Call on the data processor
+            try
+            {
+                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+                await LoginProcessor.UpdateLoginByIdAsync(connectionString, id, login);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
+                await conflictResponse.WriteStringAsync("Conflict when inserting into the database");
+                return conflictResponse;
+            }
+
+
+            // Successfully updated the Login in the database
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            return response;
+        }
+
         [Function("DeleteLoginById")]
         public static async Task<HttpResponseData> DeleteLoginById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -91,6 +165,7 @@ namespace MUSMDatabaseServicesAPI
             return response;
         }
 
+
         [Function("GetLogins")]
         public static async Task<HttpResponseData> GetLogins([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -103,6 +178,18 @@ namespace MUSMDatabaseServicesAPI
         }
 
 
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "Username": "PaulMorton27",
+    "Password": "ihaveasecurepassword"
+}
+
+         * 
+         */
         [Function("ReturnIdByUsernameAndPassword")]
         public static async Task<HttpResponseData> ReturnLoginIdByUsernameAndPassword([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -110,13 +197,12 @@ namespace MUSMDatabaseServicesAPI
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the LoginModel from the request body
             LoginModel login;
             try
             {
-                login = JsonSerializer.Deserialize<LoginModel>(jsonBody.GetProperty("Login").GetRawText());
+                login = JsonSerializer.Deserialize<LoginModel>(requestBody);
             }
             catch (Exception e)
             {
@@ -151,52 +237,5 @@ namespace MUSMDatabaseServicesAPI
         }
 
 
-
-        [Function("UpdateLoginById")]
-        public static async Task<HttpResponseData> UpdateLoginById([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req, FunctionContext executionContext)
-        {
-            ILogger logger = executionContext.GetLogger("LoginController");
-
-            // Get the body of the request
-            string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
-
-            // Get the Id and LoginModel from the request body
-            int id;
-            LoginModel login;
-            try
-            {
-                id = jsonBody.GetProperty("Id").GetInt32();
-                login = JsonSerializer.Deserialize<LoginModel>(jsonBody.GetProperty("Login").GetRawText());
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-
-                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
-                return badRequestResponse;
-            }
-
-            // Call on the data processor
-            try
-            {
-                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-                await LoginProcessor.UpdateLoginByIdAsync(connectionString, id, login);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-
-                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
-                await conflictResponse.WriteStringAsync("Conflict when inserting into the database");
-                return conflictResponse;
-            }
-
-
-            // Successfully updated the Login in the database
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            return response;
-        }
     }
 }

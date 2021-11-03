@@ -12,7 +12,7 @@ namespace MUSMWebApplication.Objects
 
         public LoggedInUser()
         {
-            Console.WriteLine("ddddddddddddddddddddddddd");
+            Console.WriteLine("LoggedInUser singleton created");
             Login = new LoginModel();
         }
     }

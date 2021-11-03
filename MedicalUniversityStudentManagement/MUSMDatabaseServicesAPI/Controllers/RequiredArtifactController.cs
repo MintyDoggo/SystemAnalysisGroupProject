@@ -70,6 +70,17 @@ Example request body:
             return response;
         }
 
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "Id": 1
+}
+
+         * 
+         */
         [Function("DeleteRequiredArtifactById")]
         public static async Task<HttpResponseData> DeleteRequiredArtifactById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -80,7 +91,7 @@ Example request body:
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id of the RequiredArtifact to delete from the request body
-            int id = jsonBody.GetInt32();
+            int id = jsonBody.GetProperty("Id").GetInt32();
 
             try
             {

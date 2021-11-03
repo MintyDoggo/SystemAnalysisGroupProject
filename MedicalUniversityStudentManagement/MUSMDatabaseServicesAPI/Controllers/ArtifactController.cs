@@ -134,6 +134,17 @@ Example request body:
             return response;
         }
 
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "Id": 1
+}
+
+         * 
+         */
         [Function("DeleteArtifactById")]
         public static async Task<HttpResponseData> DeleteArtifactById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -144,7 +155,7 @@ Example request body:
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id of the Artifact to delete from the request body
-            int id = jsonBody.GetInt32();
+            int id = jsonBody.GetProperty("Id").GetInt32();
 
             try
             {
@@ -166,6 +177,17 @@ Example request body:
             return response;
         }
 
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "StudentId": 2
+}
+
+         * 
+         */
         [Function("GetArtifactsByStudentId")]
         public static async Task<HttpResponseData> GetArtifactsByStudentId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -176,7 +198,7 @@ Example request body:
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id of the Student from the request body
-            int studentId = jsonBody.GetInt32();
+            int studentId = jsonBody.GetProperty("StudentId").GetInt32();
 
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
@@ -186,6 +208,18 @@ Example request body:
             await response.WriteAsJsonAsync<IEnumerable<ArtifactModel>>(Artifacts);
             return response;
         }
+
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "RequiredArtifactId": 1
+}
+
+         * 
+         */
         [Function("GetArtifactsByRequiredArtifactId")]
         public static async Task<HttpResponseData> GetArtifactsByRequiredArtifactId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -195,8 +229,8 @@ Example request body:
             string requestBody = await req.ReadAsStringAsync();
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
-            // Get the Id of the Required Artifact from the request body
-            int requiredArtifactId = jsonBody.GetInt32();
+            // Get the Id of the Student from the request body
+            int requiredArtifactId = jsonBody.GetProperty("RequiredArtifactId").GetInt32();
 
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");

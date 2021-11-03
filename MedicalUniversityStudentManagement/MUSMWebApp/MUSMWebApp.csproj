@@ -10,4 +10,8 @@
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.4.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MUSMModelsLibrary\MUSMModelsLibrary.csproj" />
+  </ItemGroup>
+
 </Project>

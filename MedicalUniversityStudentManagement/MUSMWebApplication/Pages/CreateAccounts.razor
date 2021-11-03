@@ -22,8 +22,8 @@
             {
                 <CardBody>
                     <CardTitle Size="5">New Staff Member</CardTitle>
-                    Username: <TextEdit @ref="@user_textbox_staff" Placeholder="@newUser?.Username" />
-                    Password: <TextEdit @ref="@pass_textbox_staff" Placeholder="@newUser?.Password" />
+                    Username: <TextEdit @ref="@user_textbox_staff" Placeholder="Create Username" />
+                    Password: <TextEdit @ref="@pass_textbox_staff" Placeholder="Create Password" />
                 </CardBody>
                 <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
                 <Button Color="Color.Success" Clicked="@OnAddButtonClickedStaff">Add</Button>
@@ -46,8 +46,8 @@
             {
                 <CardBody>
                     <CardTitle Size="5">New Student</CardTitle>
-                    Username: <TextEdit @ref="@user_textbox_student" Placeholder="@newUser?.Username" />
-                    Password: <TextEdit @ref="@pass_textbox_student" Placeholder="@newUser?.Password" />
+                    Username: <TextEdit @ref="@user_textbox_student" Placeholder="Create Username" />
+                    Password: <TextEdit @ref="@pass_textbox_student" Placeholder="Create Password" />
                 </CardBody>
                 <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
                 <Button Color="Color.Success" Clicked="@OnAddButtonClickedStudent">Add</Button>
@@ -122,6 +122,8 @@
         if (newUser.Username == null || newUser.Password == null)
         {
             info = "Please enter a username and password.";
+            newUser.Username = "";
+            newUser.Password = "";
             return;
         }
 
@@ -130,7 +132,7 @@
         //TODO: store STAFF user in database
 
 
-
+        //database stuff here!!
 
 
         // Update this Student
@@ -170,6 +172,8 @@
         if (newUser.Username == null || newUser.Password == null)
         {
             info = "Please enter a username and password.";
+            newUser.Username = "";
+            newUser.Password = "";
             return;
         }
 
@@ -178,7 +182,7 @@
         //TODO: store STUDENT user in database
 
 
-
+        //database stuff here!!
 
 
         // Update this Student

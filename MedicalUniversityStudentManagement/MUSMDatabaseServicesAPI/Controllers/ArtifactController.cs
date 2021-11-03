@@ -46,7 +46,14 @@ Example request body:
                 logger.LogError(e, e.Message);
 
                 var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
+                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
+                await badRequestResponse.WriteStringAsync("\n");
+                await badRequestResponse.WriteStringAsync("{\n");
+                await badRequestResponse.WriteStringAsync("    \"RequiredArtifactId\": 1,\n");
+                await badRequestResponse.WriteStringAsync("    \"StudentId\": 2,\n");
+                await badRequestResponse.WriteStringAsync("    \"DocumentReference\": \"my document is here\",\n");
+                await badRequestResponse.WriteStringAsync("    \"CheckedOff\": false\n");
+                await badRequestResponse.WriteStringAsync("}\n");
                 return badRequestResponse;
             }
 
@@ -109,7 +116,15 @@ Example request body:
                 logger.LogError(e, e.Message);
 
                 var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
+                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
+                await badRequestResponse.WriteStringAsync("\n");
+                await badRequestResponse.WriteStringAsync("{\n");
+                await badRequestResponse.WriteStringAsync("    \"Id\": 2,\n");
+                await badRequestResponse.WriteStringAsync("    \"RequiredArtifactId\": 1,\n");
+                await badRequestResponse.WriteStringAsync("    \"StudentId\": 2,\n");
+                await badRequestResponse.WriteStringAsync("    \"DocumentReference\": \"my document is there\",\n");
+                await badRequestResponse.WriteStringAsync("    \"CheckedOff\": true\n");
+                await badRequestResponse.WriteStringAsync("}\n");
                 return badRequestResponse;
             }
 
@@ -155,7 +170,23 @@ Example request body:
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id of the Artifact to delete from the request body
-            int id = jsonBody.GetProperty("Id").GetInt32();
+            int id;
+            try
+            {
+                id = jsonBody.GetProperty("Id").GetInt32();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
+                await badRequestResponse.WriteStringAsync("\n");
+                await badRequestResponse.WriteStringAsync("{\n");
+                await badRequestResponse.WriteStringAsync("    \"Id\": 1,\n");
+                await badRequestResponse.WriteStringAsync("}\n");
+                return badRequestResponse;
+            }
 
             try
             {
@@ -198,7 +229,23 @@ Example request body:
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id of the Student from the request body
-            int studentId = jsonBody.GetProperty("StudentId").GetInt32();
+            int studentId;
+            try
+            {
+                studentId = jsonBody.GetProperty("StudentId").GetInt32();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
+                await badRequestResponse.WriteStringAsync("\n");
+                await badRequestResponse.WriteStringAsync("{\n");
+                await badRequestResponse.WriteStringAsync("    \"StudentId\": 2,\n");
+                await badRequestResponse.WriteStringAsync("}\n");
+                return badRequestResponse;
+            }
 
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
@@ -230,7 +277,23 @@ Example request body:
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id of the Student from the request body
-            int requiredArtifactId = jsonBody.GetProperty("RequiredArtifactId").GetInt32();
+            int requiredArtifactId;
+            try
+            {
+                requiredArtifactId = jsonBody.GetProperty("RequiredArtifactId").GetInt32();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
+                await badRequestResponse.WriteStringAsync("\n");
+                await badRequestResponse.WriteStringAsync("{\n");
+                await badRequestResponse.WriteStringAsync("    \"RequiredArtifactId\": 1,\n");
+                await badRequestResponse.WriteStringAsync("}\n");
+                return badRequestResponse;
+            }
 
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");

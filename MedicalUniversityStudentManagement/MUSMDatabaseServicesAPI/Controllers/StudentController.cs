@@ -52,7 +52,20 @@ Example request body:
                 logger.LogError(e, e.Message);
 
                 var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
+                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
+                await badRequestResponse.WriteStringAsync("\n");
+                await badRequestResponse.WriteStringAsync("{\n");
+                await badRequestResponse.WriteStringAsync("    \"StaffId\": 3,\n");
+                await badRequestResponse.WriteStringAsync("    \"StudentIdNumber\": 23,\n");
+                await badRequestResponse.WriteStringAsync("    \"FirstName\": \"Clyde\",\n");
+                await badRequestResponse.WriteStringAsync("    \"LastName\": \"Clyde\",\n");
+                await badRequestResponse.WriteStringAsync("    \"Birthday\": \"1993-11-08\",\n");
+                await badRequestResponse.WriteStringAsync("    \"Address\": \"clyde lives in miami\",\n");
+                await badRequestResponse.WriteStringAsync("    \"Major\": \"computer\",\n");
+                await badRequestResponse.WriteStringAsync("    \"FirstYearEnrolled\": 2001,\n");
+                await badRequestResponse.WriteStringAsync("    \"HighSchoolAttended\": \"Bane Bay\",\n");
+                await badRequestResponse.WriteStringAsync("    \"UndergraduateSchoolAttended\": \"homeschool o ya\"\n");
+                await badRequestResponse.WriteStringAsync("}\n");
                 return badRequestResponse;
             }
 
@@ -121,7 +134,21 @@ Example request body:
                 logger.LogError(e, e.Message);
 
                 var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
+                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
+                await badRequestResponse.WriteStringAsync("\n");
+                await badRequestResponse.WriteStringAsync("{\n");
+                await badRequestResponse.WriteStringAsync("    \"Id\": 4,\n");
+                await badRequestResponse.WriteStringAsync("    \"StaffId\": 3,\n");
+                await badRequestResponse.WriteStringAsync("    \"StudentIdNumber\": 23,\n");
+                await badRequestResponse.WriteStringAsync("    \"FirstName\": \"Anthony\",\n");
+                await badRequestResponse.WriteStringAsync("    \"LastName\": \"Anthony\",\n");
+                await badRequestResponse.WriteStringAsync("    \"Birthday\": \"1995-07-23\",\n");
+                await badRequestResponse.WriteStringAsync("    \"Address\": \"ohio\",\n");
+                await badRequestResponse.WriteStringAsync("    \"Major\": \"computer\",\n");
+                await badRequestResponse.WriteStringAsync("    \"FirstYearEnrolled\": 2003,\n");
+                await badRequestResponse.WriteStringAsync("    \"HighSchoolAttended\": \"Bane Bay\",\n");
+                await badRequestResponse.WriteStringAsync("    \"UndergraduateSchoolAttended\": \"homeschool o ya\"\n");
+                await badRequestResponse.WriteStringAsync("}\n");
                 return badRequestResponse;
             }
 
@@ -167,7 +194,23 @@ Example request body:
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id of the Student to delete from the request body
-            int id = jsonBody.GetProperty("Id").GetInt32();
+            int id;
+            try
+            {
+                id = jsonBody.GetProperty("Id").GetInt32();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
+                await badRequestResponse.WriteStringAsync("\n");
+                await badRequestResponse.WriteStringAsync("{\n");
+                await badRequestResponse.WriteStringAsync("    \"Id\": 1,\n");
+                await badRequestResponse.WriteStringAsync("}\n");
+                return badRequestResponse;
+            }
 
             try
             {
@@ -224,7 +267,23 @@ Example request body:
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id of the Staff from the request body
-            int staffId = jsonBody.GetProperty("StaffId").GetInt32();
+            int staffId;
+            try
+            {
+                staffId = jsonBody.GetProperty("StaffId").GetInt32();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
+                await badRequestResponse.WriteStringAsync("\n");
+                await badRequestResponse.WriteStringAsync("{\n");
+                await badRequestResponse.WriteStringAsync("    \"StaffId\": 2,\n");
+                await badRequestResponse.WriteStringAsync("}\n");
+                return badRequestResponse;
+            }
 
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");

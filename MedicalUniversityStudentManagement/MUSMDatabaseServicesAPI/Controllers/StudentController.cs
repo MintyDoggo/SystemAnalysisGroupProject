@@ -146,6 +146,17 @@ Example request body:
             return response;
         }
 
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "Id": 1
+}
+
+         * 
+         */
         [Function("DeleteStudentById")]
         public static async Task<HttpResponseData> DeleteStudentById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -156,7 +167,7 @@ Example request body:
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id of the Student to delete from the request body
-            int id = jsonBody.GetInt32();
+            int id = jsonBody.GetProperty("Id").GetInt32();
 
             try
             {
@@ -178,7 +189,9 @@ Example request body:
             return response;
         }
 
-
+        /**
+         * Get all Students
+         */
         [Function("GetStudents")]
         public static async Task<HttpResponseData> GetStudents([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -190,6 +203,17 @@ Example request body:
             return response;
         }
 
+        /**
+         * 
+         * 
+Example request body:
+
+{
+    "StaffId": 2
+}
+
+         * 
+         */
         [Function("GetStudentsByStaffId")]
         public static async Task<HttpResponseData> GetStudentsByStaffId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
         {
@@ -200,7 +224,7 @@ Example request body:
             JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id of the Staff from the request body
-            int staffId = jsonBody.GetInt32();
+            int staffId = jsonBody.GetProperty("StaffId").GetInt32();
 
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");

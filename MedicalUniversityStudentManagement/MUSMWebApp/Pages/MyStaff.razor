@@ -1,5 +1,5 @@
 ﻿@page "/mystaff"
-@inject HttpClient Http
+@inject IHttpClientFactory _clientFactory
 
 <h1>My Staff</h1>
 
@@ -68,7 +68,7 @@
         // Update our Staffs list
         try
         {
-            IEnumerable<StaffModel> getStaffsResponse = await Http.GetFromJsonAsync<IEnumerable<StaffModel>>(@"www.endpointhere.com");
+            IEnumerable<StaffModel> getStaffsResponse = await _clientFactory.CreateClient().GetFromJsonAsync<IEnumerable<StaffModel>>(@"www.endpointhere.com");
             staffModels = new List<StaffModel>(getStaffsResponse);
         }
         catch (Exception e)

@@ -41,6 +41,8 @@ namespace MUSMWebApp
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
+            services.AddHttpClient();
             services.AddSingleton<LoggedInUser>();
         }
 

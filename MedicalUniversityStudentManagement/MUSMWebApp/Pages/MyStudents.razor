@@ -1,0 +1,123 @@
+﻿@page "/mystudents"
+@inject HttpClient Http
+
+<CardBody>
+    <Row>
+        <Column>
+            <h3>Students</h3>
+            <Fields>
+                <Field>
+                    <FieldBody>
+                        <Inline>
+                            <Button Color="Color.Primary" Clicked="@ReloadTable" Margin="Margin.Is1" Size="Size.Small" Disabled="RefreshButtonDisabed" Loading="RefreshButtonDisabed"> Refresh</Button>
+                        </Inline>
+                    </FieldBody>
+                </Field>
+            </Fields>
+            <DataGrid TItem="StudentModel"
+                      @ref="dataGrid"
+                      Data="@studentModels"
+                      SortMode="DataGridSortMode.Multiple"
+                      Striped="true"
+                      Bordered="true"
+                      Hoverable="true"
+                      Filterable="true"
+                      PageSize="10"
+                      ShowPager="@true"
+                      SelectedRowChanged="@OnSelectedRowChanged">
+                <EmptyTemplate>No records...</EmptyTemplate>
+                <DataGridColumns>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Id)" Caption="Id" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.StudentIdNumber)" Caption="StudentIdNumber" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.FirstName)" Caption="FirstName" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.LastName)" Caption="LastName" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Birthday)" Caption="Birthday" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Address)" Caption="Address" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Major)" Caption="Major" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.FirstYearEnrolled)" Caption="FirstYearEnrolled" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.HighSchoolAttended)" Caption="HighSchoolAttended" Editable="true">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.UndergraduateSchoolAttended)" Caption="UndergraduateSchoolAttended" Editable="true">
+                    </DataGridColumn>
+
+                </DataGridColumns>
+            </DataGrid>
+        </Column>
+    </Row>
+</CardBody>
+
+<hr />
+
+@if (dataGrid != null && dataGrid.SelectedRow != null)
+{
+    <StudentInfo myStudent="@dataGrid?.SelectedRow" />
+}
+
+@code
+{
+    DataGrid<StudentModel> dataGrid;
+    List<StudentModel> studentModels;
+    bool RefreshButtonDisabed;
+
+
+
+
+    // Blazor event
+    protected override async Task OnInitializedAsync()
+    {
+        await ReloadTable();
+    }
+
+
+
+
+
+
+
+
+    async Task ReloadTable()
+    {
+        studentModels = new List<StudentModel>();
+        // Update our Students list
+        try
+        {
+            IEnumerable<StudentModel> getStudentsResponse = await Http.GetFromJsonAsync<IEnumerable<StudentModel>>(@"www.endpointhere.com");
+            studentModels.Clear();
+            studentModels.AddRange(getStudentsResponse);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
+
+        studentModels.Add(new StudentModel { Id= 3, Address = "test addr", FirstName = "Bob", LastName = "idk", Major = "Bio"});
+        studentModels.Add(new StudentModel { Id= 1, Address = "sf", FirstName = "fgd", LastName = "sss", Major = "CompSci"});
+        studentModels.Add(new StudentModel { Id= 2, Address = "re", FirstName = "y", LastName = "sfd", Major = "Math"});
+        studentModels.Add(new StudentModel { Id = 4, Address = "test f", FirstName = "jg", LastName = "ggfsfe", Major = "CompSci" });
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+
+    void OnSelectedRowChanged()
+    {
+        StateHasChanged();
+    }
+
+
+
+
+
+
+
+}

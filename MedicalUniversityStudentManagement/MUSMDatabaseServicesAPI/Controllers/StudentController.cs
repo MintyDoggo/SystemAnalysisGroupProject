@@ -19,18 +19,16 @@ namespace MUSMDatabaseServicesAPI
 Example request body:
 
 {
-    "Student": {
-        "StaffId": 3,
-        "StudentIdNumber": 23,
-        "FirstName": "Clyde",
-        "LastName": "Clyde",
-        "Birthday": "1993-11-08",
-        "Address": "clyde lives in miami",
-        "Major": "computer",
-        "FirstYearEnrolled": 2001,
-        "HighSchoolAttended": "Bane Bay",
-        "UndergraduateSchoolAttended": "homeschool o ya"
-    }
+    "StaffId": 3,
+    "StudentIdNumber": 23,
+    "FirstName": "Clyde",
+    "LastName": "Clyde",
+    "Birthday": "1993-11-08",
+    "Address": "clyde lives in miami",
+    "Major": "computer",
+    "FirstYearEnrolled": 2001,
+    "HighSchoolAttended": "Bane Bay",
+    "UndergraduateSchoolAttended": "homeschool o ya"
 }
 
          * 
@@ -42,13 +40,12 @@ Example request body:
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the StudentModel from the request body
             StudentModel student;
             try
             {
-                student = JsonSerializer.Deserialize<StudentModel>(jsonBody.GetProperty("Student").GetRawText());
+                student = JsonSerializer.Deserialize<StudentModel>(requestBody);
             }
             catch (Exception e)
             {
@@ -89,18 +86,16 @@ Example request body:
 
 {
     "Id": 4,
-    "Student": {
-        "StaffId": 3,
-        "StudentIdNumber": 23,
-        "FirstName": "Anthony",
-        "LastName": "Anthony",
-        "Birthday": "1995-07-23",
-        "Address": "ohio",
-        "Major": "computer",
-        "FirstYearEnrolled": 2003,
-        "HighSchoolAttended": "Bane Bay",
-        "UndergraduateSchoolAttended": "homeschool o ya"
-    }
+    "StaffId": 3,
+    "StudentIdNumber": 23,
+    "FirstName": "Anthony",
+    "LastName": "Anthony",
+    "Birthday": "1995-07-23",
+    "Address": "ohio",
+    "Major": "computer",
+    "FirstYearEnrolled": 2003,
+    "HighSchoolAttended": "Bane Bay",
+    "UndergraduateSchoolAttended": "homeschool o ya"
 }
 
          * 
@@ -112,15 +107,14 @@ Example request body:
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id and StudentModel from the request body
             int id;
             StudentModel student;
             try
             {
-                id = jsonBody.GetProperty("Id").GetInt32();
-                student = JsonSerializer.Deserialize<StudentModel>(jsonBody.GetProperty("Student").GetRawText());
+                student = JsonSerializer.Deserialize<StudentModel>(requestBody);
+                id = student.Id;
             }
             catch (Exception e)
             {

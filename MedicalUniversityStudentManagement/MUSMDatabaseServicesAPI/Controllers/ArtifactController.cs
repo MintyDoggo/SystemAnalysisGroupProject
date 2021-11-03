@@ -19,12 +19,10 @@ namespace MUSMDatabaseServicesAPI
 Example request body:
 
 {
-    "Artifact": {
-        "RequiredArtifactId": 1,
-        "StudentId": 2,
-        "DocumentReference": "my document is here",
-        "CheckedOff": false
-    }
+    "RequiredArtifactId": 1,
+    "StudentId": 2,
+    "DocumentReference": "my document is here",
+    "CheckedOff": false
 }
 
          * 
@@ -36,13 +34,12 @@ Example request body:
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the ArtifactModel from the request body
             ArtifactModel artifact;
             try
             {
-                artifact = JsonSerializer.Deserialize<ArtifactModel>(jsonBody.GetProperty("Artifact").GetRawText());
+                artifact = JsonSerializer.Deserialize<ArtifactModel>(requestBody);
             }
             catch (Exception e)
             {
@@ -83,12 +80,10 @@ Example request body:
 
 {
     "Id": 2,
-    "Artifact": {
-        "RequiredArtifactId": 1,
-        "StudentId": 2,
-        "DocumentReference": "my document is there",
-        "CheckedOff": true
-    }
+    "RequiredArtifactId": 1,
+    "StudentId": 2,
+    "DocumentReference": "my document is there",
+    "CheckedOff": true
 }
 
          * 
@@ -100,15 +95,14 @@ Example request body:
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
             // Get the Id and ArtifactModel from the request body
             int id;
             ArtifactModel artifact;
             try
             {
-                id = jsonBody.GetProperty("Id").GetInt32();
-                artifact = JsonSerializer.Deserialize<ArtifactModel>(jsonBody.GetProperty("Artifact").GetRawText());
+                artifact = JsonSerializer.Deserialize<ArtifactModel>(requestBody);
+                id = artifact.Id;
             }
             catch (Exception e)
             {

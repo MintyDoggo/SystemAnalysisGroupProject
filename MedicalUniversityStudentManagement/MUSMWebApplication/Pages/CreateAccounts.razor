@@ -1,5 +1,8 @@
 ﻿@page "/createaccounts"
 @inject HttpClient Http
+@inject NavigationManager NavManager
+@inject LoggedInUser loggedInUser
+
 
 @{
     if (!createStaff && !createStudent)

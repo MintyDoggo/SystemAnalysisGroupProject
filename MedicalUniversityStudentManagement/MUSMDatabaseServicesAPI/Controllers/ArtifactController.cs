@@ -40,6 +40,10 @@ Example request body:
             try
             {
                 artifact = JsonSerializer.Deserialize<ArtifactModel>(requestBody);
+                if (artifact is null)
+                {
+                    throw new JsonException();
+                }
             }
             catch (Exception e)
             {
@@ -109,6 +113,11 @@ Example request body:
             try
             {
                 artifact = JsonSerializer.Deserialize<ArtifactModel>(requestBody);
+                if (artifact is null)
+                {
+                    throw new JsonException();
+                }
+
                 id = artifact.Id;
             }
             catch (Exception e)

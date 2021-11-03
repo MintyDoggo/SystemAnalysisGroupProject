@@ -39,6 +39,10 @@ Example request body:
             try
             {
                 login = JsonSerializer.Deserialize<LoginModel>(requestBody);
+                if (login is null)
+                {
+                    throw new JsonException();
+                }
             }
             catch (Exception e)
             {
@@ -101,6 +105,11 @@ Example request body:
             try
             {
                 login = JsonSerializer.Deserialize<LoginModel>(requestBody);
+                if (login is null)
+                {
+                    throw new JsonException();
+                }
+
                 id = login.Id;
             }
             catch (Exception e)

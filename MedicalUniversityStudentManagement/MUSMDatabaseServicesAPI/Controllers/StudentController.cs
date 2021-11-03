@@ -46,6 +46,10 @@ Example request body:
             try
             {
                 student = JsonSerializer.Deserialize<StudentModel>(requestBody);
+                if (student is null)
+                {
+                    throw new JsonException();
+                }
             }
             catch (Exception e)
             {
@@ -122,11 +126,16 @@ Example request body:
             string requestBody = await req.ReadAsStringAsync();
 
             // Get the Id and StudentModel from the request body
-            int id;
+            int id = -1;
             StudentModel student;
             try
             {
                 student = JsonSerializer.Deserialize<StudentModel>(requestBody);
+                if (student is null)
+                {
+                    throw new JsonException();
+                }
+
                 id = student.Id;
             }
             catch (Exception e)

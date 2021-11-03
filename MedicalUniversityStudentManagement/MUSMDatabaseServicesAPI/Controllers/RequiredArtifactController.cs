@@ -37,6 +37,10 @@ Example request body:
             try
             {
                 requiredArtifact = JsonSerializer.Deserialize<RequiredArtifactModel>(requestBody);
+                if (requiredArtifact is null)
+                {
+                    throw new JsonException();
+                }
             }
             catch (Exception e)
             {

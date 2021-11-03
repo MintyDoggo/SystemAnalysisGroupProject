@@ -21,6 +21,8 @@
             <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
             <CardBody>
                 <CardTitle Size="5">Student Info</CardTitle>
+                StudentIdNumber: @myStudent?.StudentIdNumber
+                <br />
                 FirstName: @myStudent?.FirstName
                 <br />
                 LastName: @myStudent?.LastName
@@ -34,6 +36,8 @@
                 FirstYearEnrolled: @myStudent?.FirstYearEnrolled.ToString()
                 <br />
                 HighSchoolAttended: @myStudent?.HighSchoolAttended
+                <br />
+                UndergraduateSchoolAttended: @myStudent?.UndergraduateSchoolAttended
             </CardBody>
         }
     }

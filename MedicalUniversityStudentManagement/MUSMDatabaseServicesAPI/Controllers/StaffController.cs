@@ -38,6 +38,10 @@ Example request body:
             try
             {
                 staff = JsonSerializer.Deserialize<StaffModel>(requestBody);
+                if (staff is null)
+                {
+                    throw new JsonException();
+                }
             }
             catch (Exception e)
             {

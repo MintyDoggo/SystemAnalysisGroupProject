@@ -1,5 +1,8 @@
 ﻿@page "/studentinfo"
 @inject HttpClient Http
+@using System.Text.Json
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 
 <Card>
     @{
@@ -63,7 +66,19 @@
         // Update this Student
         try
         {
-            await Http.GetAsync(@"www.endpointhere.com");
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "UpdateStudentById/";
+
+            // The HTTP request body we will send
+            string jsonStudent = JsonSerializer.Serialize<StudentModel>(myStudent);
+            StringContent httpContent = new(jsonStudent);
+
+            // Call the endpoint
+            HttpResponseMessage response = await Http.PutAsync(endpoint, httpContent);
+
+            // Log the response
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
+
         }
         catch (Exception e)
         {

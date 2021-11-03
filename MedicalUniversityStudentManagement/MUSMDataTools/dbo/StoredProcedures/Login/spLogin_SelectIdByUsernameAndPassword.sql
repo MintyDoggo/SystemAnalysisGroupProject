@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spLogin_GetIdByUsernameAndPassword]
+﻿CREATE PROCEDURE [dbo].[spLogin_SelectIdByUsernameAndPassword]
 	@outId INT OUT,
 	@inUsername VARCHAR(32),
 	@inPassword VARCHAR(256)

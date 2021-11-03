@@ -1,5 +1,5 @@
 ﻿@page "/createaccounts"
-@inject HttpClient Http
+@inject IHttpClientFactory ClientFactory
 @inject NavigationManager NavManager
 @inject LoggedInUser loggedInUser
 
@@ -141,7 +141,7 @@
         // Update this Student
         try
         {
-            await Http.GetAsync(@"www.endpointhere.com");
+            await ClientFactory.CreateClient().GetAsync(@"www.endpointhere.com");
         }
         catch (Exception e)
         {
@@ -191,7 +191,7 @@
         // Update this Student
         try
         {
-            await Http.GetAsync(@"www.endpointhere.com");
+            await ClientFactory.CreateClient().GetAsync(@"www.endpointhere.com");
         }
         catch (Exception e)
         {

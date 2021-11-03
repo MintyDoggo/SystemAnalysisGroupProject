@@ -1,5 +1,5 @@
 ﻿@page "/mystudents"
-@inject HttpClient Http
+@inject IHttpClientFactory ClientFactory
 
 <CardBody>
     <Row>
@@ -89,7 +89,7 @@
         // Update our Students list
         try
         {
-            IEnumerable<StudentModel> getStudentsResponse = await Http.GetFromJsonAsync<IEnumerable<StudentModel>>(@"www.endpointhere.com");
+            IEnumerable<StudentModel> getStudentsResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<StudentModel>>(@"www.endpointhere.com");
             studentModels.Clear();
             studentModels.AddRange(getStudentsResponse);
         }
@@ -101,9 +101,9 @@
 
 
 
-        studentModels.Add(new StudentModel { Id= 3, Address = "test addr", FirstName = "Bob", LastName = "idk", Major = "Bio"});
-        studentModels.Add(new StudentModel { Id= 1, Address = "sf", FirstName = "fgd", LastName = "sss", Major = "CompSci"});
-        studentModels.Add(new StudentModel { Id= 2, Address = "re", FirstName = "y", LastName = "sfd", Major = "Math"});
+        studentModels.Add(new StudentModel { Id = 3, Address = "test addr", FirstName = "Bob", LastName = "idk", Major = "Bio" });
+        studentModels.Add(new StudentModel { Id = 1, Address = "sf", FirstName = "fgd", LastName = "sss", Major = "CompSci" });
+        studentModels.Add(new StudentModel { Id = 2, Address = "re", FirstName = "y", LastName = "sfd", Major = "Math" });
         studentModels.Add(new StudentModel { Id = 4, Address = "test f", FirstName = "jg", LastName = "ggfsfe", Major = "CompSci" });
         // always call StateHasChanged!
         StateHasChanged();

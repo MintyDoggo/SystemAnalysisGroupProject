@@ -9,11 +9,14 @@ namespace MUSMWebApplication.Objects
     public class LoggedInUser
     {
         public LoginModel Login { get; set; }
+        public StudentModel Student { get; set; }
+        public StaffModel Staff { get; set; }
 
         public LoggedInUser()
         {
-            Console.WriteLine("LoggedInUser singleton created");
             Login = new LoginModel();
+            Student = new StudentModel();
+            Staff = new StaffModel();
         }
     }
 }

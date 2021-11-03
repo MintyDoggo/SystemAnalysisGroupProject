@@ -190,35 +190,26 @@ Example request body:
 
          * 
          */
-        [Function("ReturnIdByUsernameAndPassword")]
-        public static async Task<HttpResponseData> ReturnLoginIdByUsernameAndPassword([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
+        [Function("GetLoginIdByUsernameAndPassword")]
+        public static async Task<HttpResponseData> GetLoginIdByUsernameAndPassword([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
         {
             ILogger logger = executionContext.GetLogger("LoginController");
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
-            // Get the LoginModel from the request body
-            LoginModel login;
-            try
-            {
-                login = JsonSerializer.Deserialize<LoginModel>(requestBody);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
+            // Get the username and password from the request body
+            string username = jsonBody.GetProperty("Username").GetString();
+            string password = jsonBody.GetProperty("Password").GetString();
 
-                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
-                return badRequestResponse;
-            }
 
             // Call on the data processor and return the Id
             int retVal;
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-                retVal = await LoginProcessor.ReturnLoginIdByUsernameAndPassword(connectionString, login);
+                retVal = await LoginProcessor.GetLoginIdByUsernameAndPassword(connectionString, username, password);
             }
             catch (Exception e)
             {

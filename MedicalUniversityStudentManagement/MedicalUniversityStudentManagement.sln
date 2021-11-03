@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MUSMDataLibrary", "MUSMData
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MUSMDatabaseServicesAPI", "MUSMDatabaseServicesAPI\MUSMDatabaseServicesAPI.csproj", "{54E590B1-BC31-42D4-BE22-93AF25EF441A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MUSMWebApp", "MUSMWebApp\MUSMWebApp.csproj", "{A612EC5B-5954-4FC6-BC37-8192EA294D0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MUSMWebApp", "MUSMWebApp\MUSMWebApp.csproj", "{A612EC5B-5954-4FC6-BC37-8192EA294D0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

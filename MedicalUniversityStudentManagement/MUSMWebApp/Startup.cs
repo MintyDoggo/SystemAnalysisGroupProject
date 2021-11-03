@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MUSMWebApp.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +13,8 @@ using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+
+using MUSMWebApplication.Objects;
 
 
 namespace MUSMWebApp
@@ -40,7 +41,7 @@ namespace MUSMWebApp
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<LoggedInUser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

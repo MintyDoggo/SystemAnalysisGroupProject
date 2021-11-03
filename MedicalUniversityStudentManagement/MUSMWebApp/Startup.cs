@@ -15,6 +15,8 @@ using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 
+using MUSMWebApplication.Objects;
+
 
 namespace MUSMWebApp
 {
@@ -40,7 +42,7 @@ namespace MUSMWebApp
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<LoggedInUser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

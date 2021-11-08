@@ -118,5 +118,21 @@ Example request body:
         }
 
 
+
+        /**
+         * Get all Required Artifacts
+         */
+        [Function("GetRequiredArtifacts")]
+        public static async Task<HttpResponseData> GetGetRequiredArtifacts([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("RequiredArtifactController");
+
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+            IEnumerable<RequiredArtifactModel> RequiredArtifacts = await RequiredArtifactProcessor.GetRequiredArtifactsAsync(connectionString);
+
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync<IEnumerable<RequiredArtifactModel>>(RequiredArtifacts);
+            return response;
+        }
     }
 }

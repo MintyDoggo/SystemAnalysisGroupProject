@@ -1,7 +1,7 @@
 ﻿@page "/myartifacts"
 @using Microsoft.Extensions.Configuration
-@inject IHttpClientFactory ClientFactory
 @inject IConfiguration Configuration
+@inject IHttpClientFactory ClientFactory
 
 
 <h3>MyArtifacts</h3>
@@ -21,7 +21,6 @@
         {
             // The API endpoint to call
             string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifactsByStudentId";
-            endpoint += "?" + "studentId=2";
 
             // Call the endpoint
             HttpResponseMessage response = await ClientFactory.CreateClient().GetAsync(endpoint);

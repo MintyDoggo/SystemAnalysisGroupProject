@@ -1,5 +1,7 @@
 ﻿@page "/configureartifacts"
+@using Microsoft.Extensions.Configuration
 @inject IHttpClientFactory ClientFactory
+@inject IConfiguration Configuration
 
 <h3>Current #of RequiredArtifact:@RequiredArtifacts?.Count</h3>
 @for (int i = 0; i < RequiredArtifacts?.Count; i++)
@@ -17,7 +19,7 @@
     </div>
 }
 
-<Button Color="Color.Success" Clicked="@OnButtonClicked">Add RequiredArtifact</Button> 
+<Button Color="Color.Success" Clicked="@OnButtonClicked">Add RequiredArtifact</Button>
 
 @for (int i = 0; i < newRequiredArtifactsNum; i++)
 {
@@ -52,9 +54,12 @@
         // Update our RequiredArtifacts list
         try
         {
-            IEnumerable<RequiredArtifactModel> RequiredArtifactsResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<RequiredArtifactModel>>(@"www.endpointhere.com");
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetRequiredArtifacts/";
+
+            IEnumerable<RequiredArtifactModel> getRequiredArtifactsResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<RequiredArtifactModel>>(endpoint);
             RequiredArtifacts.Clear();
-            RequiredArtifacts.AddRange(RequiredArtifactsResponse);
+            RequiredArtifacts.AddRange(getRequiredArtifactsResponse);
         }
         catch (Exception e)
         {

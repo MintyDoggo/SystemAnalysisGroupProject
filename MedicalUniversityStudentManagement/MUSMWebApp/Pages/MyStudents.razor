@@ -1,4 +1,6 @@
 ﻿@page "/mystudents"
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 @inject IHttpClientFactory ClientFactory
 
 <CardBody>
@@ -89,7 +91,10 @@
         // Update our Students list
         try
         {
-            IEnumerable<StudentModel> getStudentsResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<StudentModel>>(@"www.endpointhere.com");
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetRequiredArtifacts/";
+
+            IEnumerable<StudentModel> getStudentsResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<StudentModel>>(endpoint);
             studentModels.Clear();
             studentModels.AddRange(getStudentsResponse);
         }

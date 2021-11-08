@@ -1,4 +1,6 @@
 ﻿@page "/createaccounts"
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 @inject IHttpClientFactory ClientFactory
 @inject NavigationManager NavManager
 @inject ProtectedSessionStorage sessionStorage
@@ -141,7 +143,9 @@
         // Update this Student
         try
         {
-            await ClientFactory.CreateClient().GetAsync(@"www.endpointhere.com");
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateLoginAndReturnId";
+            await ClientFactory.CreateClient().GetAsync(endpoint);
         }
         catch (Exception e)
         {
@@ -191,7 +195,9 @@
         // Update this Student
         try
         {
-            await ClientFactory.CreateClient().GetAsync(@"www.endpointhere.com");
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateLoginAndReturnId";
+            await ClientFactory.CreateClient().GetAsync(endpoint);
         }
         catch (Exception e)
         {

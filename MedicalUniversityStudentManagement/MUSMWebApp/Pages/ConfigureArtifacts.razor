@@ -1,16 +1,17 @@
 ﻿@page "/configureartifacts"
 @inject IHttpClientFactory ClientFactory
 
-<h3>Current #of Artifacts:@count</h3>
+<h3>Current #of Artifacts:@newArtifacts</h3>
 
 <Button Color="Color.Success" Clicked="@OnButtonClicked">Add Artifact</Button>
 
 @code
 {
-    private int count = 0;
+    RequiredArtifactModel artifact;
+    private int newArtifacts = 0;
 
     protected void OnButtonClicked()
     {
-        ++count;
+        ++newArtifacts;
     }
 }

@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[tblStudent]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
-	[StaffId] INT NOT NULL FOREIGN KEY REFERENCES tblStaff(Id), -- the associated staff for this student
+	[StaffId] INT NOT NULL FOREIGN KEY REFERENCES tblStaff(Id) ON DELETE CASCADE, -- the associated staff for this student
 	[StudentIdNumber] INT,
 	[FirstName] VARCHAR(64),
 	[LastName] VARCHAR(64),

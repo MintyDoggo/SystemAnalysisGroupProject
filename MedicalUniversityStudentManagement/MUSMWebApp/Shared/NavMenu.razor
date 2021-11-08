@@ -1,4 +1,4 @@
-﻿@inject LoggedInUser loggedInUser
+﻿@inject ProtectedSessionStorage  sessionStorage
 
 <div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">MUSMWebApp</a>
@@ -9,63 +9,76 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
-        @switch (loggedInUser.Login.UserType)
+        @if (UserType == "Admin")
         {
-            case UserType.Admin:
-                //If user is Admin
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="createaccounts">
-                        <span class="oi oi-home" aria-hidden="true"></span> Create Accounts
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="configureartifacts">
-                        <span class="oi oi-script" aria-hidden="true"></span> Configure Artifacts
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="artifactreports">
-                        <span class="oi oi-home" aria-hidden="true"></span> Artifact Reports
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="mystaff">
-                        <span class="oi oi-home" aria-hidden="true"></span> MyStaff
-                    </NavLink>
-                </li>
-                break;
-            case UserType.Staff:
-                //If user type is a staff
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="mystudents">
-                        <span class="oi oi-people" aria-hidden="true"></span> My Students
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="staff">
-                        <span class="oi oi-briefcase" aria-hidden="true"></span> Staff Page
-                    </NavLink>
-                </li>
-                break;
-            case UserType.Student:
-                //If user type is student
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="studentinfo">
-                        <span class="oi oi-home" aria-hidden="true"></span> Student Info
-                    </NavLink>
-                </li>
-                break;
+            //If user is Admin
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="createaccounts">
+                    <span class="oi oi-home" aria-hidden="true"></span> Create Accounts
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="configureartifacts">
+                    <span class="oi oi-script" aria-hidden="true"></span> Configure Artifacts
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="artifactreports">
+                    <span class="oi oi-home" aria-hidden="true"></span> Artifact Reports
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="mystaff">
+                    <span class="oi oi-home" aria-hidden="true"></span> MyStaff
+                </NavLink>
+            </li>
+        }
+        else if (UserType == "Staff")
+        {
+            //If user type is a staff
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="mystudents">
+                    <span class="oi oi-people" aria-hidden="true"></span> My Students
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="staff">
+                    <span class="oi oi-briefcase" aria-hidden="true"></span> Staff Page
+                </NavLink>
+            </li>
+        }
+        else if (UserType == "Student")
+        {
+            //If user type is student
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="studentinfo">
+                    <span class="oi oi-home" aria-hidden="true"></span> Student Info
+                </NavLink>
+            </li>
         }
     </ul>
 </div>
 
-@code {
+@code
+{
     private bool collapseNavMenu = true;
+    private string UserType = "";
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? "";
+            StateHasChanged();
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace MUSMDataLibrary.BuisinessLogic
             // Execute our stored procedure with the parameters we made
             await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
 
-            // Return the outputed id from the stored procedure
+            // Return the outputed Id from the stored procedure
             return parameters.Get<int>("@outId");
         }
 
@@ -99,8 +99,15 @@ namespace MUSMDataLibrary.BuisinessLogic
             // Execute our stored procedure with the parameters we made
             await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
 
-            // Return the outputed id from the stored procedure
-            return parameters.Get<int>("@outId");
+
+            // Return the outputed Id from the stored procedure
+            int? retVal = parameters.Get<int?>("@outId");
+            if (retVal is not null)
+            {
+                return retVal.Value;
+            }
+
+            return -1;
         }
 
 

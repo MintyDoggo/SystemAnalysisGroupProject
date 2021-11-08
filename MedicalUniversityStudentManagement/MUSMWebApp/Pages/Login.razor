@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject IHttpClientFactory ClientFactory
 @inject NavigationManager NavManager
-@inject LoggedInUser loggedInUser
+@inject ProtectedSessionStorage  sessionStorage
 
 <CardBody>
     <CardTitle Size="5">Welcome</CardTitle>
@@ -24,7 +24,7 @@
     public TextEdit username_textbox;
     public TextEdit password_textbox;
 
-    void OnSubmitButtonClicked()
+    async Task OnSubmitButtonClicked()
     {
         myLogin.Username = username_textbox.Text;
         myLogin.Password = password_textbox.Text;
@@ -47,30 +47,31 @@
         //set user type here
         //myLogin.UserType = //get from database
 
-        loggedInUser.Login.Id = myLogin.Id;
-        loggedInUser.Login.Username = myLogin.Username;
-        loggedInUser.Login.Password = myLogin.Password;
-        loggedInUser.Login.UserType = myLogin.UserType;
+        await sessionStorage.SetAsync("LoginId", myLogin.Id);
+        await sessionStorage.SetAsync("Username", myLogin.Username.ToString());
+        await sessionStorage.SetAsync("Password", myLogin.Password.ToString());
+        await sessionStorage.SetAsync("UserType", myLogin.UserType.ToString());
+
         NavManager.NavigateTo("/home");
     }
 
 
     //DELETE ALL 3 OF THESE LATER
-    void BypassAdmin()
+    async Task BypassAdmin()
     {
-        loggedInUser.Login.UserType = UserType.Admin;
+        await sessionStorage.SetAsync("UserType", "Admin");
         NavManager.NavigateTo("/home");
     }
 
-    void BypassStaff()
+    async Task BypassStaff()
     {
-        loggedInUser.Login.UserType = UserType.Staff;
+        await sessionStorage.SetAsync("UserType", "Staff");
         NavManager.NavigateTo("/home");
     }
 
-    void BypassStudent()
+    async Task BypassStudent()
     {
-        loggedInUser.Login.UserType = UserType.Student;
+        await sessionStorage.SetAsync("UserType", "Student");
         NavManager.NavigateTo("/home");
     }
 }

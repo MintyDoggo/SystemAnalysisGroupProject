@@ -1,18 +1,34 @@
 ﻿@page "/home"
-@inject LoggedInUser loggedInUser
+@inject ProtectedSessionStorage  sessionStorage
 
-
-@if (loggedInUser.Login.UserType == UserType.Admin)
-{
-    <h1>Welcome Admin!</h1>
-}
-else if (loggedInUser.Login.UserType == UserType.Staff)
-{
-    <h1>Welcome Staff Member!</h1>
-}
-else if (loggedInUser.Login.UserType == UserType.Student)
+@if (UserType == "Student")
 {
     <h1>Welcome Student!</h1>
 }
+else if (UserType == "Staff")
+{
+    <h1>Welcome Staff Member!</h1>
+}
+else if (UserType == "Admin")
+{
+    <h1>Welcome Admin!</h1>
+}
 
 Use the sidebar to navigate to pages
+
+
+
+@code
+{
+    private string UserType = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? "";
+            StateHasChanged();
+        }
+    }
+}

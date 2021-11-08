@@ -13,7 +13,7 @@ namespace MUSMModelsLibrary
         public int RequiredArtifactId { get; set; }
         public int StudentId { get; set; }
 
-        public string DocumentReference { get; set; }
+        public byte[] Document { get; set; }
         public bool CheckedOff { get; set; }
 
     }

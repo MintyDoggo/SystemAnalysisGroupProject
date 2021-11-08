@@ -22,10 +22,10 @@ namespace MUSMDataLibrary.BuisinessLogic
             DataTable artifactTable = new DataTable("@inArtifact");
             artifactTable.Columns.Add("RequiredArtifactId", typeof(int));
             artifactTable.Columns.Add("StudentId", typeof(int));
-            artifactTable.Columns.Add("DocumentReference", typeof(string));
+            artifactTable.Columns.Add("Document", typeof(byte[]));
             artifactTable.Columns.Add("CheckedOff", typeof(bool));
             // Fill in the data
-            artifactTable.Rows.Add(artifact.RequiredArtifactId, artifact.StudentId, artifact.DocumentReference, artifact.CheckedOff);
+            artifactTable.Rows.Add(artifact.RequiredArtifactId, artifact.StudentId, artifact.Document, artifact.CheckedOff);
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();
@@ -50,10 +50,10 @@ namespace MUSMDataLibrary.BuisinessLogic
             DataTable artifactTable = new DataTable("@inArtifact");
             artifactTable.Columns.Add("RequiredArtifactId", typeof(int));
             artifactTable.Columns.Add("StudentId", typeof(int));
-            artifactTable.Columns.Add("DocumentReference", typeof(string));
+            artifactTable.Columns.Add("Document", typeof(byte[]));
             artifactTable.Columns.Add("CheckedOff", typeof(bool));
             // Fill in the data
-            artifactTable.Rows.Add(artifact.RequiredArtifactId, artifact.StudentId, artifact.DocumentReference, artifact.CheckedOff);
+            artifactTable.Rows.Add(artifact.RequiredArtifactId, artifact.StudentId, artifact.Document, artifact.CheckedOff);
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();

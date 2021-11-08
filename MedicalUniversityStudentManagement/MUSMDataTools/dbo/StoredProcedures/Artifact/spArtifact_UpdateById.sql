@@ -9,7 +9,7 @@ BEGIN
 	SET
 	tblArtifact.RequiredArtifactId = inArtifact.RequiredArtifactId,
 	tblArtifact.StudentId = inArtifact.StudentId,
-	tblArtifact.DocumentReference = inArtifact.DocumentReference,
+	tblArtifact.Document = inArtifact.Document,
 	tblArtifact.CheckedOff = inArtifact.CheckedOff
 	FROM @inArtifact inArtifact
 	WHERE tblArtifact.Id = @inId;

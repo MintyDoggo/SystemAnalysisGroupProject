@@ -2,6 +2,6 @@
 (
 	[RequiredArtifactId] INT NOT NULL,
 	[StudentId] INT NOT NULL,
-	[DocumentReference] VARCHAR(64) NOT NULL,
+	[Document] VARBINARY(MAX) NOT NULL,
 	[CheckedOff] BIT NOT NULL
 )

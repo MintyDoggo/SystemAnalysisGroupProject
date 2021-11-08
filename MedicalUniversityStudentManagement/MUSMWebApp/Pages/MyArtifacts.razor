@@ -1,8 +1,40 @@
-﻿<h3>MyArtifacts</h3>
+﻿@page "/myartifacts"
+@using Microsoft.Extensions.Configuration
+@inject IHttpClientFactory ClientFactory
+@inject IConfiguration Configuration
 
-<RenderPdf inBytes="pdfBytes"/>
+
+<h3>MyArtifacts</h3>
+
+<RenderPdf inBytes="pdfBytes" />
 
 
 @code {
     byte[] pdfBytes;
+
+
+    // Blazor event
+    protected override async Task OnInitializedAsync()
+    {
+        // Update this Student
+        try
+        {
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifactsByStudentId";
+            endpoint += "?" + "studentId=2";
+
+            // Call the endpoint
+            HttpResponseMessage response = await ClientFactory.CreateClient().GetAsync(endpoint);
+            List<ArtifactModel> artifacts = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
+            pdfBytes = artifacts.LastOrDefault().Document;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+    }
+
+
+
 }

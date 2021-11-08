@@ -1,25 +1,51 @@
-﻿@inject IHttpClientFactory ClientFactory
+﻿
+
 
 @if (!string.IsNullOrEmpty(pdfContent))
 {
-    <embed src="@pdfContent" width="800px" height="2100px" />
-    <iframe src="@pdfContent" width="800px" height="2100px" />
-    <object data="@pdfContent" width="500" height="200"></object>
+                <!--- TODO: bootstrap --->
+<div>
+    <iframe src="@pdfContent" width="1080" height="1920"/>
+</div>
+
 }
 
 
 @code {
     [Parameter]
     public byte[] inBytes { get; set; }
+    //{
+    //    get
+    //    {
+    //        return inBytes;
+    //    }
+    //    set
+    //    {
+    //        inBytes = value;
+    //        rendered = false;
+    //    }
+    //}
+
+
     string pdfContent = "";
+    bool rendered = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (inBytes is null)
         {
-            pdfContent = "inBytes:application/pdf;base64,";
+            return;
+        }
+
+        if (rendered == false)
+        {
+            rendered = true;
+            pdfContent = "data:application/pdf;base64,";
             pdfContent += System.Convert.ToBase64String(inBytes);
             StateHasChanged();
         }
+
     }
+
+
 }

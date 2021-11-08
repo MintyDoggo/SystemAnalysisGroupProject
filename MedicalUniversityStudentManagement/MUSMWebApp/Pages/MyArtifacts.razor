@@ -21,6 +21,7 @@
         {
             // The API endpoint to call
             string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifactsByStudentId";
+            endpoint += "?" + "studentId=2"; // TODO: make this not hard-coded
 
             // Call the endpoint
             HttpResponseMessage response = await ClientFactory.CreateClient().GetAsync(endpoint);

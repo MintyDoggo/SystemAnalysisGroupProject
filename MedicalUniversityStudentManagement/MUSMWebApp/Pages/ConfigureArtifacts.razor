@@ -1,17 +1,75 @@
 ﻿@page "/configureartifacts"
 @inject IHttpClientFactory ClientFactory
 
-<h3>Current #of Artifacts:@newArtifacts</h3>
+<h3>Current #of RequiredArtifact:@RequiredArtifacts?.Count</h3>
+@for (int i = 0; i < RequiredArtifacts?.Count; i++)
+{
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8 offset-md-2">
+                <Card>
+                    <CardBody>
+                        @RequiredArtifacts[i].Name
+                    </CardBody>
+                </Card>
+            </div>
+        </div>
+    </div>
+}
 
-<Button Color="Color.Success" Clicked="@OnButtonClicked">Add Artifact</Button>
+<Button Color="Color.Success" Clicked="@OnButtonClicked">Add RequiredArtifact</Button> 
+
+@for (int i = 0; i < newRequiredArtifactsNum; i++)
+{
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8 offset-md-2">
+                <Card>
+                    <CardBody>
+                        Name: <TextEdit Placeholder="ie. Collage Transcript" />
+                    </CardBody>
+                </Card>
+            </div>
+        </div>
+    </div>
+}
+
 
 @code
 {
-    RequiredArtifactModel artifact;
-    private int newArtifacts = 0;
+    public List<RequiredArtifactModel> RequiredArtifacts { get; set; }
+    private int newRequiredArtifactsNum = 0;
+
+    // Blazor event
+    protected override async Task OnInitializedAsync()
+    {
+        await Reload();
+    }
+
+    async Task Reload()
+    {
+        RequiredArtifacts = new List<RequiredArtifactModel>();
+        // Update our RequiredArtifacts list
+        try
+        {
+            IEnumerable<RequiredArtifactModel> RequiredArtifactsResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<RequiredArtifactModel>>(@"www.endpointhere.com");
+            RequiredArtifacts.Clear();
+            RequiredArtifacts.AddRange(RequiredArtifactsResponse);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
 
     protected void OnButtonClicked()
     {
-        ++newArtifacts;
+        ++newRequiredArtifactsNum;
+        StateHasChanged();
     }
 }

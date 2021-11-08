@@ -1,7 +1,9 @@
 ﻿@page "/"
-@inject IHttpClientFactory ClientFactory
 @inject NavigationManager NavManager
 @inject ProtectedSessionStorage  sessionStorage
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@inject IHttpClientFactory ClientFactory
 
 <CardBody>
     <CardTitle Size="5">Welcome</CardTitle>
@@ -11,7 +13,7 @@
 
 
 <Button Color="Color.Primary" Clicked="@OnSubmitButtonClicked">Submit</Button>
-<p style="color:#FF0000">@info</p>
+<p style="color:red">@errorMessage</p>
 <Button Color="Color.Warning" Clicked="@BypassAdmin">Admin</Button>
 <Button Color="Color.Warning" Clicked="@BypassStaff">Staff</Button>
 <Button Color="Color.Warning" Clicked="@BypassStudent">Student</Button>
@@ -20,32 +22,47 @@
 {
     public LoginModel myLogin { get; set; } = new LoginModel();
 
-    String info = "";
+    String errorMessage = string.Empty;
     public TextEdit username_textbox;
     public TextEdit password_textbox;
+
 
     async Task OnSubmitButtonClicked()
     {
         myLogin.Username = username_textbox.Text;
         myLogin.Password = password_textbox.Text;
 
-        if (myLogin.Username != /*check if user exists in database*/"Carter")
+
+        // Get our LoginModel given this Username and Password
+        try
         {
-            info = "Invalid Username. Please try again.";
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetLoginByUsernameAndPassword";
+            endpoint += '?' + $"username={myLogin.Username}" + '&' + $"password={myLogin.Password}";
+
+            // Call the endpoint
+            HttpResponseMessage response = await ClientFactory.CreateClient().GetAsync(endpoint);
+
+
+            // Try to get the Login from the response
+            try
+            {
+                LoginModel login = await response.Content.ReadFromJsonAsync<LoginModel>();
+                myLogin = login;
+                errorMessage = string.Empty;
+            }
+            catch (Exception e)
+            {
+                errorMessage = "Invalid username or password.";
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
             return;
         }
 
-        //set Id using primary key for the user here:
-        //myLogin.Id = // get from database
-
-        if (myLogin.Password != /*check if password corresponds with myLogin.Id in database*/"123")
-        {
-            info = "Invalid Password. Please try again.";
-            return;
-        }
-
-        //set user type here
-        //myLogin.UserType = //get from database
 
         await sessionStorage.SetAsync("LoginId", myLogin.Id);
         await sessionStorage.SetAsync("Username", myLogin.Username.ToString());
@@ -56,7 +73,9 @@
     }
 
 
-    //DELETE ALL 3 OF THESE LATER
+
+    // DELETE ALL 3 OF THESE LATER:
+
     async Task BypassAdmin()
     {
         await sessionStorage.SetAsync("UserType", "Admin");

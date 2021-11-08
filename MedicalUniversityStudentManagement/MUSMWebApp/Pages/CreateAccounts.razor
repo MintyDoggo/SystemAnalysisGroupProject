@@ -80,7 +80,7 @@
     public LoginModel newUser { get; set; } = new LoginModel();
 
     public TextEdit user_textbox_student, user_textbox_staff, pass_textbox_student, pass_textbox_staff;
-    String info = "";
+    String info = string.Empty;
 
     bool isEditable = false;
     bool createStaff = false;
@@ -94,7 +94,7 @@
     void OnCancelButtonClicked()
     {
         isEditable = false;
-        info = "";
+        info = string.Empty;
     }
 
     void OnAddStaffButtonClicked()
@@ -114,9 +114,9 @@
         isEditable = false;
         createStudent = false;
         createStaff = false;
-        info = "";
-        newUser.Username = "";
-        newUser.Password = "";
+        info = string.Empty;
+        newUser.Username = string.Empty;
+        newUser.Password = string.Empty;
     }
 
     async Task OnAddButtonClickedStaff()
@@ -127,8 +127,8 @@
         if (newUser.Username == null || newUser.Password == null)
         {
             info = "Please enter a username and password.";
-            newUser.Username = "";
-            newUser.Password = "";
+            newUser.Username = string.Empty;
+            newUser.Password = string.Empty;
             return;
         }
 
@@ -166,9 +166,9 @@
         isEditable = false;
         createStudent = false;
         createStaff = false;
-        info = "";
-        newUser.Username = "";
-        newUser.Password = "";
+        info = string.Empty;
+        newUser.Username = string.Empty;
+        newUser.Password = string.Empty;
     }
 
     async Task OnAddButtonClickedStudent()
@@ -179,8 +179,8 @@
         if (newUser.Username == null || newUser.Password == null)
         {
             info = "Please enter a username and password.";
-            newUser.Username = "";
-            newUser.Password = "";
+            newUser.Username = string.Empty;
+            newUser.Password = string.Empty;
             return;
         }
 
@@ -219,8 +219,8 @@
         isEditable = false;
         createStudent = false;
         createStaff = false;
-        info = "";
-        newUser.Username = "";
-        newUser.Password = "";
+        info = string.Empty;
+        newUser.Username = string.Empty;
+        newUser.Password = string.Empty;
     }
 }

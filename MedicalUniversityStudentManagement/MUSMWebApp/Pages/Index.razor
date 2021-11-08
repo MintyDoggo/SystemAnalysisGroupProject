@@ -20,14 +20,14 @@ Use the sidebar to navigate to pages
 
 @code
 {
-    private string UserType = "";
+    private string UserType = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
         if (firstRender)
         {
-            UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? "";
+            UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? string.Empty;
             StateHasChanged();
         }
     }

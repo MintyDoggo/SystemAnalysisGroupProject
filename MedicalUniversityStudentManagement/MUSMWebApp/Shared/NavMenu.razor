@@ -62,7 +62,7 @@
 @code
 {
     private bool collapseNavMenu = true;
-    private string UserType = "";
+    private string UserType = string.Empty;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -77,7 +77,7 @@
         await base.OnAfterRenderAsync(firstRender);
         if (firstRender)
         {
-            UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? "";
+            UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? string.Empty;
             StateHasChanged();
         }
     }

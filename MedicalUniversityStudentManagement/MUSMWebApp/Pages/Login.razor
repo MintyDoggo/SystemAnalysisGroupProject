@@ -52,7 +52,7 @@
         await sessionStorage.SetAsync("Password", myLogin.Password.ToString());
         await sessionStorage.SetAsync("UserType", myLogin.UserType.ToString());
 
-        NavManager.NavigateTo("/home");
+        NavManager.NavigateTo("/home", true);
     }
 
 
@@ -60,18 +60,18 @@
     async Task BypassAdmin()
     {
         await sessionStorage.SetAsync("UserType", "Admin");
-        NavManager.NavigateTo("/home");
+        NavManager.NavigateTo("/home", true);
     }
 
     async Task BypassStaff()
     {
         await sessionStorage.SetAsync("UserType", "Staff");
-        NavManager.NavigateTo("/home");
+        NavManager.NavigateTo("/home", true);
     }
 
     async Task BypassStudent()
     {
         await sessionStorage.SetAsync("UserType", "Student");
-        NavManager.NavigateTo("/home");
+        NavManager.NavigateTo("/home", true);
     }
 }

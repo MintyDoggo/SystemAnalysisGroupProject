@@ -247,6 +247,8 @@ Example request body:
         [Function("GetStudents")]
         public static async Task<HttpResponseData> GetStudents([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
         {
+            ILogger logger = executionContext.GetLogger("StudentController");
+
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
             IEnumerable<StudentModel> Students = await StudentProcessor.GetStudentsAsync(connectionString);
 
@@ -258,41 +260,15 @@ Example request body:
         /**
          * 
          * 
-Example request body:
+Example query parameters:
 
-{
-    "StaffId": 2
-}
-
+?staffId=2
          * 
          */
         [Function("GetStudentsByStaffId")]
-        public static async Task<HttpResponseData> GetStudentsByStaffId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        public static async Task<HttpResponseData> GetStudentsByStaffId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext, int staffId)
         {
             ILogger logger = executionContext.GetLogger("StudentController");
-
-            // Get the body of the request and deserialize it to json
-            string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
-
-            // Get the Id of the Staff from the request body
-            int staffId;
-            try
-            {
-                staffId = jsonBody.GetProperty("StaffId").GetInt32();
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-
-                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
-                await badRequestResponse.WriteStringAsync("\n");
-                await badRequestResponse.WriteStringAsync("{\n");
-                await badRequestResponse.WriteStringAsync("    \"StaffId\": 2,\n");
-                await badRequestResponse.WriteStringAsync("}\n");
-                return badRequestResponse;
-            }
 
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");

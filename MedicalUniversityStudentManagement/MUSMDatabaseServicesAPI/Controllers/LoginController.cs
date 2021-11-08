@@ -193,6 +193,9 @@ Example request body:
         [Function("GetLogins")]
         public static async Task<HttpResponseData> GetLogins([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
         {
+            ILogger logger = executionContext.GetLogger("LoginController");
+
+
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
             IEnumerable<LoginModel> Logins = await LoginProcessor.GetLoginsAsync(connectionString);
 
@@ -201,48 +204,23 @@ Example request body:
             return response;
         }
 
-
         /**
          * 
          * 
-Example request body:
+Example query parameters:
 
-{
-    "Username": "PaulMorton27",
-    "Password": "ihaveasecurepassword"
-}
-
+?username="PaulMorton27"&password="ihaveasecurepassword"
          * 
          */
         [Function("GetLoginIdByUsernameAndPassword")]
-        public static async Task<HttpResponseData> GetLoginIdByUsernameAndPassword([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        public static async Task<HttpResponseData> GetLoginIdByUsernameAndPassword([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext, string username, string password)
         {
             ILogger logger = executionContext.GetLogger("LoginController");
 
-            // Get the body of the request
-            string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
-
-            // Get the username and password from the request body
-            string username = jsonBody.GetProperty("Username").GetString();
-            string password = jsonBody.GetProperty("Password").GetString();
-
 
             // Call on the data processor and return the Id
-            int retVal;
-            try
-            {
-                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-                retVal = await LoginProcessor.GetLoginIdByUsernameAndPassword(connectionString, username, password);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-
-                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
-                await conflictResponse.WriteStringAsync("Conflict when looking up the Id of a given Username and Password");
-                return conflictResponse;
-            }
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+            int retVal = await LoginProcessor.GetLoginIdByUsernameAndPassword(connectionString, username, password);
 
 
             // Successfully looked up the Id

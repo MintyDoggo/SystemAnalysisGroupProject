@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -14,52 +15,41 @@ namespace MUSMDatabaseServicesAPI
     public static class ArtifactController
     {
         /**
-         * 
-         * 
-Example request body:
+         * Binary request body with query parameters.
+Example query parameters:
 
-{
-    "RequiredArtifactId": 1,
-    "StudentId": 2,
-    "DocumentReference": "my document is here",
-    "CheckedOff": false
-}
-
+?requiredArtifactId=1&studentId=2&checkedOff=false
          * 
          */
         [Function("CreateArtifactAndReturnId")]
-        public static async Task<HttpResponseData> CreateArtifactAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
+        public static async Task<HttpResponseData> CreateArtifactAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext, int requiredArtifactId, int studentId, bool checkedOff)
         {
             ILogger logger = executionContext.GetLogger("ArtifactController");
 
-            // Get the body of the request
-            string requestBody = await req.ReadAsStringAsync();
+            // Get the ArtifactModel from the query parameters
+            ArtifactModel artifact = new();
+            artifact.RequiredArtifactId = requiredArtifactId;
+            artifact.StudentId = studentId;
 
-            // Get the ArtifactModel from the request body
-            ArtifactModel artifact;
-            try
+            // artifact.Document
             {
-                artifact = JsonSerializer.Deserialize<ArtifactModel>(requestBody);
-                if (artifact is null)
+                MemoryStream bodyStream = (MemoryStream)(req.Body);
+                if (bodyStream is not null)
                 {
-                    throw new JsonException();
+                    artifact.Document = bodyStream.ToArray();
+                }
+                else
+                {
+                    using (MemoryStream memoryStream = new())
+                    {
+                        await req.Body.CopyToAsync(memoryStream);
+                        artifact.Document = memoryStream.ToArray();
+                    }
                 }
             }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
 
-                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
-                await badRequestResponse.WriteStringAsync("\n");
-                await badRequestResponse.WriteStringAsync("{\n");
-                await badRequestResponse.WriteStringAsync("    \"RequiredArtifactId\": 1,\n");
-                await badRequestResponse.WriteStringAsync("    \"StudentId\": 2,\n");
-                await badRequestResponse.WriteStringAsync("    \"DocumentReference\": \"my document is here\",\n");
-                await badRequestResponse.WriteStringAsync("    \"CheckedOff\": false\n");
-                await badRequestResponse.WriteStringAsync("}\n");
-                return badRequestResponse;
-            }
+            artifact.CheckedOff = checkedOff;
+
 
             // Call on the data processor and return the Id
             int retVal;
@@ -85,57 +75,41 @@ Example request body:
         }
 
         /**
-         * 
-         * 
-Example request body:
+         * Binary request body with query parameters.
+Example query parameters:
 
-{
-    "Id": 2,
-    "RequiredArtifactId": 1,
-    "StudentId": 2,
-    "DocumentReference": "my document is there",
-    "CheckedOff": true
-}
-
+?id=2&requiredArtifactId=1&studentId=2&checkedOff=true
          * 
          */
         [Function("UpdateArtifactById")]
-        public static async Task<HttpResponseData> UpdateArtifactById([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req, FunctionContext executionContext)
+        public static async Task<HttpResponseData> UpdateArtifactById([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req, FunctionContext executionContext, int id, int requiredArtifactId, int studentId, bool checkedOff)
         {
             ILogger logger = executionContext.GetLogger("ArtifactController");
 
-            // Get the body of the request
-            string requestBody = await req.ReadAsStringAsync();
+            // Get the ArtifactModel from the query parameters
+            ArtifactModel artifact = new();
+            artifact.RequiredArtifactId = requiredArtifactId;
+            artifact.StudentId = studentId;
 
-            // Get the Id and ArtifactModel from the request body
-            int id;
-            ArtifactModel artifact;
-            try
+            // artifact.Document
             {
-                artifact = JsonSerializer.Deserialize<ArtifactModel>(requestBody);
-                if (artifact is null)
+                MemoryStream bodyStream = (MemoryStream)(req.Body);
+                if (bodyStream is not null)
                 {
-                    throw new JsonException();
+                    artifact.Document = bodyStream.ToArray();
                 }
-
-                id = artifact.Id;
+                else
+                {
+                    using (MemoryStream memoryStream = new())
+                    {
+                        await req.Body.CopyToAsync(memoryStream);
+                        artifact.Document = memoryStream.ToArray();
+                    }
+                }
             }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
 
-                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
-                await badRequestResponse.WriteStringAsync("\n");
-                await badRequestResponse.WriteStringAsync("{\n");
-                await badRequestResponse.WriteStringAsync("    \"Id\": 2,\n");
-                await badRequestResponse.WriteStringAsync("    \"RequiredArtifactId\": 1,\n");
-                await badRequestResponse.WriteStringAsync("    \"StudentId\": 2,\n");
-                await badRequestResponse.WriteStringAsync("    \"DocumentReference\": \"my document is there\",\n");
-                await badRequestResponse.WriteStringAsync("    \"CheckedOff\": true\n");
-                await badRequestResponse.WriteStringAsync("}\n");
-                return badRequestResponse;
-            }
+            artifact.CheckedOff = checkedOff;
+
 
             // Call on the data processor
             try

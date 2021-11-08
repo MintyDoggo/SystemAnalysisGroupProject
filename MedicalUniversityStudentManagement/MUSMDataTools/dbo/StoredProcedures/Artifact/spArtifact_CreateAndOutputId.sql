@@ -6,8 +6,8 @@ BEGIN
 	SET NOCOUNT ON;		-- don't give how many rows affected
 
 
-	INSERT INTO tblArtifact(RequiredArtifactId, StudentId, DocumentReference, CheckedOff)
-	SELECT RequiredArtifactId, StudentId, DocumentReference, CheckedOff FROM @inArtifact;
+	INSERT INTO tblArtifact(RequiredArtifactId, StudentId, Document, CheckedOff)
+	SELECT RequiredArtifactId, StudentId, Document, CheckedOff FROM @inArtifact;
 	
 	SELECT @outId = SCOPE_IDENTITY();
 

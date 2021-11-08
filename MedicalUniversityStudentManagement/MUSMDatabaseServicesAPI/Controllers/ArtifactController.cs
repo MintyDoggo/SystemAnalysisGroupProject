@@ -194,41 +194,15 @@ Example request body:
         /**
          * 
          * 
-Example request body:
+Example query parameters:
 
-{
-    "StudentId": 2
-}
-
+?studentId=2
          * 
          */
         [Function("GetArtifactsByStudentId")]
-        public static async Task<HttpResponseData> GetArtifactsByStudentId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        public static async Task<HttpResponseData> GetArtifactsByStudentId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext, int studentId)
         {
             ILogger logger = executionContext.GetLogger("ArtifactController");
-
-            // Get the body of the request and deserialize it to json
-            string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
-
-            // Get the Id of the Student from the request body
-            int studentId;
-            try
-            {
-                studentId = jsonBody.GetProperty("StudentId").GetInt32();
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-
-                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
-                await badRequestResponse.WriteStringAsync("\n");
-                await badRequestResponse.WriteStringAsync("{\n");
-                await badRequestResponse.WriteStringAsync("    \"StudentId\": 2,\n");
-                await badRequestResponse.WriteStringAsync("}\n");
-                return badRequestResponse;
-            }
 
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
@@ -242,41 +216,15 @@ Example request body:
         /**
          * 
          * 
-Example request body:
+Example query parameters:
 
-{
-    "RequiredArtifactId": 1
-}
-
+?requiredArtifactId=1
          * 
          */
         [Function("GetArtifactsByRequiredArtifactId")]
-        public static async Task<HttpResponseData> GetArtifactsByRequiredArtifactId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        public static async Task<HttpResponseData> GetArtifactsByRequiredArtifactId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext, int requiredArtifactId)
         {
             ILogger logger = executionContext.GetLogger("ArtifactController");
-
-            // Get the body of the request and deserialize it to json
-            string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
-
-            // Get the Id of the Student from the request body
-            int requiredArtifactId;
-            try
-            {
-                requiredArtifactId = jsonBody.GetProperty("RequiredArtifactId").GetInt32();
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-
-                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
-                await badRequestResponse.WriteStringAsync("\n");
-                await badRequestResponse.WriteStringAsync("{\n");
-                await badRequestResponse.WriteStringAsync("    \"RequiredArtifactId\": 1,\n");
-                await badRequestResponse.WriteStringAsync("}\n");
-                return badRequestResponse;
-            }
 
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");

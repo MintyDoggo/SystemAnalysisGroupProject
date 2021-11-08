@@ -209,23 +209,28 @@ Example request body:
          * 
 Example query parameters:
 
-?username="PaulMorton27"&password="ihaveasecurepassword"
+?username=PaulMorton27&password=ihaveasecurepassword
          * 
          */
-        [Function("GetLoginIdByUsernameAndPassword")]
-        public static async Task<HttpResponseData> GetLoginIdByUsernameAndPassword([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext, string username, string password)
+        [Function("GetLoginByUsernameAndPassword")]
+        public static async Task<HttpResponseData> GetLoginByUsernameAndPassword([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext, string username, string password)
         {
             ILogger logger = executionContext.GetLogger("LoginController");
 
 
             // Call on the data processor and return the Id
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-            int retVal = await LoginProcessor.GetLoginIdByUsernameAndPassword(connectionString, username, password);
-
+            LoginModel login = await LoginProcessor.GetLoginByUsernameAndPassword(connectionString, username, password);
+            if (login is null)
+            {
+                var noContentResponse = req.CreateResponse(HttpStatusCode.NoContent);
+                await noContentResponse.WriteStringAsync("No logins found with the given username and password");
+                return noContentResponse;
+            }
 
             // Successfully looked up the Id
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(retVal);
+            await response.WriteAsJsonAsync(login);
             return response;
         }
 

@@ -85,29 +85,25 @@ namespace MUSMDataLibrary.BuisinessLogic
             return await SqlDataAccess.LoadDataAsync<LoginModel>(connectionString, procedureName);    
         }
 
-        public static async Task<int> GetLoginIdByUsernameAndPassword(string connectionString, string username, string password)
+        public static async Task<LoginModel> GetLoginByUsernameAndPassword(string connectionString, string username, string password)
         {
-            string procedureName = "spLogin_SelectIdByUsernameAndPassword";
+            string procedureName = "spLogin_SelectByUsernameAndPassword";
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@outId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            //parameters.Add("@outId", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@inUsername", username, DbType.String);
             parameters.Add("@inPassword", password, DbType.String);
 
 
             // Execute our stored procedure with the parameters we made
-            await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
-
-
-            // Return the outputed Id from the stored procedure
-            int? retVal = parameters.Get<int?>("@outId");
-            if (retVal is not null)
+            IEnumerable<LoginModel> logins = await SqlDataAccess.LoadDataAsync<LoginModel>(connectionString, procedureName, parameters);
+            if (logins.Any())
             {
-                return retVal.Value;
+                return logins.First();
             }
 
-            return -1;
+            return null;
         }
 
 

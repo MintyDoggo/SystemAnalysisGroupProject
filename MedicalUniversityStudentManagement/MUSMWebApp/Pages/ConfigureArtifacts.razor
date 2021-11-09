@@ -96,26 +96,30 @@
     {
         try
         {
-@*            // The API endpoint to call
+            //// The API endpoint to call
+            //string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateRequiredArtifactAndReturnId/";
+            //
+            //var result = await ClientFactory.CreateClient().PostAsJsonAsync(endpoint, new { Name = "gbh" }, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+            RequiredArtifactModel requiredArtifactToSend = new RequiredArtifactModel { Id = 6, Name = "gfsdht" };
+            // The API endpoint to call
             string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateRequiredArtifactAndReturnId/";
 
-            var result = await ClientFactory.CreateClient().PostAsJsonAsync(endpoint, new { Name = "gbh" }, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });*@
+            // The HTTP request body we will send
+            string jsonRequiredArtifact = JsonSerializer.Serialize<RequiredArtifactModel>(requiredArtifactToSend);
+            StringContent httpContent = new(jsonRequiredArtifact);
 
-        RequiredArtifactModel requiredArtifactToSend = new RequiredArtifactModel { Id = 6, Name = "gfsdht" };
-        // The API endpoint to call
-        string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateRequiredArtifactAndReturnId/";
+            // Call the endpoint
+            HttpResponseMessage response = await ClientFactory.CreateClient().PostAsync(endpoint, httpContent);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
 
-        // The HTTP request body we will send
-        string jsonRequiredArtifact = JsonSerializer.Serialize<RequiredArtifactModel>(requiredArtifactToSend);
-        StringContent httpContent = new(jsonRequiredArtifact);
-
-        // Call the endpoint
-        HttpResponseMessage response = await ClientFactory.CreateClient().PostAsJsonAsync(endpoint, httpContent);
+        await Reload();
     }
-    catch (Exception e)
-    {
-        Console.WriteLine("Database services must be offline");
-    }
-    await Reload();
-}
+
+
+
 }

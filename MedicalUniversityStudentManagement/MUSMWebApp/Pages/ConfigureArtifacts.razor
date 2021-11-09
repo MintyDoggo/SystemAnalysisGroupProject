@@ -19,28 +19,33 @@
     </div>
 }
 
-<Button Color="Color.Success" Clicked="@OnButtonClicked">Add RequiredArtifact</Button>
 
-@for (int i = 0; i < newRequiredArtifactsNum; i++)
+<hr />
+<Button Color="Color.Success" Clicked="@OnCreateRequiredArtifactsButtonClicked">@CreateCloseButtonText</Button>
+@if (CreateRequiredArtifact)
 {
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-8 offset-md-2">
                 <Card>
                     <CardBody>
-                        Name: <TextEdit Placeholder="ie. Collage Transcript" />
+                        Name: <TextEdit @ref="RequiredArtifactNameTextEdit" Placeholder="ie. Collage Transcript" />
                     </CardBody>
                 </Card>
             </div>
         </div>
     </div>
+    <Button Color="Color.Success" Clicked="@OnSubmitButtonClicked">Submit</Button>
 }
+
 
 
 @code
 {
     public List<RequiredArtifactModel> RequiredArtifacts { get; set; }
-    private int newRequiredArtifactsNum = 0;
+    public bool CreateRequiredArtifact = false;
+    string CreateCloseButtonText = "Create Required Artifact";
+    TextEdit RequiredArtifactNameTextEdit;
 
     // Blazor event
     protected override async Task OnInitializedAsync()
@@ -72,9 +77,49 @@
         StateHasChanged();
     }
 
-    protected void OnButtonClicked()
+    void OnCreateRequiredArtifactsButtonClicked()
     {
-        ++newRequiredArtifactsNum;
+        if (CreateRequiredArtifact)
+        {
+            CreateRequiredArtifact = false;
+            CreateCloseButtonText = "Create Required Artifact";
+        }
+        else
+        {
+            CreateRequiredArtifact = true;
+            CreateCloseButtonText = "Close";
+        }
         StateHasChanged();
     }
+
+    async Task OnSubmitButtonClicked()
+    {
+        try
+        {
+            //// The API endpoint to call
+            //string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateRequiredArtifactAndReturnId/";
+            //
+            //var result = await ClientFactory.CreateClient().PostAsJsonAsync(endpoint, new { Name = "gbh" }, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+            RequiredArtifactModel requiredArtifactToSend = new RequiredArtifactModel { Id = 6, Name = "gfsdht" };
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateRequiredArtifactAndReturnId/";
+
+            // The HTTP request body we will send
+            string jsonRequiredArtifact = JsonSerializer.Serialize<RequiredArtifactModel>(requiredArtifactToSend);
+            StringContent httpContent = new(jsonRequiredArtifact);
+
+            // Call the endpoint
+            HttpResponseMessage response = await ClientFactory.CreateClient().PostAsync(endpoint, httpContent);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+        await Reload();
+    }
+
+
+
 }

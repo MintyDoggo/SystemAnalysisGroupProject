@@ -31,16 +31,12 @@ Example request body:
 
             // Get the body of the request
             string requestBody = await req.ReadAsStringAsync();
+            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
-            // Get the RequiredArtifactModel from the request body
-            RequiredArtifactModel requiredArtifact;
+            string reqName;
             try
             {
-                requiredArtifact = JsonSerializer.Deserialize<RequiredArtifactModel>(requestBody);
-                if (requiredArtifact is null)
-                {
-                    throw new JsonException();
-                }
+                reqName = jsonBody.GetProperty("Name").GetString();
             }
             catch (Exception e)
             {
@@ -56,7 +52,8 @@ Example request body:
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-                retVal = await RequiredArtifactProcessor.CreateRequiredArtifactAndReturnIdAsync(connectionString, requiredArtifact);
+                RequiredArtifactModel NewRequiredArtifactModel = new RequiredArtifactModel { Name = reqName };
+                retVal = await RequiredArtifactProcessor.CreateRequiredArtifactAndReturnIdAsync(connectionString, NewRequiredArtifactModel);
             }
             catch (Exception e)
             {

@@ -194,7 +194,7 @@
             LoginModel loginToSend = new LoginModel { Username = newUser.Username, Password = newUser.Password, UserType = newUser.UserType };
             // The API endpoint to call
             int associatedStaffId = myStaffComponent.dataGrid.SelectedRow.Id;
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateLoginAndReturnId/?associatedStaffId=" + associatedStaffId;
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateLoginAndReturnId/?staffId=" + associatedStaffId;
 
             // The HTTP request body we will send
             string jsonLogin = JsonSerializer.Serialize<LoginModel>(loginToSend);

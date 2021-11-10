@@ -168,6 +168,23 @@ Example request body:
             return response;
         }
 
+
+        /**
+         * Get all Artifacts
+         */
+        [Function("GetArtifacts")]
+        public static async Task<HttpResponseData> GetArtifacts([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("ArtifactController");
+
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+            IEnumerable<ArtifactModel> artifacts = await ArtifactProcessor.GetArtifactsAsync(connectionString);
+
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync<IEnumerable<ArtifactModel>>(artifacts);
+            return response;
+        }
+
         /**
          * 
          * 

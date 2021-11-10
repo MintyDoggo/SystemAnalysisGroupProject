@@ -76,6 +76,14 @@ namespace MUSMDataLibrary.BuisinessLogic
             return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
         }
 
+
+        public static async Task<IEnumerable<ArtifactModel>> GetArtifactsAsync(string connectionString)
+        {
+            string procedureName = "spArtifact_SelectAll";
+
+            return await SqlDataAccess.LoadDataAsync<ArtifactModel>(connectionString, procedureName);
+        }
+
         public static async Task<IEnumerable<ArtifactModel>> GetArtifactsByStudentIdAsync(string connectionString, int studentId)
         {
             string procedureName = "spArtifact_SelectByStudentId";
@@ -86,6 +94,7 @@ namespace MUSMDataLibrary.BuisinessLogic
 
             return await SqlDataAccess.LoadDataAsync<ArtifactModel>(connectionString, procedureName, parameters);
         }
+
         public static async Task<IEnumerable<ArtifactModel>> GetArtifactsByRequiredArtifactIdAsync(string connectionString, int requiredArtifactId)
         {
             string procedureName = "spArtifact_SelectByRequiredArtifactId";

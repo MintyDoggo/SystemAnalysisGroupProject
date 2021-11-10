@@ -8,11 +8,18 @@
     @{
         if (isEditable)
         {
-            <CardBody>
-                <CardTitle Size="5">Edit Student Info here:</CardTitle>
-                FirstName: <TextEdit Placeholder="@myStaff?.FirstName" />
-                LastName: <TextEdit Placeholder="@myStaff?.LastName" />
-            </CardBody>
+        <CardBody>
+            <CardTitle Size="5">Edit Student Info here:</CardTitle>
+            StudentIdNumber: <TextEdit Placeholder="@myStudent?.StudentIdNumber.ToString()" />
+            FirstName: <TextEdit Placeholder="@myStaff?.FirstName" />
+            LastName: <TextEdit Placeholder="@myStaff?.LastName" />
+            Birthday: <TextEdit Placeholder="@myStudent?.Birthday.ToString()" />
+            Address: <TextEdit Placeholder="@myStudent?.Address" />
+            Major: <TextEdit Placeholder="@myStudent?.Major" />
+            FirstYearEnrolled: <TextEdit Placeholder="@myStudent?.FirstYearEnrolled.ToString()" />
+            HighSchoolAttended: <TextEdit Placeholder="@myStudent?.HighSchoolAttended" />
+            UndergraduateSchoolAttended: <TextEdit Placeholder="@myStudent?.UndergraduateSchoolAttended" />
+        </CardBody>
             <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
             <Button Color="Color.Primary" Clicked="@OnSubmitButtonClicked">Submit</Button>
         }

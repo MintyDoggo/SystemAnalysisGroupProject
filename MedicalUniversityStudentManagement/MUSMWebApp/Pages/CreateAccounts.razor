@@ -199,13 +199,13 @@
         // Create the student
         try
         {
-            StudentModel studentToSend = new StudentModel { FirstName = "", LastName = "" };
+            LoginModel loginToSend = new LoginModel { Username = user_textbox_student.Text, Password = pass_textbox_student.Text };
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateStudentAndReturnId/";
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateStudentLoginAndReturnId/?associatedStaffId=" + staffAssociatedId;
 
             // The HTTP request body we will send
-            string jsonStudent = JsonSerializer.Serialize<StudentModel>(studentToSend);
-            StringContent httpContent = new(jsonStudent);
+            string jsonLogin = JsonSerializer.Serialize<LoginModel>(loginToSend);
+            StringContent httpContent = new(jsonLogin);
 
             // Call the endpoint
             HttpResponseMessage response = await ClientFactory.CreateClient().PostAsync(endpoint, httpContent);

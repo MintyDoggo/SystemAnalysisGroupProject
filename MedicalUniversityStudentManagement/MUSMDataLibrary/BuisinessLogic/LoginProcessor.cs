@@ -107,5 +107,34 @@ namespace MUSMDataLibrary.BuisinessLogic
         }
 
 
+
+
+
+
+
+
+
+
+
+        public static async Task<int> CreateStudentLoginAndReturnIdAsync(string connectionString, LoginModel login, int associatedStaffId)
+        {
+            // Name of our stored procedure to execute
+            string procedureName = "spStudent_CreateAndOutputId";
+
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inUsername", dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@inPassword", dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@inStaffId", dbType: DbType.Int32, direction: ParameterDirection.Input);
+            parameters.Add("@outId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+
+            // Execute our stored procedure with the parameters we made
+            await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
+
+            // Return the outputed Id from the stored procedure
+            return parameters.Get<int>("@outId");
+        }
     }
 }

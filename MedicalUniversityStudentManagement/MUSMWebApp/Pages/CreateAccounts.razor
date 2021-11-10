@@ -53,8 +53,9 @@
                     <CardTitle Size="5">New Student</CardTitle>
                     Username: <TextEdit @ref="@user_textbox_student" Placeholder="Create Username" />
                     Password: <TextEdit @ref="@pass_textbox_student" Placeholder="Create Password" />
-                    
-                    Password: <TextEdit @ref="@StaffId_textbox_student" Placeholder="Staff Id to assign to" />
+
+                    <MyStaff @ref="@myStaffComponent"/>
+
                 </CardBody>
                 <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
                 <Button Color="Color.Success" Clicked="@OnAddButtonClickedStudent">Add</Button>
@@ -78,10 +79,11 @@
 
 @code
 {
+    MyStaff myStaffComponent;
     [Parameter]
     public LoginModel newUser { get; set; } = new LoginModel();
 
-    public TextEdit user_textbox_student, user_textbox_staff, pass_textbox_student, pass_textbox_staff, StaffId_textbox_student;
+    public TextEdit user_textbox_student, user_textbox_staff, pass_textbox_student, pass_textbox_staff;
     String info = string.Empty;
 
     bool isEditable = false;
@@ -171,11 +173,10 @@
     {
         newUser.Username = user_textbox_student.Text;
         newUser.Password = pass_textbox_student.Text;
-        string staffAssociatedId = StaffId_textbox_student.Text;
 
-        if (newUser.Username == null || newUser.Password == null)
+        if (newUser.Username == null || newUser.Password == null || myStaffComponent?.dataGrid?.SelectedRow == null)
         {
-            info = "Please enter a username and password.";
+            info = "Please enter a username and password and select a staff to assign the student to.";
             newUser.Username = string.Empty;
             newUser.Password = string.Empty;
             return;
@@ -192,7 +193,8 @@
         {
             LoginModel loginToSend = new LoginModel { Username = newUser.Username, Password = newUser.Password, UserType = newUser.UserType };
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateLoginAndReturnId/?associatedStaffId=" + staffAssociatedId;
+            int associatedStaffId = myStaffComponent.dataGrid.SelectedRow.Id;
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateLoginAndReturnId/?associatedStaffId=" + associatedStaffId;
 
             // The HTTP request body we will send
             string jsonLogin = JsonSerializer.Serialize<LoginModel>(loginToSend);

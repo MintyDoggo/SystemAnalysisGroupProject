@@ -26,7 +26,7 @@
             // Call the endpoint
             HttpResponseMessage response = await ClientFactory.CreateClient().GetAsync(endpoint);
             List<ArtifactModel> artifacts = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
-            pdfBytes = artifacts.LastOrDefault().Document;
+            pdfBytes = artifacts.LastOrDefault()?.Document;
         }
         catch (Exception e)
         {

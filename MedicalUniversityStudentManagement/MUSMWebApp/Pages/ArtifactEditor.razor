@@ -1,4 +1,7 @@
-﻿<h3>ArtifactEditor</h3>
+﻿@inject IConfiguration Configuration
+@inject IHttpClientFactory _clientFactory
+
+<h3>ArtifactEditor</h3>
 
 
 <Card>
@@ -32,11 +35,11 @@
 
 
 
-@code 
+@code
 {
 
     // list of all the artifacts the student has. ***Size = amount of rows in tblRequiredArtifacts***
-    List<ArtifactModel> student_artifacts;
+    List<ArtifactModel> student_artifacts = new List<ArtifactModel>();
 
     public StudentModel myStudent { get; set; }
 
@@ -51,5 +54,43 @@
     async Task OnChanged(FileChangedEventArgs e)
     {
 
+    }
+
+
+
+
+
+    // Blazor event
+    protected override async Task OnInitializedAsync()
+    {
+        await Reload();
+    }
+
+
+
+    async Task Reload()
+    {
+        // Update our Artifacts list
+        try
+        {
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifacts/";
+            IEnumerable<ArtifactModel> getArtifactsResponse = await _clientFactory.CreateClient().GetFromJsonAsync<IEnumerable<ArtifactModel>>(endpoint);
+            student_artifacts = new List<ArtifactModel>(getArtifactsResponse);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
+
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+
+    void OnSelectedRowChanged()
+    {
+        StateHasChanged();
     }
 }

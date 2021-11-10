@@ -144,38 +144,15 @@ Example request body:
          * 
          */
         [Function("DeleteArtifactById")]
-        public static async Task<HttpResponseData> DeleteArtifactById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
+        public static async Task<HttpResponseData> DeleteArtifactById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext, int artifactId)
         {
             ILogger logger = executionContext.GetLogger("ArtifactController");
-
-            // Get the body of the request and deserialize it to json
-            string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
-
-            // Get the Id of the Artifact to delete from the request body
-            int id;
-            try
-            {
-                id = jsonBody.GetProperty("Id").GetInt32();
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-
-                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Request body didn't meet syntax requirements. Example body:\n");
-                await badRequestResponse.WriteStringAsync("\n");
-                await badRequestResponse.WriteStringAsync("{\n");
-                await badRequestResponse.WriteStringAsync("    \"Id\": 1,\n");
-                await badRequestResponse.WriteStringAsync("}\n");
-                return badRequestResponse;
-            }
 
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
 
-                await ArtifactProcessor.DeleteArtifactByIdAsync(connectionString, id);
+                await ArtifactProcessor.DeleteArtifactByIdAsync(connectionString, artifactId);
             }
             catch (Exception e)
             {

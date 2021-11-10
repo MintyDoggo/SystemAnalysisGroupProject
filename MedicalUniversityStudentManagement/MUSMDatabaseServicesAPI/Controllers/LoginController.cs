@@ -316,5 +316,74 @@ Example request body:
             return response;
         }
 
+
+
+
+
+        /**
+ * 
+ * 
+Example request body:
+
+{
+"Username": "PaulMorton27",
+"Password": "ihaveasecurepassword",
+"UserType": 2
+}
+
+ * 
+ */
+        [Function("CreateStaffLoginAndReturnId")]
+        public static async Task<HttpResponseData> CreateStaffLoginAndReturnId([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("LoginController");
+
+            // Get the body of the request
+            string requestBody = await req.ReadAsStringAsync();
+
+            // Get the LoginModel from the request body
+            LoginModel login;
+            try
+            {
+                login = JsonSerializer.Deserialize<LoginModel>(requestBody);
+                if (login is null)
+                {
+                    throw new JsonException();
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequestResponse.WriteStringAsync("Request didn't meet syntax requirements (make sure you include everything and have the correct property types)");
+                return badRequestResponse;
+            }
+
+            // Call on the data processor and return the Id
+            int retVal;
+            try
+            {
+                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+                retVal = await LoginProcessor.CreateStaffLoginAndReturnIdAsync(connectionString, login);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
+                await conflictResponse.WriteStringAsync("Conflict when inserting into the database");
+                return conflictResponse;
+            }
+
+
+            // Successfully added the Login to the database
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(retVal);
+            return response;
+        }
     }
+
+
+
 }

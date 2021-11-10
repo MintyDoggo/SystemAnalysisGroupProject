@@ -83,22 +83,16 @@ Example request body:
          * 
          */
         [Function("DeleteRequiredArtifactById")]
-        public static async Task<HttpResponseData> DeleteRequiredArtifactById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext)
+        public static async Task<HttpResponseData> DeleteRequiredArtifactById([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req, FunctionContext executionContext, int requiredArtifactId)
         {
             ILogger logger = executionContext.GetLogger("RequiredArtifactController");
 
-            // Get the body of the request and deserialize it to json
-            string requestBody = await req.ReadAsStringAsync();
-            JsonElement jsonBody = JsonSerializer.Deserialize<JsonElement>(requestBody);
-
-            // Get the Id of the RequiredArtifact to delete from the request body
-            int id = jsonBody.GetProperty("Id").GetInt32();
-
+           
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
 
-                await RequiredArtifactProcessor.DeleteRequiredArtifactByIdAsync(connectionString, id);
+                await RequiredArtifactProcessor.DeleteRequiredArtifactByIdAsync(connectionString, requiredArtifactId);
             }
             catch (Exception e)
             {

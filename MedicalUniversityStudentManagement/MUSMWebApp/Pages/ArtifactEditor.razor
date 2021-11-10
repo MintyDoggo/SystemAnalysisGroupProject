@@ -1,0 +1,96 @@
+﻿@inject IConfiguration Configuration
+@inject IHttpClientFactory _clientFactory
+
+<h3>ArtifactEditor</h3>
+
+
+<Card>
+    @{
+        foreach (ArtifactModel student_artifact in student_artifacts)
+        {
+            if (student_artifact.CheckedOff) // if artifact is checked off
+            {
+                <CardBody>
+                    <CardTitle Size="5">@student_artifact.GetType().ToString(): Checked off!</CardTitle>
+                </CardBody>
+            }
+            else if (@student_artifact.Document.Length == 0) // if you have not submitted any pdf
+            {
+                <CardBody>
+                    <CardTitle Size="5">@student_artifact.GetType()ToString(): Needs submitting</CardTitle>
+                </CardBody>
+                <FileEdit Filter=".pdf" Changed="@OnChanged" />
+                <Button Color="Color.Primary" Clicked="@OnSubmitButtonClicked">Submit</Button>
+            }
+            else // if you have submitted the artifact but have not had it checked off yet,
+            {
+                <CardBody>
+                    <CardTitle Size="5">@student_artifact?.GetType()ToString(): Waiting for approval </CardTitle>
+                </CardBody>
+            }
+        }
+
+    }
+</Card>
+
+
+
+@code
+{
+
+    // list of all the artifacts the student has. ***Size = amount of rows in tblRequiredArtifacts***
+    List<ArtifactModel> student_artifacts = new List<ArtifactModel>();
+
+    public StudentModel myStudent { get; set; }
+
+
+
+    async Task OnSubmitButtonClicked()
+    {
+
+
+    }
+
+    async Task OnChanged(FileChangedEventArgs e)
+    {
+
+    }
+
+
+
+
+
+    // Blazor event
+    protected override async Task OnInitializedAsync()
+    {
+        await Reload();
+    }
+
+
+
+    async Task Reload()
+    {
+        // Update our Artifacts list
+        try
+        {
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifacts/";
+            IEnumerable<ArtifactModel> getArtifactsResponse = await _clientFactory.CreateClient().GetFromJsonAsync<IEnumerable<ArtifactModel>>(endpoint);
+            student_artifacts = new List<ArtifactModel>(getArtifactsResponse);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
+
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+
+    void OnSelectedRowChanged()
+    {
+        StateHasChanged();
+    }
+}

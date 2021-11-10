@@ -141,13 +141,13 @@
         // Create the staff
         try
         {
-            StaffModel staffToSend = new StaffModel { FirstName = "", LastName = "" };
+            LoginModel loginToSend = new LoginModel { Username = newUser.Username, Password = newUser.Password, UserType = newUser.UserType };
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateStaffAndReturnId/";
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateLoginAndReturnId/";
 
             // The HTTP request body we will send
-            string jsonStaff = JsonSerializer.Serialize<StaffModel>(staffToSend);
-            StringContent httpContent = new(jsonStaff);
+            string jsonLogin = JsonSerializer.Serialize<LoginModel>(loginToSend);
+            StringContent httpContent = new(jsonLogin);
 
             // Call the endpoint
             HttpResponseMessage response = await ClientFactory.CreateClient().PostAsync(endpoint, httpContent);
@@ -157,15 +157,6 @@
             Console.WriteLine("Database services must be offline");
         }
 
-
-
-
-        Console.WriteLine("Student Info:\nUsername: ");
-        Console.WriteLine(newUser.Username);
-        Console.WriteLine("Password: ");
-        Console.WriteLine(newUser.Password);
-        Console.WriteLine("UserType: ");
-        Console.WriteLine(newUser.UserType.ToString());
 
         // basically, puts you back to the default CreateAccounts page when you submit
         isEditable = false;
@@ -199,9 +190,9 @@
         // Create the student
         try
         {
-            LoginModel loginToSend = new LoginModel { Username = user_textbox_student.Text, Password = pass_textbox_student.Text };
+            LoginModel loginToSend = new LoginModel { Username = newUser.Username, Password = newUser.Password, UserType = newUser.UserType };
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateStudentLoginAndReturnId/?associatedStaffId=" + staffAssociatedId;
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateLoginAndReturnId/?associatedStaffId=" + staffAssociatedId;
 
             // The HTTP request body we will send
             string jsonLogin = JsonSerializer.Serialize<LoginModel>(loginToSend);
@@ -217,14 +208,6 @@
 
 
 
-
-
-        Console.WriteLine("Student Info:\nUsername: ");
-        Console.WriteLine(newUser.Username);
-        Console.WriteLine("Password: ");
-        Console.WriteLine(newUser.Password);
-        Console.WriteLine("UserType: ");
-        Console.WriteLine(newUser.UserType.ToString());
 
         // basically, puts you back to the default CreateAccounts page when you submit
         isEditable = false;

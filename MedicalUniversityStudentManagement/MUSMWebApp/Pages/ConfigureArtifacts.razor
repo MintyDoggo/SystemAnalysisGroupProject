@@ -2,31 +2,6 @@
 @using Microsoft.Extensions.Configuration
 @inject IHttpClientFactory ClientFactory
 @inject IConfiguration Configuration
-@*@if (RequiredArtifacts is not null)
-    {
-        if (RequiredArtifacts.Count > 0)
-        {
-            <h3>Current # of RequiredArtifacts:@RequiredArtifacts.Count</h3>
-            @for (int i = 0; i < RequiredArtifacts.Count; i++)
-            {
-                if (i >= 0 && i < RequiredArtifacts.Count)
-                {
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-md-8 offset-md-2">
-                                <Card>
-                                    <CardBody>
-                                        @RequiredArtifacts[i]?.Name
-                                    </CardBody>
-                                </Card>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-        }
-    }*@
-
 
 <CardBody>
     <Row>
@@ -68,7 +43,7 @@
 
 
 <hr />
-<Button Color="Color.Success" Clicked="@OnDeleteRequiredArtifactsButtonClicked">Delete Selected</Button>
+<Button Color="Color.Danger" Clicked="@OnDeleteRequiredArtifactsButtonClicked">Delete Selected</Button>
 <Button Color="Color.Success" Clicked="@OnCreateRequiredArtifactsButtonClicked">@CreateCloseButtonText</Button>
 @if (CreateRequiredArtifact)
 {

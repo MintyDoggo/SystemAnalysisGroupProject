@@ -136,16 +136,19 @@
 
         //TODO: store STAFF user in database
 
-
-        //database stuff here!!
-
-
-        // Update this Student
+        // Create the staff
         try
         {
+            StaffModel staffToSend = new StaffModel { FirstName = "", LastName = "" };
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateLoginAndReturnId";
-            await ClientFactory.CreateClient().GetAsync(endpoint);
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateStaffAndReturnId/";
+
+            // The HTTP request body we will send
+            string jsonStaff = JsonSerializer.Serialize<StaffModel>(staffToSend);
+            StringContent httpContent = new(jsonStaff);
+
+            // Call the endpoint
+            HttpResponseMessage response = await ClientFactory.CreateClient().PostAsync(endpoint, httpContent);
         }
         catch (Exception e)
         {
@@ -189,15 +192,20 @@
         //TODO: store STUDENT user in database
 
 
-        //database stuff here!!
 
-
-        // Update this Student
+        // Create the student
         try
         {
+            StudentModel studentToSend = new StudentModel { FirstName = "", LastName = "" };
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateLoginAndReturnId";
-            await ClientFactory.CreateClient().GetAsync(endpoint);
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateStudentAndReturnId/";
+
+            // The HTTP request body we will send
+            string jsonStudent = JsonSerializer.Serialize<StudentModel>(studentToSend);
+            StringContent httpContent = new(jsonStudent);
+
+            // Call the endpoint
+            HttpResponseMessage response = await ClientFactory.CreateClient().PostAsync(endpoint, httpContent);
         }
         catch (Exception e)
         {

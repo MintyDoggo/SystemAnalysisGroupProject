@@ -1,5 +1,6 @@
 ﻿@page "/mystaff"
 @inject IHttpClientFactory _clientFactory
+@inject IConfiguration Configuration
 
 <h1>My Staff</h1>
 
@@ -68,7 +69,8 @@
         // Update our Staffs list
         try
         {
-            IEnumerable<StaffModel> getStaffsResponse = await _clientFactory.CreateClient().GetFromJsonAsync<IEnumerable<StaffModel>>(@"www.endpointhere.com");
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetStaff/";
+            IEnumerable<StaffModel> getStaffsResponse = await _clientFactory.CreateClient().GetFromJsonAsync<IEnumerable<StaffModel>>(endpoint);
             staffModels = new List<StaffModel>(getStaffsResponse);
         }
         catch (Exception e)

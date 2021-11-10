@@ -119,5 +119,22 @@ Example request body:
         }
 
 
+
+         /**
+         * Get all Staff
+         */
+        [Function("GetStaff")]
+        public static async Task<HttpResponseData> GetStaff([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("StaffController");
+
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+            IEnumerable<StaffModel> Staff = await StaffProcessor.GetStaffsAsync(connectionString);
+
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync<IEnumerable<StaffModel>>(Staff);
+            return response;
+        }
+
     }
 }

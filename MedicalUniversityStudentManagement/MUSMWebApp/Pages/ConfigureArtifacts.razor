@@ -132,7 +132,7 @@
         var result = await ClientFactory.CreateClient().DeleteAsync(endpoint);
 
 
-        Reload();
+        await Reload();
         StateHasChanged();
     }
     void OnCreateRequiredArtifactsButtonClicked()

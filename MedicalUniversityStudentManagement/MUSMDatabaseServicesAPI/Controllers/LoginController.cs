@@ -63,14 +63,14 @@ Example request body:
                 switch (login.UserType)
                 {
                     case MUSMModelsLibrary.Enums.UserType.Staff:
-                        retVal = await LoginProcessor.CreateStaffLoginAndReturnIdAsync(connectionString, login);
+                        retVal = await LoginProcessor.CreateStaffLoginAndReturnIdAsync(connectionString, login.Username, login.Password);
                         break;
                     case MUSMModelsLibrary.Enums.UserType.Student:
                         if (queryParameters.Contains("?staffId="))
                         {
                             // TODO: This query parameter thing sucks
                             int staffId = int.Parse(queryParameters.Remove(0, "?staffId=".Length));
-                            retVal = await LoginProcessor.CreateStudentLoginAndReturnIdAsync(connectionString, login, staffId);
+                            retVal = await LoginProcessor.CreateStudentLoginAndReturnIdAsync(connectionString, login.Username, login.Password, staffId);
                             break;
                         }
                         var badRequestResponse1 = req.CreateResponse(HttpStatusCode.BadRequest);

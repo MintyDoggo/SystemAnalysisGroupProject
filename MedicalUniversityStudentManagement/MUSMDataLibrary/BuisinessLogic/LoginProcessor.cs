@@ -12,24 +12,16 @@ namespace MUSMDataLibrary.BuisinessLogic
 {
     public static class LoginProcessor
     {
-        public static async Task<int> CreateLoginAndReturnIdAsync(string connectionString, LoginModel login)
+        public static async Task<int> CreateStaffLoginAndReturnIdAsync(string connectionString, string username, string password)
         {
             // Name of our stored procedure to execute
-            string procedureName = "spLogin_CreateAndOutputId";
+            string procedureName = "spStaff_CreateAndOutputId";
 
-
-            // Create the Data Table representation of the user defined Login table
-            DataTable loginTable = new DataTable("@inLogin");
-            loginTable.Columns.Add("Username", typeof(string));
-            loginTable.Columns.Add("Password", typeof(string));
-            loginTable.Columns.Add("UserType", typeof(int));
-
-            // Fill in the data
-            loginTable.Rows.Add(login.Username, login.Password, login.UserType);
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inLogin", loginTable.AsTableValuedParameter("udtLogin"), DbType.Object);
+            parameters.Add("@inUsername", username, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@inPassword", password, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@outId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
 
@@ -39,6 +31,29 @@ namespace MUSMDataLibrary.BuisinessLogic
             // Return the outputed Id from the stored procedure
             return parameters.Get<int>("@outId");
         }
+
+        public static async Task<int> CreateStudentLoginAndReturnIdAsync(string connectionString, string username, string password, int staffId)
+        {
+            // Name of our stored procedure to execute
+            string procedureName = "spStudent_CreateAndOutputId";
+
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inUsername", username, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@inPassword", password, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@inStaffId", staffId, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            parameters.Add("@outId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+
+            // Execute our stored procedure with the parameters we made
+            await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
+
+            // Return the outputed Id from the stored procedure
+            return parameters.Get<int>("@outId");
+        }
+
+
 
         // Does not provide ability to change the Login's database id (for good reason)
         public static async Task UpdateLoginByIdAsync(string connectionString, int id, LoginModel login)
@@ -107,54 +122,5 @@ namespace MUSMDataLibrary.BuisinessLogic
         }
 
 
-
-
-
-
-
-
-
-
-
-        public static async Task<int> CreateStudentLoginAndReturnIdAsync(string connectionString, LoginModel login, int associatedStaffId)
-        {
-            // Name of our stored procedure to execute
-            string procedureName = "spStudent_CreateAndOutputId";
-
-
-            // Make parameters to pass to the stored procedure
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inUsername", login.Username, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@inPassword", login.Password, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@inStaffId", associatedStaffId, dbType: DbType.Int32, direction: ParameterDirection.Input);
-            parameters.Add("@outId", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-
-            // Execute our stored procedure with the parameters we made
-            await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
-
-            // Return the outputed Id from the stored procedure
-            return parameters.Get<int>("@outId");
-        }
-
-        public static async Task<int> CreateStaffLoginAndReturnIdAsync(string connectionString, LoginModel login)
-        {
-            // Name of our stored procedure to execute
-            string procedureName = "spStaff_CreateAndOutputId";
-
-
-            // Make parameters to pass to the stored procedure
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inUsername", login.Username, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@inPassword", login.Password, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@outId", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-
-            // Execute our stored procedure with the parameters we made
-            await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
-
-            // Return the outputed Id from the stored procedure
-            return parameters.Get<int>("@outId");
-        }
     }
 }

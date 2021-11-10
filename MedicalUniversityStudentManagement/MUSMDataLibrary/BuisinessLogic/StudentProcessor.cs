@@ -46,37 +46,6 @@ namespace MUSMDataLibrary.BuisinessLogic
             return parameters.Get<int>("@outId");
         }
 
-        public static async Task<int> DeleteStudentByIdAsync(string connectionString, int id)
-        {
-            string procedureName = "spStudent_DeleteById";
-
-            // Make parameters to pass to the stored procedure
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inId", id, DbType.Int32);
-
-            return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
-        }
-
-        public static async Task<IEnumerable<StudentModel>> GetStudentsAsync(string connectionString)
-        {
-            string procedureName = "spStudent_SelectAll";
-
-            return await SqlDataAccess.LoadDataAsync<StudentModel>(connectionString, procedureName);    
-        }
-
-        public static async Task<IEnumerable<StudentModel>> GetStudentsByStaffIdAsync(string connectionString, int staffId)
-        {
-            string procedureName = "spStudent_SelectByStaffId";
-
-            // Make parameters to pass to the stored procedure
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@inStaffId", staffId, DbType.Int32);
-
-            return await SqlDataAccess.LoadDataAsync<StudentModel>(connectionString, procedureName, parameters);
-        }
-
-
-        // Does not provide ability to change the student's database id (for good reason)
         public static async Task UpdateStudentByIdAsync(string connectionString, int id, StudentModel student)
         {
             // Name of our stored procedure to execute
@@ -107,5 +76,55 @@ namespace MUSMDataLibrary.BuisinessLogic
             // Execute our stored procedure with the parameters we made
             await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
         }
+
+        public static async Task<int> DeleteStudentByIdAsync(string connectionString, int id)
+        {
+            string procedureName = "spStudent_DeleteById";
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inId", id, DbType.Int32);
+
+            return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
+        }
+
+        public static async Task<IEnumerable<StudentModel>> GetStudentsAsync(string connectionString)
+        {
+            string procedureName = "spStudent_SelectAll";
+
+            return await SqlDataAccess.LoadDataAsync<StudentModel>(connectionString, procedureName);    
+        }
+
+        public static async Task<IEnumerable<StudentModel>> GetStudentsByStaffIdAsync(string connectionString, int staffId)
+        {
+            string procedureName = "spStudent_SelectByStaffId";
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inStaffId", staffId, DbType.Int32);
+
+            return await SqlDataAccess.LoadDataAsync<StudentModel>(connectionString, procedureName, parameters);
+        }
+        
+
+        public static async Task<StudentModel> GetStudentByLoginIdAsync(string connectionString, int loginId)
+        {
+            string procedureName = "spStudent_SelectByLoginId";
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inLoginId", loginId, DbType.Int32);
+
+
+            IEnumerable<StudentModel> students = await SqlDataAccess.LoadDataAsync<StudentModel>(connectionString, procedureName, parameters);
+            if (students.Any())
+            {
+                return students.First();
+            }
+
+            return null;
+
+        }
+
     }
 }

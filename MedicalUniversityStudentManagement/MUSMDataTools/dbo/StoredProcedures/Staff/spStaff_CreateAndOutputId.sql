@@ -9,7 +9,7 @@ BEGIN
 
 	-- Create a Login for this new Staff
 	DECLARE @newLogin AS udtLogin;
-	INSERT INTO @newLogin VALUES (@inUsername, @inPassword, 3);
+	INSERT INTO @newLogin VALUES (@inUsername, @inPassword, 2);
 	EXEC spLogin_CreateAndOutputId @inLogin = @newLogin, @outId = @outId OUTPUT;
 
 

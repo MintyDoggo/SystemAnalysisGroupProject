@@ -53,6 +53,8 @@
                     <CardTitle Size="5">New Student</CardTitle>
                     Username: <TextEdit @ref="@user_textbox_student" Placeholder="Create Username" />
                     Password: <TextEdit @ref="@pass_textbox_student" Placeholder="Create Password" />
+                    
+                    Password: <TextEdit @ref="@StaffId_textbox_student" Placeholder="Staff Id to assign to" />
                 </CardBody>
                 <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
                 <Button Color="Color.Success" Clicked="@OnAddButtonClickedStudent">Add</Button>
@@ -79,7 +81,7 @@
     [Parameter]
     public LoginModel newUser { get; set; } = new LoginModel();
 
-    public TextEdit user_textbox_student, user_textbox_staff, pass_textbox_student, pass_textbox_staff;
+    public TextEdit user_textbox_student, user_textbox_staff, pass_textbox_student, pass_textbox_staff, StaffId_textbox_student;
     String info = string.Empty;
 
     bool isEditable = false;
@@ -178,6 +180,7 @@
     {
         newUser.Username = user_textbox_student.Text;
         newUser.Password = pass_textbox_student.Text;
+        string staffAssociatedId = StaffId_textbox_student.Text;
 
         if (newUser.Username == null || newUser.Password == null)
         {

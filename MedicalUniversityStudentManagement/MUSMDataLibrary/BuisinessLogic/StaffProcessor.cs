@@ -49,13 +49,31 @@ namespace MUSMDataLibrary.BuisinessLogic
             return await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
         }
 
-        public static async Task<IEnumerable<StaffModel>> GetStaffsAsync(string connectionString)
+        public static async Task<IEnumerable<StaffModel>> GetStaffAsync(string connectionString)
         {
             string procedureName = "spStaff_SelectAll";
 
             return await SqlDataAccess.LoadDataAsync<StaffModel>(connectionString, procedureName);
         }
 
+        public static async Task<StaffModel> GetStaffByLoginIdAsync(string connectionString, int loginId)
+        {
+            string procedureName = "spStaff_SelectByLoginId";
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inLoginId", loginId, DbType.Int32);
+
+
+            IEnumerable<StaffModel> staff = await SqlDataAccess.LoadDataAsync<StaffModel>(connectionString, procedureName, parameters);
+            if (staff.Any())
+            {
+                return staff.First();
+            }
+
+            return null;
+
+        }
 
     }
 }

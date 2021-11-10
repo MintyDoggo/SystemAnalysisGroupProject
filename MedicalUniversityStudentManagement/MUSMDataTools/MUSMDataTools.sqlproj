@@ -107,6 +107,7 @@
     <Build Include="dbo\StoredProcedures\Admin\spAdmin_DeleteById.sql" />
     <Build Include="dbo\StoredProcedures\Student\spStudent_SelectByLoginId.sql" />
     <Build Include="dbo\StoredProcedures\Staff\spStaff_SelectByLoginId.sql" />
+    <Build Include="dbo\StoredProcedures\Artifact\spArtifact_SelectAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishProfiles\MedicalUniversityStudentManagementDB.publish.xml" />

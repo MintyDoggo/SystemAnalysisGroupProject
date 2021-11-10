@@ -243,6 +243,8 @@ Example request body:
             return response;
         }
 
+
+
         /**
          * Get all Students
          */
@@ -264,6 +266,28 @@ Example request body:
          * 
 Example query parameters:
 
+?loginId=4
+         * 
+         */
+        [Function("GetStudentByLoginId")]
+        public static async Task<HttpResponseData> GetStudentByLoginId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext, int loginId)
+        {
+            ILogger logger = executionContext.GetLogger("StudentController");
+
+
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+            StudentModel student = await StudentProcessor.GetStudentByLoginIdAsync(connectionString, loginId);
+
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync<StudentModel>(student);
+            return response;
+        }
+
+        /**
+         * 
+         * 
+Example query parameters:
+
 ?staffId=2
          * 
          */
@@ -271,10 +295,6 @@ Example query parameters:
         public static async Task<HttpResponseData> GetStudentsByStaffId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext, int staffId)
         {
             ILogger logger = executionContext.GetLogger("StudentController");
-
-
-
-
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
             IEnumerable<StudentModel> Students = await StudentProcessor.GetStudentsByStaffIdAsync(connectionString, staffId);

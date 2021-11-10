@@ -120,7 +120,7 @@ Example request body:
 
 
 
-         /**
+        /**
          * Get all Staff
          */
         [Function("GetStaff")]
@@ -128,11 +128,33 @@ Example request body:
         {
             ILogger logger = executionContext.GetLogger("StaffController");
 
-            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
-            IEnumerable<StaffModel> Staff = await StaffProcessor.GetStaffsAsync(connectionString);
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");    
+            IEnumerable<StaffModel> Staff = await StaffProcessor.GetStaffAsync(connectionString);
 
             HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync<IEnumerable<StaffModel>>(Staff);
+            return response;
+        }
+
+        /**
+         * 
+         * 
+Example query parameters:
+
+?loginId=3
+         * 
+         */
+        [Function("GetStaffByLoginId")]
+        public static async Task<HttpResponseData> GetStaffByLoginId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext, int loginId)
+        {
+            ILogger logger = executionContext.GetLogger("StaffController");
+
+
+            string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+            StaffModel staff = await StaffProcessor.GetStaffByLoginIdAsync(connectionString, loginId);
+
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync<StaffModel>(staff);
             return response;
         }
 

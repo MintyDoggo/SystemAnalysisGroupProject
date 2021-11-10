@@ -61,6 +61,33 @@
     public StudentModel myStudent { get; set; }
     public StaffModel myStaff { get; set; }
 
+
+    // Blazor event
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetStudentByLoginId";
+            endpoint += '?' + $"loginId={(await sessionStorage.GetAsync<int>("LoginId")).Value}";
+
+            // Call the endpoint
+            HttpResponseMessage response = await ClientFactory.CreateClient().GetAsync(endpoint);
+
+            // Set our Student
+            myStudent = await response.Content.ReadFromJsonAsync<StudentModel>();
+
+            // Log the response
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+    }
+
+
     bool isEditable = false;
 
     void OnEditableButtonClicked()

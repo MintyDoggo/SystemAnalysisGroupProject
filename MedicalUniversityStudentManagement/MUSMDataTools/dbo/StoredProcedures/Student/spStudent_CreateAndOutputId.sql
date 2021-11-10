@@ -6,11 +6,29 @@ BEGIN
 	SET NOCOUNT ON;		-- don't give how many rows affected
 
 
-	INSERT INTO tblStudent(StaffId, StudentIdNumber, FirstName, LastName, Birthday, Address, Major, FirstYearEnrolled, HighSchoolAttended, UndergraduateSchoolAttended)
-	SELECT StaffId, StudentIdNumber, FirstName, LastName, Birthday, Address, Major, FirstYearEnrolled, HighSchoolAttended, UndergraduateSchoolAttended FROM @inStudent;
-	
-	-- SCOPE_IDENTITY() returns the most recent modified Id within the scope of this procedure (last identity created in the same session and the same scope)
-	SELECT @outId = SCOPE_IDENTITY();
+	-- Create a Login for this new Student
+	DECLARE @newLogin AS udtLogin;
+	INSERT INTO @newLogin VALUES ('username', 'TEMPORARY_PASSWORD', 4);
+	EXEC spLogin_CreateAndOutputId @inLogin = @newLogin, @outId = @outId OUTPUT;
+
+
+	-- Create the Student data for this new Login
+	INSERT INTO tblStudent(Id, StaffId, StudentIdNumber, FirstName, LastName, Birthday, [Address], Major, FirstYearEnrolled, HighSchoolAttended, UndergraduateSchoolAttended)
+	SELECT
+		@outId,
+
+		StaffId,
+		StudentIdNumber,
+		FirstName,
+		LastName,
+		Birthday,
+		[Address],
+		Major,
+		FirstYearEnrolled,
+		HighSchoolAttended,
+		UndergraduateSchoolAttended
+		FROM
+		@inStudent;
 
 END
 RETURN 0

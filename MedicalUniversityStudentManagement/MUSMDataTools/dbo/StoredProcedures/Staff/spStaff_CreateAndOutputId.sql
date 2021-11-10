@@ -6,11 +6,21 @@ BEGIN
 	SET NOCOUNT ON;		-- don't give how many rows affected
 
 
-	INSERT INTO tblStaff(FirstName, LastName)
-	SELECT FirstName, LastName FROM @inStaff;
-	
-	-- SCOPE_IDENTITY() returns the most recent modified Id within the scope of this procedure (last identity created in the same session and the same scope)
-	SELECT @outId = SCOPE_IDENTITY();
+	-- Create a Login for this new Staff
+	DECLARE @newLogin AS udtLogin;
+	INSERT INTO @newLogin VALUES ('username', 'TEMPORARY_PASSWORD', 3);
+	EXEC spLogin_CreateAndOutputId @inLogin = @newLogin, @outId = @outId OUTPUT;
+
+
+	-- Create the Staff data for this new Login
+	INSERT INTO tblStaff(Id, FirstName, LastName)
+	SELECT
+		@outId,
+
+		FirstName,
+		LastName
+		FROM
+		@inStaff;
 
 END
 RETURN 0

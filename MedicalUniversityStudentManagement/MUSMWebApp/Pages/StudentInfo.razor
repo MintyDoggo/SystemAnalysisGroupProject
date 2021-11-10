@@ -1,25 +1,30 @@
 ﻿@page "/studentinfo"
 @using System.Text.Json
-@using Microsoft.Extensions.Configuration
 @inject IHttpClientFactory ClientFactory
 @inject IConfiguration Configuration
+@inject ProtectedSessionStorage sessionStorage
 
 <Card>
     @{
         if (isEditable)
         {
-        <CardBody>
             <CardTitle Size="5">Edit Student Info here:</CardTitle>
-            StudentIdNumber: <TextEdit Placeholder="@myStudent?.StudentIdNumber.ToString()" />
-            FirstName: <TextEdit Placeholder="@myStaff?.FirstName" />
-            LastName: <TextEdit Placeholder="@myStaff?.LastName" />
-            Birthday: <TextEdit Placeholder="@myStudent?.Birthday.ToString()" />
-            Address: <TextEdit Placeholder="@myStudent?.Address" />
-            Major: <TextEdit Placeholder="@myStudent?.Major" />
-            FirstYearEnrolled: <TextEdit Placeholder="@myStudent?.FirstYearEnrolled.ToString()" />
-            HighSchoolAttended: <TextEdit Placeholder="@myStudent?.HighSchoolAttended" />
-            UndergraduateSchoolAttended: <TextEdit Placeholder="@myStudent?.UndergraduateSchoolAttended" />
-        </CardBody>
+            <CardBody>
+                StudentIdNumber: <TextEdit @ref="StudentIdNumberTextEdit" Placeholder="@myStudent?.StudentIdNumber.ToString()" />
+                FirstName: <TextEdit @ref="FirstNameTextEdit" Placeholder="@myStaff?.FirstName" />
+                LastName: <TextEdit @ref="LastNameTextEdit" Placeholder="@myStaff?.LastName" />
+                Birthday: <br />
+                <Card>
+                    <CardBody>
+                        Year (ie. 2002): <TextEdit @ref="BirthdayYearTextEdit" Placeholder="@myStudent?.Birthday.ToString()" /> Month (ie. 5): <TextEdit @ref="BirthdayMonthTextEdit" Placeholder="@myStudent?.Birthday.ToString()" /> Day (ie. 8): <TextEdit @ref="BirthdayDayTextEdit" Placeholder="@myStudent?.Birthday.ToString()" />
+                    </CardBody>
+                </Card>
+                Address: <TextEdit @ref="AddressTextEdit" Placeholder="@myStudent?.Address" />
+                Major: <TextEdit @ref="MajorTextEdit" Placeholder="@myStudent?.Major" />
+                FirstYearEnrolled: <TextEdit @ref="FirstYearEnrolledTextEdit" Placeholder="@myStudent?.FirstYearEnrolled.ToString()" />
+                HighSchoolAttended: <TextEdit @ref="HighSchoolAttendedTextEdit" Placeholder="@myStudent?.HighSchoolAttended" />
+                UndergraduateSchoolAttended: <TextEdit @ref="UndergraduateSchoolAttendedTextEdit" Placeholder="@myStudent?.UndergraduateSchoolAttended" />
+            </CardBody>
             <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
             <Button Color="Color.Primary" Clicked="@OnSubmitButtonClicked">Submit</Button>
         }
@@ -52,6 +57,7 @@
 
 @code
 {
+    TextEdit StudentIdNumberTextEdit, FirstNameTextEdit, LastNameTextEdit, BirthdayYearTextEdit, BirthdayMonthTextEdit, BirthdayDayTextEdit, AddressTextEdit, MajorTextEdit, FirstYearEnrolledTextEdit, HighSchoolAttendedTextEdit, UndergraduateSchoolAttendedTextEdit;
     public StudentModel myStudent { get; set; }
     public StaffModel myStaff { get; set; }
 
@@ -69,22 +75,32 @@
 
     async Task OnSubmitButtonClicked()
     {
+        int loggedInStudentId = (await sessionStorage.GetAsync<int>("LoginId")).Value;
         // Update this Student
         try
         {
+            StudentModel studentToSend = new StudentModel
+            {
+                Id = loggedInStudentId,
+                StudentIdNumber = int.Parse(StudentIdNumberTextEdit?.Text),
+                FirstName = FirstNameTextEdit?.Text,
+                LastName = LastNameTextEdit?.Text,
+                Birthday = new DateTime(int.Parse(BirthdayYearTextEdit?.Text), int.Parse(BirthdayMonthTextEdit?.Text), int.Parse(BirthdayDayTextEdit?.Text)),
+                Address = AddressTextEdit?.Text,
+                Major = MajorTextEdit?.Text,
+                FirstYearEnrolled = int.Parse(FirstYearEnrolledTextEdit?.Text),
+                HighSchoolAttended = HighSchoolAttendedTextEdit?.Text,
+                UndergraduateSchoolAttended = UndergraduateSchoolAttendedTextEdit?.Text
+            };
             // The API endpoint to call
             string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "UpdateStudentById/";
 
             // The HTTP request body we will send
-            string jsonStudent = JsonSerializer.Serialize<StudentModel>(myStudent);
-            StringContent httpContent = new(jsonStudent);
+            string jsonRequiredArtifact = JsonSerializer.Serialize<StudentModel>(studentToSend);
+            StringContent httpContent = new(jsonRequiredArtifact);
 
             // Call the endpoint
             HttpResponseMessage response = await ClientFactory.CreateClient().PutAsync(endpoint, httpContent);
-
-            // Log the response
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
-
         }
         catch (Exception e)
         {

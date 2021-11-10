@@ -3,21 +3,34 @@
 @inject IHttpClientFactory ClientFactory
 @inject IConfiguration Configuration
 
-<h3>Current #of RequiredArtifact:@RequiredArtifacts?.Count</h3>
-@for (int i = 0; i < RequiredArtifacts?.Count; i++)
+@if (RequiredArtifacts is not null)
 {
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8 offset-md-2">
-                <Card>
-                    <CardBody>
-                        @RequiredArtifacts[i].Name
-                    </CardBody>
-                </Card>
-            </div>
-        </div>
-    </div>
+    if (RequiredArtifacts.Count > 0)
+    {
+        <h3>Current # of RequiredArtifacts:@RequiredArtifacts.Count</h3>
+        @for (int i = 0; i < RequiredArtifacts.Count; i++)
+        {
+            if (i >= 0 && i < RequiredArtifacts.Count)
+            {
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-8 offset-md-2">
+                            <Card>
+                                <CardBody>
+                                    @RequiredArtifacts[i]?.Name
+                                </CardBody>
+                            </Card>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
 }
+
+
+
+
 
 
 <hr />
@@ -42,7 +55,7 @@
 
 @code
 {
-    public List<RequiredArtifactModel> RequiredArtifacts { get; set; }
+    public List<RequiredArtifactModel> RequiredArtifacts { get; set; } = new List<RequiredArtifactModel>();
     public bool CreateRequiredArtifact = false;
     string CreateCloseButtonText = "Create Required Artifact";
     TextEdit RequiredArtifactNameTextEdit;
@@ -50,7 +63,7 @@
     // Blazor event
     protected override async Task OnInitializedAsync()
     {
-        await Reload();
+                await Reload();
     }
 
     async Task Reload()
@@ -64,7 +77,7 @@
 
             IEnumerable<RequiredArtifactModel> getRequiredArtifactsResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<RequiredArtifactModel>>(endpoint);
             RequiredArtifacts.Clear();
-            RequiredArtifacts.AddRange(getRequiredArtifactsResponse);
+            RequiredArtifacts = getRequiredArtifactsResponse.ToList();
         }
         catch (Exception e)
         {
@@ -74,7 +87,7 @@
 
 
         // always call StateHasChanged!
-        StateHasChanged();
+                StateHasChanged();
     }
 
     void OnCreateRequiredArtifactsButtonClicked()
@@ -89,19 +102,14 @@
             CreateRequiredArtifact = true;
             CreateCloseButtonText = "Close";
         }
-        StateHasChanged();
+                StateHasChanged();
     }
 
     async Task OnSubmitButtonClicked()
     {
         try
         {
-            //// The API endpoint to call
-            //string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateRequiredArtifactAndReturnId/";
-            //
-            //var result = await ClientFactory.CreateClient().PostAsJsonAsync(endpoint, new { Name = "gbh" }, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-
-            RequiredArtifactModel requiredArtifactToSend = new RequiredArtifactModel { Id = 6, Name = "gfsdht" };
+            RequiredArtifactModel requiredArtifactToSend = new RequiredArtifactModel { Name = RequiredArtifactNameTextEdit.Text };
             // The API endpoint to call
             string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateRequiredArtifactAndReturnId/";
 

@@ -111,7 +111,7 @@
         {
             RequiredArtifactModel requiredArtifactToSend = new RequiredArtifactModel { Name = RequiredArtifactNameTextEdit.Text };
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateRequiredArtifactAndReturnId/";
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateRequiredArtifactAndReturnId/?staffId=2";
 
             // The HTTP request body we will send
             string jsonRequiredArtifact = JsonSerializer.Serialize<RequiredArtifactModel>(requiredArtifactToSend);

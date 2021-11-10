@@ -8,6 +8,8 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using MUSMDataLibrary.BuisinessLogic;
 using MUSMModelsLibrary;
+using System.Collections.Specialized;
+using System.Web;
 
 namespace MUSMDatabaseServicesAPI
 {
@@ -269,6 +271,9 @@ Example query parameters:
         public static async Task<HttpResponseData> GetStudentsByStaffId([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext executionContext, int staffId)
         {
             ILogger logger = executionContext.GetLogger("StudentController");
+
+
+
 
 
             string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");

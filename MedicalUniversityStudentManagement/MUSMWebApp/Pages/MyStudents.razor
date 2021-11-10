@@ -2,6 +2,7 @@
 @using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
 @inject IHttpClientFactory ClientFactory
+@inject ProtectedSessionStorage sessionStorage
 
 <CardBody>
     <Row>
@@ -83,25 +84,29 @@
 
 
 
-
-
     async Task ReloadTable()
     {
         studentModels = new List<StudentModel>();
         // Update our Students list
         try
         {
+            string loggedInStaffId = string.Empty;
+            loggedInStaffId = (await sessionStorage.GetAsync<string>("LoginId")).Value ?? string.Empty;
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetRequiredArtifacts/";
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetStudentsByStaffId/?staffId=" + loggedInStaffId;
 
-            IEnumerable<StudentModel> getStudentsResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<StudentModel>>(endpoint);
-            studentModels.Clear();
-            studentModels.AddRange(getStudentsResponse);
+            IEnumerable<StudentModel> getStudentsByStaffIdResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<StudentModel>>(endpoint);
+            studentModels = new List<StudentModel>(getStudentsByStaffIdResponse);
         }
         catch (Exception e)
         {
             Console.WriteLine("Database services must be offline");
         }
+
+
+
+
+
 
 
 

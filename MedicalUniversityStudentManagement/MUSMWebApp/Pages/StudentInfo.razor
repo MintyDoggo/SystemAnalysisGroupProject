@@ -102,13 +102,13 @@
 
     async Task OnSubmitButtonClicked()
     {
-        int loggedInStudentId = (await sessionStorage.GetAsync<int>("LoginId")).Value;
         // Update this Student
         try
         {
             StudentModel studentToSend = new StudentModel
             {
-                Id = loggedInStudentId,
+                Id = myStudent.Id,
+                StaffId = myStudent.StaffId,
                 StudentIdNumber = int.Parse(StudentIdNumberTextEdit?.Text),
                 FirstName = FirstNameTextEdit?.Text,
                 LastName = LastNameTextEdit?.Text,

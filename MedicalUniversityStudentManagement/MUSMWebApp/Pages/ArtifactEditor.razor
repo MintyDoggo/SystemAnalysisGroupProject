@@ -2,6 +2,7 @@
 @inject IHttpClientFactory _clientFactory
 @inject ProtectedSessionStorage sessionStorage
 @inject IConfiguration Configuration
+@using System.IO;
 
 <h3>ArtifactEditor</h3>
 
@@ -10,28 +11,29 @@
     @{
         foreach (KeyValuePair<RequiredArtifactModel, ArtifactModel> entry in RequiredArtifactToArtifactMap)
         {
+            currentArtifact = entry.Value;
             <Card>
-                    <CardBody>
-                        <CardTitle Size="5">@entry.Key.Name</CardTitle>
-                        <Check TValue="bool" ReadOnly="IsCheckoffReadonly" @bind-Checked="entry.Value.CheckedOff">Checked off</Check>
-                        @if (entry.Value.Document.Length == 0)
+                <CardBody>
+                    <CardTitle Size="5">@entry.Key.Name</CardTitle>
+                    <Check TValue="bool" ReadOnly="IsCheckoffReadonly" @bind-Checked="entry.Value.CheckedOff">Checked off</Check>
+                    <InputFile OnChange="@LoadFiles" />
+                    @if (entry.Value.Document?.Length == 0)
+                    {
+                        <p class="text-danger">Document needs submiting!</p>
+                    }
+                    else if (entry.Value.Document?.Length > 0)
+                    {
+                        if (entry.Value.CheckedOff == false)
                         {
-                            <p class="text-danger">Document needs submiting!</p>
-                            <FileEdit Filter=".pdf" Changed="@OnChanged" />
+                            <p class="text-warning">Submited, awaiting approval</p>
                         }
-                        else if (entry.Value.Document.Length > 0)
+                        else
                         {
-                            if (entry.Value.CheckedOff == false)
-                            {
-                                <p class="text-warning">Submited, awaiting approval</p>
-                            }
-                            else
-                            {
-                                <p class="text-success">Submited and aproved!</p>
-                            }
+                            <p class="text-success">Submited and aproved!</p>
                         }
+                    }
 
-                    </CardBody>
+                </CardBody>
             </Card>
         }
 
@@ -51,16 +53,38 @@
     Dictionary<RequiredArtifactModel, ArtifactModel> RequiredArtifactToArtifactMap = new Dictionary<RequiredArtifactModel, ArtifactModel>();
     public StudentModel myStudent { get; set; }
 
+    private ArtifactModel currentArtifact { get; set; }
 
 
     async Task OnSubmitButtonClicked()
     {
 
-
+        //// Update this Artifact in the database
+        //try
+        //{
+        //    // The API endpoint to call
+        //    string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "UpdateArtifactById/";
+        //    endpoint += '?' + $"id={}" + '&' + $"requiredArtifactId={}" + '&' + $"studentId={}" + '&' + $"checkedOff={}";
+        //
+        //    // The HTTP request body we will send
+        //    StringContent httpContent = new(PdfBytes.ToString());
+        //
+        //    // Call the endpoint
+        //    HttpResponseMessage response = await _clientFactory.CreateClient().PutAsync(endpoint, httpContent);
+        //}
+        //catch (Exception e)
+        //{
+        //    Console.WriteLine("Database services must be offline");
+        //}
     }
 
-    async Task OnChanged(FileChangedEventArgs e)
+    async Task LoadFiles(InputFileChangeEventArgs e)
     {
+        const int maxFileSize = 10 * 1000000; // 10MB
+        MemoryStream memory = new MemoryStream();
+        await e.File.OpenReadStream(maxFileSize).CopyToAsync(memory);
+
+        currentArtifact.Document = memory.ToArray();
 
     }
 

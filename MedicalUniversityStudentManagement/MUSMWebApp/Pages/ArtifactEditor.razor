@@ -2,6 +2,7 @@
 @inject IHttpClientFactory _clientFactory
 @inject ProtectedSessionStorage sessionStorage
 @inject IConfiguration Configuration
+@using System.IO;
 
 <h3>ArtifactEditor</h3>
 
@@ -10,9 +11,11 @@
     @{
         foreach (KeyValuePair<RequiredArtifactModel, ArtifactModel> entry in RequiredArtifactToArtifactMap)
         {
+            currentArtifact = entry.Value;
             <Card>
                     <CardBody>
                         <CardTitle Size="5">@entry.Key.Name</CardTitle>
+                        <InputFile OnChange="@LoadFiles" />
                         @if (UserType == "Staff")
                         {
                             <Button Clicked="@(=> _clientFactory.CreateClient().PutAsync(Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + $"UpdateArtifactById/?id={entry.Value?.Id.ToString()}&requiredArtifactId={entry.Value?.RequiredArtifactId.ToString()}&studentId={entry.Value?.StudentId.ToString()}&checkedOff={true.ToString()}", new HttpContent()))">Checkoff</Button>
@@ -20,7 +23,6 @@
                         @if (entry.Value?.Document?.Length == 0)
                         {
                             <p class="text-danger">Document needs submiting!</p>
-                            <FileEdit Filter=".pdf" Changed="@OnChanged" />
                         }
                         else if (entry.Value?.Document?.Length > 0)
                         {
@@ -34,7 +36,7 @@
                             }
                         }
 
-                    </CardBody>
+                </CardBody>
             </Card>
         }
 
@@ -55,6 +57,7 @@
     [Parameter]
     public StudentModel myStudent { get; set; } = new StudentModel();
 
+    private ArtifactModel currentArtifact { get; set; }
 
     private string UserType = string.Empty;
 
@@ -63,7 +66,7 @@
 
     // Blazor event
     protected override async Task OnInitializedAsync()
-    {
+    {    
         UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? string.Empty;
         StateHasChanged();
 
@@ -75,6 +78,36 @@
 
         await Reload();
     }
+
+
+    async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        const int maxFileSize = 10 * 1000000; // 10MB
+        MemoryStream memory = new MemoryStream();
+        await e.File.OpenReadStream(maxFileSize).CopyToAsync(memory);
+
+        currentArtifact.Document = memory.ToArray();
+
+        
+        //// Update this Artifact in the database
+        //try
+        //{
+        //    // The API endpoint to call
+        //    string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "UpdateArtifactById/";
+        //    endpoint += '?' + $"id={}" + '&' + $"requiredArtifactId={}" + '&' + $"studentId={}" + '&' + $"checkedOff={}";
+        //
+        //    // The HTTP request body we will send
+        //    StringContent httpContent = new(PdfBytes.ToString());
+        //
+        //    // Call the endpoint
+        //    HttpResponseMessage response = await _clientFactory.CreateClient().PutAsync(endpoint, httpContent);
+        //}
+        //catch (Exception e)
+        //{
+        //    Console.WriteLine("Database services must be offline");
+        //}
+    }
+
 
 
 
@@ -142,23 +175,5 @@
     void OnSelectedRowChanged()
     {
         StateHasChanged();
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    async Task OnChanged(FileChangedEventArgs e)
-    {
-
     }
 }

@@ -169,14 +169,18 @@
             }
         }
 
-
+        await Reload();
     }
 
 
 
 
-    async Task Reload()
+    public async Task Reload()
     {
+        student_artifacts.Clear();
+        RequiredArtifacts.Clear();
+        RequiredArtifactToArtifactMap.Clear();
+
         // Update Required artifacts
         RequiredArtifacts = new List<RequiredArtifactModel>();
         // Update our RequiredArtifacts list

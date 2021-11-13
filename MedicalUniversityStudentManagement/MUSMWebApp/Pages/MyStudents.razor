@@ -62,12 +62,12 @@
 {
     <StudentInfo myStudent="@dataGrid?.SelectedRow" />
     <br />
-    <ArtifactEditor myStudent="@dataGrid?.SelectedRow" IsCheckoffReadonly="false"/>
+    <ArtifactEditor @ref="ArtifactEditorRef" myStudent="@dataGrid?.SelectedRow" IsCheckoffReadonly="false"/>
 }
 
 @code
 {
-
+    ArtifactEditor ArtifactEditorRef;
     DataGrid<StudentModel> dataGrid;
     List<StudentModel> studentModels;
     bool RefreshButtonDisabed;
@@ -103,8 +103,9 @@
         StateHasChanged();
     }
 
-    void OnSelectedRowChanged()
+    async Task OnSelectedRowChanged()
     {
+        await ArtifactEditorRef.Reload();
         StateHasChanged();
     }
 

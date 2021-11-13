@@ -8,28 +8,31 @@
 
 <Card>
     @{
-        foreach (ArtifactModel student_artifact in student_artifacts)
+        foreach (KeyValuePair<RequiredArtifactModel, ArtifactModel> entry in RequiredArtifactToArtifactMap)
         {
-            if (student_artifact.CheckedOff) // if artifact is checked off
-            {
-                <CardBody>
-                    <CardTitle Size="5">@student_artifact.GetType().ToString(): Checked off!</CardTitle>
-                </CardBody>
-            }
-            else if (@student_artifact.Document.Length == 0) // if you have not submitted any pdf
-            {
-                <CardBody>
-                    <CardTitle Size="5">@student_artifact.GetType()ToString(): Needs submitting</CardTitle>
-                </CardBody>
-                <FileEdit Filter=".pdf" Changed="@OnChanged" />
-                <Button Color="Color.Primary" Clicked="@OnSubmitButtonClicked">Submit</Button>
-            }
-            else // if you have submitted the artifact but have not had it checked off yet,
-            {
-                <CardBody>
-                    <CardTitle Size="5">@student_artifact?.GetType()ToString(): Waiting for approval </CardTitle>
-                </CardBody>
-            }
+            <Card>
+                    <CardBody>
+                        <CardTitle Size="5">@entry.Key.Name</CardTitle>
+                        <Check TValue="bool" ReadOnly="IsCheckoffReadonly" @bind-Checked="entry.Value.CheckedOff">Checked off</Check>
+                        @if (entry.Value.Document.Length == 0)
+                        {
+                            <p class="text-danger">Document needs submiting!</p>
+                            <FileEdit Filter=".pdf" Changed="@OnChanged" />
+                        }
+                        else if (entry.Value.Document.Length > 0)
+                        {
+                            if (entry.Value.CheckedOff == false)
+                            {
+                                <p class="text-warning">Submited, awaiting approval</p>
+                            }
+                            else
+                            {
+                                <p class="text-success">Submited and aproved!</p>
+                            }
+                        }
+
+                    </CardBody>
+            </Card>
         }
 
     }
@@ -39,11 +42,13 @@
 
 @code
 {
-
+    [Parameter]
+    public bool IsCheckoffReadonly { get; set; } = true;
     // list of all the artifacts the student has. ***Size = amount of rows in tblRequiredArtifacts***
     List<ArtifactModel> student_artifacts = new List<ArtifactModel>();
     public List<RequiredArtifactModel> RequiredArtifacts { get; set; } = new List<RequiredArtifactModel>();
-    [Parameter]
+
+    Dictionary<RequiredArtifactModel, ArtifactModel> RequiredArtifactToArtifactMap = new Dictionary<RequiredArtifactModel, ArtifactModel>();
     public StudentModel myStudent { get; set; }
 
 
@@ -112,9 +117,26 @@
 
 
 
-
+        MapRequiredArtifactsToArtifacts();
         // always call StateHasChanged!
         StateHasChanged();
+    }
+
+    public void MapRequiredArtifactsToArtifacts()
+    {
+        foreach (RequiredArtifactModel requiredArtifact in RequiredArtifacts)
+        {
+            ArtifactModel artifactModelToPair = new ArtifactModel();
+            foreach (ArtifactModel artifact in student_artifacts)
+            {
+                if (artifact.RequiredArtifactId == requiredArtifact.Id)
+                {
+                    artifactModelToPair = artifact;
+                }
+            }
+
+            RequiredArtifactToArtifactMap.Add(requiredArtifact, artifactModelToPair);
+        }
     }
 
     void OnSelectedRowChanged()

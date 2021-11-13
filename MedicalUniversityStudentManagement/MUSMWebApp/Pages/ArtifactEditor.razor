@@ -9,8 +9,12 @@
 
 <Card>
     @{
-        foreach (KeyValuePair<RequiredArtifactModel, ArtifactModel> entry in RequiredArtifactToArtifactMap)
+        //foreach (KeyValuePair<RequiredArtifactModel, ArtifactModel> entry in RequiredArtifactToArtifactMap)
+        for (int i = 0; i < RequiredArtifactToArtifactMap.Count; ++i)
         {
+            int iter = i;
+            KeyValuePair<RequiredArtifactModel, ArtifactModel> entry = RequiredArtifactToArtifactMap.ElementAt(iter);
+
             ArtifactModel currentArtifact = new ArtifactModel()
             {
                 // Make a copy
@@ -47,8 +51,8 @@
                                 {
                                     <p class="text-success">Submited and aproved!</p>
                                 }
-                                <Button Color="Color.Info" @ref="DisplayDocButnRef" Clicked="DisplayDocButnClicked">Display Document toggle</Button>
-                                if (bDisplayDoc)
+                                <Button Color="Color.Info" @ref="DisplayDocButnRef" Clicked="@(e => DisplayDocButnClicked(iter))">Display Document toggle</Button>
+                                if (displayDocs[iter] == true)
                                 {
                                     <RenderPdf inBytes="currentArtifact.Document" width="1100" height="850" />
                                 }
@@ -57,6 +61,7 @@
                         </CardBody>
                 </Card>
             }
+
         }
 
     }
@@ -72,6 +77,7 @@
     List<ArtifactModel> student_artifacts = new List<ArtifactModel>();
     public List<RequiredArtifactModel> RequiredArtifacts { get; set; } = new List<RequiredArtifactModel>();
 
+
     Dictionary<RequiredArtifactModel, ArtifactModel> RequiredArtifactToArtifactMap = new Dictionary<RequiredArtifactModel, ArtifactModel>();
     [Parameter]
     public StudentModel myStudent { get; set; } = new StudentModel();
@@ -80,6 +86,7 @@
     private string UserType = string.Empty;
     bool bDisplayDoc = false;
     Button DisplayDocButnRef;
+    private List<bool> displayDocs { get; set; } = new List<bool>();
 
 
     protected override async Task OnParametersSetAsync()
@@ -234,12 +241,13 @@
             }
 
             RequiredArtifactToArtifactMap.Add(requiredArtifact, artifactModelToPair);
+            displayDocs.Add(false);
         }
     }
 
-    void DisplayDocButnClicked()
+    void DisplayDocButnClicked(int iteration)
     {
-        bDisplayDoc = !bDisplayDoc;
+        displayDocs[iteration] = !displayDocs[iteration];
 
         StateHasChanged();
     }

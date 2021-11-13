@@ -63,33 +63,16 @@
     TextEdit StudentIdNumberTextEdit, FirstNameTextEdit, LastNameTextEdit, BirthdayYearTextEdit, BirthdayMonthTextEdit, BirthdayDayTextEdit, AddressTextEdit, MajorTextEdit, FirstYearEnrolledTextEdit, HighSchoolAttendedTextEdit, UndergraduateSchoolAttendedTextEdit;
     [Parameter]
     public StudentModel myStudent { get; set; } = null;
-    public StaffModel myStaff { get; set; }
     private string UserType = string.Empty;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        if (firstRender)
-        {
-            UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? string.Empty;
-            StateHasChanged();
-        }
-    }
 
     // Blazor event
     protected override async Task OnInitializedAsync()
     {
+        UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? string.Empty;
         try
         {
-            int idToQuery;
-            if (myStudent == null)
-            {
-                idToQuery = (await sessionStorage.GetAsync<int>("LoginId")).Value;
-            }
-            else
-            {
-                idToQuery = myStudent.Id;
-            }
+            int idToQuery = (await sessionStorage.GetAsync<int>("LoginId")).Value;
+
             // The API endpoint to call
             string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetStudentByLoginId";
             endpoint += '?' + $"loginId={idToQuery}";

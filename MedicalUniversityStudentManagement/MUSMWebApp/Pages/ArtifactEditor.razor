@@ -224,6 +224,8 @@
 
     public void MapRequiredArtifactsToArtifacts()
     {
+        RequiredArtifactToArtifactMap.Clear();
+        displayDocs.Clear();
         foreach (RequiredArtifactModel requiredArtifact in RequiredArtifacts)
         {
             ArtifactModel artifactModelToPair = new ArtifactModel()

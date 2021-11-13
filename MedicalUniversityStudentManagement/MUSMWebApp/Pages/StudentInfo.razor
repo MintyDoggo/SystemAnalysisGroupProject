@@ -102,28 +102,25 @@
 
     async Task OnSubmitButtonClicked()
     {
+        // Update our myStudent
+        myStudent.StudentIdNumber = int.Parse(StudentIdNumberTextEdit?.Text);
+        myStudent.FirstName = FirstNameTextEdit?.Text;
+        myStudent.LastName = LastNameTextEdit?.Text;
+        myStudent.Birthday = new DateTime(int.Parse(BirthdayYearTextEdit?.Text), int.Parse(BirthdayMonthTextEdit?.Text), int.Parse(BirthdayDayTextEdit?.Text));
+        myStudent.Address = AddressTextEdit?.Text;
+        myStudent.Major = MajorTextEdit?.Text;
+        myStudent.FirstYearEnrolled = int.Parse(FirstYearEnrolledTextEdit?.Text);
+        myStudent.HighSchoolAttended = HighSchoolAttendedTextEdit?.Text;
+        myStudent.UndergraduateSchoolAttended = UndergraduateSchoolAttendedTextEdit?.Text;
+
         // Update this Student
         try
         {
-            StudentModel studentToSend = new StudentModel
-            {
-                Id = myStudent.Id,
-                StaffId = myStudent.StaffId,
-                StudentIdNumber = int.Parse(StudentIdNumberTextEdit?.Text),
-                FirstName = FirstNameTextEdit?.Text,
-                LastName = LastNameTextEdit?.Text,
-                Birthday = new DateTime(int.Parse(BirthdayYearTextEdit?.Text), int.Parse(BirthdayMonthTextEdit?.Text), int.Parse(BirthdayDayTextEdit?.Text)),
-                Address = AddressTextEdit?.Text,
-                Major = MajorTextEdit?.Text,
-                FirstYearEnrolled = int.Parse(FirstYearEnrolledTextEdit?.Text),
-                HighSchoolAttended = HighSchoolAttendedTextEdit?.Text,
-                UndergraduateSchoolAttended = UndergraduateSchoolAttendedTextEdit?.Text
-            };
             // The API endpoint to call
             string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "UpdateStudentById/";
 
             // The HTTP request body we will send
-            string jsonRequiredArtifact = JsonSerializer.Serialize<StudentModel>(studentToSend);
+            string jsonRequiredArtifact = JsonSerializer.Serialize<StudentModel>(myStudent);
             StringContent httpContent = new(jsonRequiredArtifact);
 
             // Call the endpoint

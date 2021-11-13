@@ -147,6 +147,7 @@
 
             // Call the endpoint
             HttpResponseMessage response = await ClientFactory.CreateClient().PutAsync(endpoint, httpContent);
+            isEditable = false;
         }
         catch (Exception e)
         {

@@ -119,7 +119,7 @@
                 endpoint += '?' + $"id={artifactChanged.Id}" + '&' + $"requiredArtifactId={artifactChanged.RequiredArtifactId}" + '&' + $"studentId={myStudent.Id}" + '&' + $"checkedOff={artifactChanged.CheckedOff.ToString().ToLower()}";
 
                 // The HTTP request body we will send
-                StringContent httpContent = new(artifactChanged.Document.ToString());
+                StringContent httpContent = new(System.Text.Encoding.Default.GetString(artifactChanged.Document));
 
                 // Call the endpoint
                 HttpResponseMessage response = await _clientFactory.CreateClient().PostAsync(endpoint, httpContent);
@@ -150,7 +150,7 @@
                 endpoint += '?' + $"id={artifactChanged.Id}" + '&' + $"requiredArtifactId={artifactChanged.RequiredArtifactId}" + '&' + $"studentId={myStudent.Id}" + '&' + $"checkedOff={artifactChanged.CheckedOff.ToString().ToLower()}";
 
                 // The HTTP request body we will send
-                StringContent httpContent = new(artifactChanged.Document.ToString());
+                StringContent httpContent = new(System.Text.Encoding.Default.GetString(artifactChanged.Document));
 
                 // Call the endpoint
                 HttpResponseMessage response = await _clientFactory.CreateClient().PutAsync(endpoint, httpContent);

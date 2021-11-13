@@ -85,32 +85,70 @@
     }
 
 
-    async Task LoadFiles(InputFileChangeEventArgs e)
+    async Task LoadFiles(InputFileChangeEventArgs ev)
     {
         const int maxFileSize = 10 * 1000000; // 10MB
         MemoryStream memory = new MemoryStream();
-        await e.File.OpenReadStream(maxFileSize).CopyToAsync(memory);
+        await ev.File.OpenReadStream(maxFileSize).CopyToAsync(memory);
 
         currentArtifact.Document = memory.ToArray();
 
+        if (currentArtifact.Id <= 0)
+        {
+            // Invalid Id - so create one
 
-        //// Update this Artifact in the database
-        //try
-        //{
-        //    // The API endpoint to call
-        //    string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "UpdateArtifactById/";
-        //    endpoint += '?' + $"id={}" + '&' + $"requiredArtifactId={}" + '&' + $"studentId={}" + '&' + $"checkedOff={}";
-        //
-        //    // The HTTP request body we will send
-        //    StringContent httpContent = new(PdfBytes.ToString());
-        //
-        //    // Call the endpoint
-        //    HttpResponseMessage response = await _clientFactory.CreateClient().PutAsync(endpoint, httpContent);
-        //}
-        //catch (Exception e)
-        //{
-        //    Console.WriteLine("Database services must be offline");
-        //}
+
+            // Create this Artifact in the database
+            try
+            {
+                // The API endpoint to call
+                string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateArtifactAndReturnId";
+                endpoint += '?' + $"id={currentArtifact.Id}" + '&' + $"requiredArtifactId={currentArtifact.RequiredArtifactId}" + '&' + $"studentId={myStudent.Id}" + '&' + $"checkedOff={currentArtifact.CheckedOff.ToString().ToLower()}";
+
+                // The HTTP request body we will send
+                StringContent httpContent = new(currentArtifact.Document.ToString());
+
+                // Call the endpoint
+                HttpResponseMessage response = await _clientFactory.CreateClient().PostAsync(endpoint, httpContent);
+
+                // Update our Id from the new Artifact
+                int returnedId;
+                if (int.TryParse(await response.Content.ReadAsStringAsync(), out returnedId))
+                {
+                    currentArtifact.Id = returnedId;
+                    
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Database services must be offline");
+            }
+
+        }
+        else
+        {
+            // Update this Artifact in the database
+            try
+            {
+
+                // The API endpoint to call
+                string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "UpdateArtifactById";
+                endpoint += '?' + $"id={currentArtifact.Id}" + '&' + $"requiredArtifactId={currentArtifact.RequiredArtifactId}" + '&' + $"studentId={myStudent.Id}" + '&' + $"checkedOff={currentArtifact.CheckedOff.ToString().ToLower()}";
+
+                // The HTTP request body we will send
+                StringContent httpContent = new(currentArtifact.Document.ToString());
+
+                // Call the endpoint
+                HttpResponseMessage response = await _clientFactory.CreateClient().PutAsync(endpoint, httpContent);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Database services must be offline");
+            }
+        }
+
+
     }
 
 
@@ -164,7 +202,12 @@
     {
         foreach (RequiredArtifactModel requiredArtifact in RequiredArtifacts)
         {
-            ArtifactModel artifactModelToPair = new ArtifactModel();
+            ArtifactModel artifactModelToPair = new ArtifactModel()
+            {
+                StudentId = myStudent.Id,
+                RequiredArtifactId = requiredArtifact.Id
+            };
+
             foreach (ArtifactModel artifact in student_artifacts)
             {
                 if (artifact.RequiredArtifactId == requiredArtifact.Id)

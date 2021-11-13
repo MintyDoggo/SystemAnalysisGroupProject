@@ -6,13 +6,13 @@
 
 <Card>
     @{
-        if (isEditable)
+        if (isEditable && UserType == "Student")
         {
             <CardTitle Size="5">Edit Student Info here:</CardTitle>
             <CardBody>
                 StudentIdNumber: <TextEdit @ref="StudentIdNumberTextEdit" Placeholder="@myStudent?.StudentIdNumber.ToString()" />
-                FirstName: <TextEdit @ref="FirstNameTextEdit" Placeholder="@myStaff?.FirstName" />
-                LastName: <TextEdit @ref="LastNameTextEdit" Placeholder="@myStaff?.LastName" />
+                FirstName: <TextEdit @ref="FirstNameTextEdit" Placeholder="@myStudent?.FirstName" />
+                LastName: <TextEdit @ref="LastNameTextEdit" Placeholder="@myStudent?.LastName" />
                 Birthday: <br />
                 <Card>
                     <CardBody>
@@ -30,7 +30,10 @@
         }
         else
         {
-            <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
+            if (UserType == "Student")
+            {
+                <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
+            }
             <CardBody>
                 <CardTitle Size="5">Student Info</CardTitle>
                 StudentIdNumber: @myStudent?.StudentIdNumber
@@ -58,18 +61,38 @@
 @code
 {
     TextEdit StudentIdNumberTextEdit, FirstNameTextEdit, LastNameTextEdit, BirthdayYearTextEdit, BirthdayMonthTextEdit, BirthdayDayTextEdit, AddressTextEdit, MajorTextEdit, FirstYearEnrolledTextEdit, HighSchoolAttendedTextEdit, UndergraduateSchoolAttendedTextEdit;
-    public StudentModel myStudent { get; set; }
+    [Parameter]
+    public StudentModel myStudent { get; set; } = null;
     public StaffModel myStaff { get; set; }
+    private string UserType = string.Empty;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? string.Empty;
+            StateHasChanged();
+        }
+    }
 
     // Blazor event
     protected override async Task OnInitializedAsync()
     {
         try
         {
+            int idToQuery;
+            if(myStudent == null)
+            {
+                idToQuery = (await sessionStorage.GetAsync<int>("LoginId")).Value;
+            }
+            else
+            {
+                idToQuery = myStudent.Id;
+            }
             // The API endpoint to call
             string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetStudentByLoginId";
-            endpoint += '?' + $"loginId={(await sessionStorage.GetAsync<int>("LoginId")).Value}";
+            endpoint += '?' + $"loginId={idToQuery}";
 
             // Call the endpoint
             HttpResponseMessage response = await ClientFactory.CreateClient().GetAsync(endpoint);
@@ -102,7 +125,6 @@
 
     async Task OnSubmitButtonClicked()
     {
-        // Update our myStudent
         myStudent.StudentIdNumber = int.Parse(StudentIdNumberTextEdit?.Text);
         myStudent.FirstName = FirstNameTextEdit?.Text;
         myStudent.LastName = LastNameTextEdit?.Text;

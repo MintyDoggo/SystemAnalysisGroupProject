@@ -61,6 +61,8 @@
 @if (dataGrid != null && dataGrid.SelectedRow != null)
 {
     <StudentInfo myStudent="@dataGrid?.SelectedRow" />
+    <br />
+    <ArtifactEditor myStudent="@dataGrid?.SelectedRow"/>
 }
 
 @code
@@ -71,18 +73,11 @@
     bool RefreshButtonDisabed;
 
 
-
-
     // Blazor event
     protected override async Task OnInitializedAsync()
     {
         await ReloadTable();
     }
-
-
-
-
-
 
     async Task ReloadTable()
     {
@@ -104,12 +99,6 @@
         }
 
 
-
-
-
-
-
-
         // always call StateHasChanged!
         StateHasChanged();
     }
@@ -118,11 +107,6 @@
     {
         StateHasChanged();
     }
-
-
-
-
-
 
 
 }

@@ -43,7 +43,7 @@
     // list of all the artifacts the student has. ***Size = amount of rows in tblRequiredArtifacts***
     List<ArtifactModel> student_artifacts = new List<ArtifactModel>();
     public List<RequiredArtifactModel> RequiredArtifacts { get; set; } = new List<RequiredArtifactModel>();
-
+    [Parameter]
     public StudentModel myStudent { get; set; }
 
 

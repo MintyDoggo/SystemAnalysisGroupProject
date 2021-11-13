@@ -80,7 +80,7 @@
             Int32 loggedInId = -1;
             loggedInId = (await sessionStorage.GetAsync<Int32>("LoginId")).Value;
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifactsByStudentId/?studentId=" + +loggedInId;
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifactsByStudentId/?studentId=" + loggedInId;
 
             IEnumerable<ArtifactModel> getArtifactsResponse = await _clientFactory.CreateClient().GetFromJsonAsync<IEnumerable<ArtifactModel>>(endpoint);
             student_artifacts = new List<ArtifactModel>(getArtifactsResponse);

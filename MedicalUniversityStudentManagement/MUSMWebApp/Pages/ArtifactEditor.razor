@@ -21,7 +21,7 @@
                         <InputFile OnChange="@LoadFiles" />
                         @if (UserType == "Staff")
                         {
-                            <Button Clicked="@(e => CheckOff(currentArtifact))">Checkoff</Button>
+                            <Button Color="Color.Success" Clicked="@(e => CheckOff(currentArtifact))">Checkoff</Button>
                         }
 
                         @if (currentArtifact?.Document == null)

@@ -7,21 +7,13 @@
 <h3>MyArtifacts</h3>
 
 
-@*Example usage of the "RendePdf component". Pass in the byte[] of the document (stored in ArtifactModel.Document)
-    | | | | | | | | | | | | | | | | | | | | | | | |
-    \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 
-    <RenderPdf inBytes="artifacts[0].Document" />
-*@
-
-
-<ArtifactEditor/>
+<ArtifactEditor myStudent="new StudentModel { Id = loggedInId }"/>
 
 
 @code
 {
-    public List<ArtifactModel> artifacts = new List<ArtifactModel>();
-
+    Int32 loggedInId = -1;
     // Blazor event
     protected override async Task OnInitializedAsync()
     {
@@ -33,22 +25,7 @@
 
     public async Task Reload()
     {
-
-        // Update the artifact list
-        try
-        {
-            Int32 loggedInStudentId = -1;
-            loggedInStudentId = (await sessionStorage.GetAsync<Int32>("LoginId")).Value;
-            // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetRequiredArtifactsByStudentId/?studentId=" + loggedInStudentId;
-
-            IEnumerable<ArtifactModel> getArtifactsByStudentIdResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<ArtifactModel>>(endpoint);
-            artifacts = new List<ArtifactModel>(getArtifactsByStudentIdResponse);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Database services must be offline");
-        }
+        loggedInId = (await sessionStorage.GetAsync<Int32>("LoginId")).Value;
         StateHasChanged();
     }
 

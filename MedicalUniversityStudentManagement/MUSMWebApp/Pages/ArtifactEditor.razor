@@ -33,23 +33,28 @@
                             <Button Color="Color.Success" Clicked="@(e => CheckOff(currentArtifact))">Checkoff</Button>
                         }
 
-                        @if (currentArtifact?.Document == null)
-                        {
-                            <p class="text-danger">Document needs submiting!</p>
-                        }
-                        else
-                        {
-                            if (currentArtifact?.CheckedOff == false)
+                            @if (currentArtifact?.Document == null)
                             {
-                                <p class="text-warning">Submited, awaiting approval</p>
+                                <p class="text-danger">Document needs submiting!</p>
                             }
                             else
                             {
-                                <p class="text-success">Submited and aproved!</p>
+                                if (currentArtifact?.CheckedOff == false)
+                                {
+                                    <p class="text-warning">Submited, awaiting approval</p>
+                                }
+                                else
+                                {
+                                    <p class="text-success">Submited and aproved!</p>
+                                }
+                                <Button Color="Color.Info" @ref="DisplayDocButnRef" Clicked="DisplayDocButnClicked">Display Document toggle</Button>
+                                if (bDisplayDoc)
+                                {
+                                    <RenderPdf inBytes="currentArtifact.Document" />
+                                }
                             }
-                        }
 
-                    </CardBody>
+                        </CardBody>
                 </Card>
             }
         }
@@ -73,8 +78,8 @@
 
 
     private string UserType = string.Empty;
-
-
+    bool bDisplayDoc = false;
+    Button DisplayDocButnRef;
 
 
     // Blazor event
@@ -124,7 +129,7 @@
                 if (int.TryParse(await response.Content.ReadAsStringAsync(), out returnedId))
                 {
                     artifactChanged.Id = returnedId;
-                    
+
                 }
 
             }
@@ -226,6 +231,13 @@
 
             RequiredArtifactToArtifactMap.Add(requiredArtifact, artifactModelToPair);
         }
+    }
+
+    void DisplayDocButnClicked()
+    {
+        bDisplayDoc = !bDisplayDoc;
+
+        StateHasChanged();
     }
 
     async Task CheckOff(ArtifactModel artifactToCheckOff)

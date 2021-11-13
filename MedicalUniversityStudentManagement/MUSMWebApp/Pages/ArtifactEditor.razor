@@ -1,5 +1,7 @@
 ﻿@inject IConfiguration Configuration
 @inject IHttpClientFactory _clientFactory
+@inject ProtectedSessionStorage sessionStorage
+@inject IConfiguration Configuration
 
 <h3>ArtifactEditor</h3>
 
@@ -70,10 +72,16 @@
 
     async Task Reload()
     {
+
+
         // Update our Artifacts list
         try
         {
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifacts/";
+            Int32 loggedInId = -1;
+            loggedInId = (await sessionStorage.GetAsync<Int32>("LoginId")).Value;
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifactsByStudentId/?studentId=" + +loggedInId;
+
             IEnumerable<ArtifactModel> getArtifactsResponse = await _clientFactory.CreateClient().GetFromJsonAsync<IEnumerable<ArtifactModel>>(endpoint);
             student_artifacts = new List<ArtifactModel>(getArtifactsResponse);
         }

@@ -11,14 +11,23 @@
     @{
         foreach (KeyValuePair<RequiredArtifactModel, ArtifactModel> entry in RequiredArtifactToArtifactMap)
         {
-            currentArtifact = entry.Value;
+            ArtifactModel currentArtifact = new ArtifactModel()
+            {
+                // Make a copy
+                Id = entry.Value.Id,
+                RequiredArtifactId = entry.Value.RequiredArtifactId,
+                StudentId = entry.Value.StudentId,
+                Document = entry.Value.Document,
+                CheckedOff = entry.Value.CheckedOff
+            };
+
             RequiredArtifactModel currentRequiredArtifact = entry.Key;
             if (currentArtifact != null && currentRequiredArtifact != null)
             {
                 <Card>
                     <CardBody>
                         <CardTitle Size="5">@currentRequiredArtifact.Name</CardTitle>
-                        <InputFile OnChange="@LoadFiles" />
+                        <InputFile OnChange="@(ev => LoadFiles(ev, currentArtifact))" />
                         @if (UserType == "Staff")
                         {
                             <Button Color="Color.Success" Clicked="@(e => CheckOff(currentArtifact))">Checkoff</Button>
@@ -62,7 +71,6 @@
     [Parameter]
     public StudentModel myStudent { get; set; } = new StudentModel();
 
-    private ArtifactModel currentArtifact { get; set; }
 
     private string UserType = string.Empty;
 
@@ -85,15 +93,15 @@
     }
 
 
-    async Task LoadFiles(InputFileChangeEventArgs ev)
+    async Task LoadFiles(InputFileChangeEventArgs ev, ArtifactModel artifactChanged)
     {
         const int maxFileSize = 10 * 1000000; // 10MB
         MemoryStream memory = new MemoryStream();
         await ev.File.OpenReadStream(maxFileSize).CopyToAsync(memory);
 
-        currentArtifact.Document = memory.ToArray();
+        artifactChanged.Document = memory.ToArray();
 
-        if (currentArtifact.Id <= 0)
+        if (artifactChanged.Id <= 0)
         {
             // Invalid Id - so create one
 
@@ -103,10 +111,10 @@
             {
                 // The API endpoint to call
                 string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "CreateArtifactAndReturnId";
-                endpoint += '?' + $"id={currentArtifact.Id}" + '&' + $"requiredArtifactId={currentArtifact.RequiredArtifactId}" + '&' + $"studentId={myStudent.Id}" + '&' + $"checkedOff={currentArtifact.CheckedOff.ToString().ToLower()}";
+                endpoint += '?' + $"id={artifactChanged.Id}" + '&' + $"requiredArtifactId={artifactChanged.RequiredArtifactId}" + '&' + $"studentId={myStudent.Id}" + '&' + $"checkedOff={artifactChanged.CheckedOff.ToString().ToLower()}";
 
                 // The HTTP request body we will send
-                StringContent httpContent = new(currentArtifact.Document.ToString());
+                StringContent httpContent = new(artifactChanged.Document.ToString());
 
                 // Call the endpoint
                 HttpResponseMessage response = await _clientFactory.CreateClient().PostAsync(endpoint, httpContent);
@@ -115,7 +123,7 @@
                 int returnedId;
                 if (int.TryParse(await response.Content.ReadAsStringAsync(), out returnedId))
                 {
-                    currentArtifact.Id = returnedId;
+                    artifactChanged.Id = returnedId;
                     
                 }
 
@@ -134,10 +142,10 @@
 
                 // The API endpoint to call
                 string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "UpdateArtifactById";
-                endpoint += '?' + $"id={currentArtifact.Id}" + '&' + $"requiredArtifactId={currentArtifact.RequiredArtifactId}" + '&' + $"studentId={myStudent.Id}" + '&' + $"checkedOff={currentArtifact.CheckedOff.ToString().ToLower()}";
+                endpoint += '?' + $"id={artifactChanged.Id}" + '&' + $"requiredArtifactId={artifactChanged.RequiredArtifactId}" + '&' + $"studentId={myStudent.Id}" + '&' + $"checkedOff={artifactChanged.CheckedOff.ToString().ToLower()}";
 
                 // The HTTP request body we will send
-                StringContent httpContent = new(currentArtifact.Document.ToString());
+                StringContent httpContent = new(artifactChanged.Document.ToString());
 
                 // Call the endpoint
                 HttpResponseMessage response = await _clientFactory.CreateClient().PutAsync(endpoint, httpContent);

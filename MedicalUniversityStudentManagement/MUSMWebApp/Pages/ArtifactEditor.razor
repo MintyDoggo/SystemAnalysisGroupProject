@@ -49,6 +49,7 @@
     public List<RequiredArtifactModel> RequiredArtifacts { get; set; } = new List<RequiredArtifactModel>();
 
     Dictionary<RequiredArtifactModel, ArtifactModel> RequiredArtifactToArtifactMap = new Dictionary<RequiredArtifactModel, ArtifactModel>();
+    [Parameter]
     public StudentModel myStudent { get; set; }
 
 

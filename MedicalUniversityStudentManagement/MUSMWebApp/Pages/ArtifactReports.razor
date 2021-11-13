@@ -1,31 +1,165 @@
 ﻿@page "/artifactreports"
 @inject IHttpClientFactory ClientFactory
+@inject IConfiguration Configuration
+@inject ProtectedSessionStorage sessionStorage
 
 
-<Button Color="Color.Info" Clicked="@OnButtonClickedAsync1">Generate a List of Students</Button>
+<Button Color="Color.Info" Clicked="@OnStudentReportButtonClickedAsync">Generate a List of Students</Button>
 <Button Color="Color.Info" Clicked="@OnButtonClickedAsync2">Submission Status of Required Documents</Button>
-<Button Color="Color.Info" Clicked="@OnButtonClickedAsync3">List of Required Documents</Button>
-<h3>@value</h3>
+<Button Color="Color.Info" Clicked="@OnButtonClickedAsync3">List of Required Student Documents</Button>
+
+<hr />
+@if (reportType == ReportType.Students && studentModels?.Count > 0)
+{
+    <CardBody>
+        <Row>
+            <Column>
+                <h3>Students</h3>
+                <DataGrid TItem="StudentModel"
+                          @ref="studentsDataGrid"
+                          Data="@studentModels"
+                          SortMode="DataGridSortMode.Multiple"
+                          Striped="true"
+                          Bordered="true"
+                          PageSize="999">
+                    <EmptyTemplate>No records...</EmptyTemplate>
+                    <DataGridColumns>
+                        <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Id)" Caption="Id">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.StudentIdNumber)" Caption="StudentIdNumber">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.FirstName)" Caption="FirstName">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.LastName)" Caption="LastName">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Birthday)" Caption="Birthday">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Address)" Caption="Address">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.Major)" Caption="Major">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.FirstYearEnrolled)" Caption="FirstYearEnrolled">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.HighSchoolAttended)" Caption="HighSchoolAttended">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="StudentModel" Field="@nameof(StudentModel.UndergraduateSchoolAttended)" Caption="UndergraduateSchoolAttended">
+                        </DataGridColumn>
+
+                    </DataGridColumns>
+                </DataGrid>
+            </Column>
+        </Row>
+    </CardBody>
+}
+else if (reportType == ReportType.CheckedOff)
+{
+
+}
+else if (reportType == ReportType.RequiredArtifacts && RequiredArtifacts?.Count > 0)
+{
+    <CardBody>
+        <Row>
+            <Column>
+                <h3>Required Student Artifacts</h3>
+                <DataGrid TItem="RequiredArtifactModel"
+                          @ref="requiredArtifactsDatagrid"
+                          Data="@RequiredArtifacts"
+                          SortMode="DataGridSortMode.Multiple"
+                          Striped="true"
+                          Bordered="true"
+                          PageSize="999">
+                    <EmptyTemplate>No records...</EmptyTemplate>
+                    <DataGridColumns>
+                        <DataGridColumn TItem="RequiredArtifactModel" Field="@nameof(RequiredArtifactModel.Name)" Caption="Name" Editable="false">
+                        </DataGridColumn>
+
+                    </DataGridColumns>
+                </DataGrid>
+            </Column>
+        </Row>
+    </CardBody>
+}
+
+
 
 @code
 {
-    private string value = string.Empty;
-
-    async void OnButtonClickedAsync1()
+    public enum ReportType
     {
-        value = "Here is your list of students:\n";
-        // list all students etc..
+        None,
+        Students,
+        CheckedOff,
+        RequiredArtifacts
+    }
+    ReportType reportType = new ReportType();
+
+    DataGrid<StudentModel> studentsDataGrid;
+    List<StudentModel> studentModels = new List<StudentModel>();
+
+
+
+
+
+    DataGrid<RequiredArtifactModel> requiredArtifactsDatagrid;
+    public List<RequiredArtifactModel> RequiredArtifacts { get; set; } = new List<RequiredArtifactModel>();
+
+
+    async void OnStudentReportButtonClickedAsync()
+    {
+        studentModels = new List<StudentModel>();
+        // Update our Students list
+        try
+        {
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetStudents/";
+
+            IEnumerable<StudentModel> getStudentsResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<StudentModel>>(endpoint);
+            studentModels = new List<StudentModel>(getStudentsResponse);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
+
+
+
+
+
+        reportType = ReportType.Students;
+        // always call StateHasChanged!
+        StateHasChanged();
     }
 
     async void OnButtonClickedAsync2()
     {
-        value = "Here is the status of all required documents:\n";
-        // list status of all documents per student etc...
+
     }
 
     async void OnButtonClickedAsync3()
     {
-        value = "Here is a list of all required documents:\n";
-        // list all required documents per student etc..
+        RequiredArtifacts = new List<RequiredArtifactModel>();
+        // Update our RequiredArtifacts list
+        try
+        {
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetRequiredArtifacts/";
+
+            IEnumerable<RequiredArtifactModel> getRequiredArtifactsResponse = await ClientFactory.CreateClient().GetFromJsonAsync<IEnumerable<RequiredArtifactModel>>(endpoint);
+            RequiredArtifacts.Clear();
+            RequiredArtifacts = getRequiredArtifactsResponse.ToList();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
+        reportType = ReportType.RequiredArtifacts;
+        // always call StateHasChanged!
+        StateHasChanged();
     }
 }

@@ -42,6 +42,7 @@
 
     // list of all the artifacts the student has. ***Size = amount of rows in tblRequiredArtifacts***
     List<ArtifactModel> student_artifacts = new List<ArtifactModel>();
+    public List<RequiredArtifactModel> RequiredArtifacts { get; set; } = new List<RequiredArtifactModel>();
 
     public StudentModel myStudent { get; set; }
 
@@ -72,6 +73,25 @@
 
     async Task Reload()
     {
+        // Update Required artifacts
+        RequiredArtifacts = new List<RequiredArtifactModel>();
+        // Update our RequiredArtifacts list
+        try
+        {
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetRequiredArtifacts/";
+
+            IEnumerable<RequiredArtifactModel> getRequiredArtifactsResponse = await _clientFactory.CreateClient().GetFromJsonAsync<IEnumerable<RequiredArtifactModel>>(endpoint);
+            RequiredArtifacts.Clear();
+            RequiredArtifacts = getRequiredArtifactsResponse.ToList();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+
+
+
 
 
         // Update our Artifacts list

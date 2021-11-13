@@ -14,14 +14,14 @@
                     <CardBody>
                         <CardTitle Size="5">@entry.Key.Name</CardTitle>
                         <Check TValue="bool" ReadOnly="IsCheckoffReadonly" @bind-Checked="entry.Value.CheckedOff">Checked off</Check>
-                        @if (entry.Value.Document.Length == 0)
+                        @if (entry.Value?.Document?.Length == 0)
                         {
                             <p class="text-danger">Document needs submiting!</p>
                             <FileEdit Filter=".pdf" Changed="@OnChanged" />
                         }
-                        else if (entry.Value.Document.Length > 0)
+                        else if (entry.Value?.Document?.Length > 0)
                         {
-                            if (entry.Value.CheckedOff == false)
+                            if (entry.Value?.CheckedOff == false)
                             {
                                 <p class="text-warning">Submited, awaiting approval</p>
                             }
@@ -53,18 +53,7 @@
     public StudentModel myStudent { get; set; }
 
 
-
-    async Task OnSubmitButtonClicked()
-    {
-
-
-    }
-
-    async Task OnChanged(FileChangedEventArgs e)
-    {
-
-    }
-
+    private string UserType = string.Empty;
 
 
 
@@ -72,6 +61,15 @@
     // Blazor event
     protected override async Task OnInitializedAsync()
     {
+        UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? string.Empty;
+        StateHasChanged();
+
+        if (UserType == "Student")
+        {
+            myStudent.Id = (await sessionStorage.GetAsync<Int32>("LoginId")).Value;
+        }
+
+
         await Reload();
     }
 
@@ -103,10 +101,8 @@
         // Update our Artifacts list
         try
         {
-            Int32 loggedInId = -1;
-            loggedInId = (await sessionStorage.GetAsync<Int32>("LoginId")).Value;
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifactsByStudentId/?studentId=" + loggedInId;
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifactsByStudentId/?studentId=" + myStudent.Id;
 
             IEnumerable<ArtifactModel> getArtifactsResponse = await _clientFactory.CreateClient().GetFromJsonAsync<IEnumerable<ArtifactModel>>(endpoint);
             student_artifacts = new List<ArtifactModel>(getArtifactsResponse);
@@ -143,5 +139,23 @@
     void OnSelectedRowChanged()
     {
         StateHasChanged();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    async Task OnChanged(FileChangedEventArgs e)
+    {
+        
     }
 }

@@ -18,7 +18,7 @@
                         <InputFile OnChange="@LoadFiles" />
                         @if (UserType == "Staff")
                         {
-                            <Button Clicked="@(=> _clientFactory.CreateClient().PutAsync(Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + $"UpdateArtifactById/?id={entry.Value?.Id.ToString()}&requiredArtifactId={entry.Value?.RequiredArtifactId.ToString()}&studentId={entry.Value?.StudentId.ToString()}&checkedOff={true.ToString()}", new HttpContent()))">Checkoff</Button>
+                            //<Button Clicked="@(=> _clientFactory.CreateClient().PutAsync(Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + $"UpdateArtifactById/?id={entry.Value?.Id.ToString()}&requiredArtifactId={entry.Value?.RequiredArtifactId.ToString()}&studentId={entry.Value?.StudentId.ToString()}&checkedOff={true.ToString()}", new HttpContent()))">Checkoff</Button>
                         }
                         @if (entry.Value?.Document?.Length == 0)
                         {

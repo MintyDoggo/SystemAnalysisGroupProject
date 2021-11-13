@@ -1,0 +1,119 @@
+﻿@page "/staffinfo"
+@using System.Text.Json
+@inject IHttpClientFactory ClientFactory
+@inject IConfiguration Configuration
+@inject ProtectedSessionStorage sessionStorage
+
+<Card>
+    @{
+        if (isEditable)
+        {
+        <CardTitle Size="5">Edit Staff Info here:</CardTitle>
+            <CardBody>
+                FirstName: <TextEdit @ref="FirstNameTextEdit" Placeholder="@myStaff?.FirstName" />
+                LastName: <TextEdit @ref="LastNameTextEdit" Placeholder="@myStaff?.LastName" />
+            </CardBody>
+            <Button Clicked="@OnCancelButtonClicked">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@OnSubmitButtonClicked">Submit</Button>
+        }
+        else
+        {
+            <Button Color="Color.Warning" Clicked="@OnEditableButtonClicked">Edit</Button>
+            <CardBody>
+                <CardTitle Size="5">Staff Info</CardTitle>
+                FirstName: @myStaff?.FirstName
+                <br />
+                LastName: @myStaff?.LastName
+                <br />
+            </CardBody>
+        }
+    }
+</Card>
+
+@code
+{
+    TextEdit FirstNameTextEdit, LastNameTextEdit;
+    public StaffModel myStaff { get; set; }
+    private string UserType = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? string.Empty;
+            StateHasChanged();
+        }
+    }
+
+    // Blazor event
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetStaffByLoginId";
+            endpoint += '?' + $"loginId={(await sessionStorage.GetAsync<int>("LoginId")).Value}";
+
+            // Call the endpoint
+            HttpResponseMessage response = await ClientFactory.CreateClient().GetAsync(endpoint);
+
+            // Set our Staff
+            myStaff = await response.Content.ReadFromJsonAsync<StaffModel>();
+
+            // Log the response
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+    }
+
+
+    bool isEditable = false;
+
+    void OnEditableButtonClicked()
+    {
+        isEditable = true;
+    }
+
+    void OnCancelButtonClicked()
+    {
+        isEditable = false;
+    }
+
+    async Task OnSubmitButtonClicked()
+    {
+
+        string firstName = FirstNameTextEdit?.Text;
+        if (string.IsNullOrEmpty(firstName) == false)
+        {
+            myStaff.FirstName = firstName;
+        }
+        string lastName = LastNameTextEdit?.Text;
+        if (string.IsNullOrEmpty(lastName) == false)
+        {
+            myStaff.LastName = lastName;
+        }
+
+        // Update this Staff in the database
+        try
+        {
+            // The API endpoint to call
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "UpdateStaffById/";
+
+            // The HTTP request body we will send
+            string jsonRequiredArtifact = JsonSerializer.Serialize<StaffModel>(myStaff);
+            StringContent httpContent = new(jsonRequiredArtifact);
+
+            // Call the endpoint
+            HttpResponseMessage response = await ClientFactory.CreateClient().PutAsync(endpoint, httpContent);
+            isEditable = false;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Database services must be offline");
+        }
+    }
+}

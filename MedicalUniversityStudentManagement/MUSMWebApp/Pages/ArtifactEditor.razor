@@ -106,6 +106,7 @@
 
         artifactChanged.Document = memory.ToArray();
 
+
         if (artifactChanged.Id <= 0)
         {
             // Invalid Id - so create one
@@ -119,7 +120,7 @@
                 endpoint += '?' + $"id={artifactChanged.Id}" + '&' + $"requiredArtifactId={artifactChanged.RequiredArtifactId}" + '&' + $"studentId={myStudent.Id}" + '&' + $"checkedOff={artifactChanged.CheckedOff.ToString().ToLower()}";
 
                 // The HTTP request body we will send
-                StringContent httpContent = new(System.Text.Encoding.Default.GetString(artifactChanged.Document));
+                ByteArrayContent httpContent = new(artifactChanged.Document);
 
                 // Call the endpoint
                 HttpResponseMessage response = await _clientFactory.CreateClient().PostAsync(endpoint, httpContent);
@@ -150,7 +151,7 @@
                 endpoint += '?' + $"id={artifactChanged.Id}" + '&' + $"requiredArtifactId={artifactChanged.RequiredArtifactId}" + '&' + $"studentId={myStudent.Id}" + '&' + $"checkedOff={artifactChanged.CheckedOff.ToString().ToLower()}";
 
                 // The HTTP request body we will send
-                StringContent httpContent = new(System.Text.Encoding.Default.GetString(artifactChanged.Document));
+                ByteArrayContent httpContent = new(artifactChanged.Document);
 
                 // Call the endpoint
                 HttpResponseMessage response = await _clientFactory.CreateClient().PutAsync(endpoint, httpContent);
@@ -249,17 +250,17 @@
 
 
 
-        StringContent stringContentToUse;
+        ByteArrayContent byteContentToUse;
 
         if (artifactToCheckOff.Document == null)
         {
-            stringContentToUse = new StringContent("");
+            byteContentToUse = new ByteArrayContent(new byte[0]); // empty bytearray
         }
         else
         {
-            stringContentToUse = new StringContent(artifactToCheckOff.Document.ToString());
+            byteContentToUse = new(artifactToCheckOff.Document);
         }
-        await _clientFactory.CreateClient().PutAsync(Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + $"UpdateArtifactById/?id={artifactToCheckOff.Id.ToString()}&requiredArtifactId={artifactToCheckOff.RequiredArtifactId.ToString()}&studentId={artifactToCheckOff.StudentId.ToString()}&checkedOff=true", stringContentToUse);
+        await _clientFactory.CreateClient().PutAsync(Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + $"UpdateArtifactById/?id={artifactToCheckOff.Id.ToString()}&requiredArtifactId={artifactToCheckOff.RequiredArtifactId.ToString()}&studentId={artifactToCheckOff.StudentId.ToString()}&checkedOff=true", byteContentToUse);
     }
 
     void OnSelectedRowChanged()

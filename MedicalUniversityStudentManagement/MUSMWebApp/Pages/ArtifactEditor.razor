@@ -16,31 +16,36 @@
             if (currentArtifact != null && currentRequiredArtifact != null)
             {
                 <Card>
-                    <CardBody>
-                        <CardTitle Size="5">@currentRequiredArtifact.Name</CardTitle>
-                        <InputFile OnChange="@LoadFiles" />
-                        @if (UserType == "Staff")
-                        {
-                            <Button Color="Color.Success" Clicked="@(e => CheckOff(currentArtifact))">Checkoff</Button>
-                        }
-
-                        @if (currentArtifact?.Document == null)
-                        {
-                            <p class="text-danger">Document needs submiting!</p>
-                        }
-                        else
-                        {
-                            if (currentArtifact?.CheckedOff == false)
+                        <CardBody>
+                            <CardTitle Size="5">@currentRequiredArtifact.Name</CardTitle>
+                            <InputFile OnChange="@LoadFiles" />
+                            @if (UserType == "Staff")
                             {
-                                <p class="text-warning">Submited, awaiting approval</p>
+                                <Button Color="Color.Success" Clicked="@(e => CheckOff(currentArtifact))">Checkoff</Button>
+                            }
+
+                            @if (currentArtifact?.Document == null)
+                            {
+                                <p class="text-danger">Document needs submiting!</p>
                             }
                             else
                             {
-                                <p class="text-success">Submited and aproved!</p>
+                                if (currentArtifact?.CheckedOff == false)
+                                {
+                                    <p class="text-warning">Submited, awaiting approval</p>
+                                }
+                                else
+                                {
+                                    <p class="text-success">Submited and aproved!</p>
+                                }
+                                <Button Color="Color.Info" @ref="DisplayDocButnRef" Clicked="DisplayDocButnClicked">Display Document toggle</Button>
+                                if (bDisplayDoc)
+                                {
+                                    <RenderPdf inBytes="currentArtifact.Document" />
+                                }
                             }
-                        }
 
-                    </CardBody>
+                        </CardBody>
                 </Card>
             }
         }
@@ -65,8 +70,8 @@
     private ArtifactModel currentArtifact { get; set; }
 
     private string UserType = string.Empty;
-
-
+    bool bDisplayDoc = false;
+    Button DisplayDocButnRef;
 
 
     // Blazor event
@@ -116,7 +121,7 @@
                 if (int.TryParse(await response.Content.ReadAsStringAsync(), out returnedId))
                 {
                     currentArtifact.Id = returnedId;
-                    
+
                 }
 
             }
@@ -218,6 +223,13 @@
 
             RequiredArtifactToArtifactMap.Add(requiredArtifact, artifactModelToPair);
         }
+    }
+
+    void DisplayDocButnClicked()
+    {
+        bDisplayDoc = !bDisplayDoc;
+
+        StateHasChanged();
     }
 
     async Task CheckOff(ArtifactModel artifactToCheckOff)

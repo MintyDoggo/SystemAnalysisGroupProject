@@ -50,7 +50,7 @@
 
     Dictionary<RequiredArtifactModel, ArtifactModel> RequiredArtifactToArtifactMap = new Dictionary<RequiredArtifactModel, ArtifactModel>();
     [Parameter]
-    public StudentModel myStudent { get; set; }
+    public StudentModel myStudent { get; set; } = new StudentModel();
 
 
     private string UserType = string.Empty;
@@ -156,6 +156,6 @@
 
     async Task OnChanged(FileChangedEventArgs e)
     {
-        
+
     }
 }

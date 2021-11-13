@@ -88,11 +88,10 @@ namespace MUSMDataLibrary.BuisinessLogic
 
             // Create the Data Table representation of the user defined Staff table
             DataTable staffTable = new DataTable("@inStaff");
-            staffTable.Columns.Add("StaffId", typeof(int));
             staffTable.Columns.Add("FirstName", typeof(string));
             staffTable.Columns.Add("LastName", typeof(string));
             // Fill in the data
-            staffTable.Rows.Add(staff.Id, staff.FirstName, staff.LastName);
+            staffTable.Rows.Add(staff.FirstName, staff.LastName);
 
             // Make parameters to pass to the stored procedure
             DynamicParameters parameters = new DynamicParameters();

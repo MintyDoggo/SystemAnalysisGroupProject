@@ -33,7 +33,7 @@
 @code
 {
     TextEdit FirstNameTextEdit, LastNameTextEdit;
-    public StaffModel myStaff { get; set; }
+    public StaffModel myStaff { get; set; } = new StaffModel();
     private string UserType = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -68,6 +68,8 @@
         {
             Console.WriteLine("Database services must be offline");
         }
+
+        StateHasChanged();
     }
 
 

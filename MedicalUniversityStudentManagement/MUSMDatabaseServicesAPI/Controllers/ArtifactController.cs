@@ -93,12 +93,23 @@ Example query parameters:
 
             // artifact.Document
             {
-                MemoryStream bodyStream = (MemoryStream)(req.Body);
-                if (bodyStream is not null)
+                try
                 {
-                    artifact.Document = bodyStream.ToArray();
+                    MemoryStream bodyStream = (MemoryStream)(req.Body);
+                    if (bodyStream is not null)
+                    {
+                        artifact.Document = bodyStream.ToArray();
+                    }
+                    else
+                    {
+                        using (MemoryStream memoryStream = new())
+                        {
+                            await req.Body.CopyToAsync(memoryStream);
+                            artifact.Document = memoryStream.ToArray();
+                        }
+                    }
                 }
-                else
+                catch (Exception)
                 {
                     using (MemoryStream memoryStream = new())
                     {
@@ -106,6 +117,7 @@ Example query parameters:
                         artifact.Document = memoryStream.ToArray();
                     }
                 }
+
             }
 
             artifact.CheckedOff = checkedOff;

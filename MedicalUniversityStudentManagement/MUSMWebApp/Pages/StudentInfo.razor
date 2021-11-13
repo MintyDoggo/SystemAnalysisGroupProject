@@ -82,7 +82,7 @@
         try
         {
             int idToQuery;
-            if(myStudent == null)
+            if (myStudent == null)
             {
                 idToQuery = (await sessionStorage.GetAsync<int>("LoginId")).Value;
             }
@@ -125,17 +125,56 @@
 
     async Task OnSubmitButtonClicked()
     {
-        myStudent.StudentIdNumber = int.Parse(StudentIdNumberTextEdit?.Text);
-        myStudent.FirstName = FirstNameTextEdit?.Text;
-        myStudent.LastName = LastNameTextEdit?.Text;
-        myStudent.Birthday = new DateTime(int.Parse(BirthdayYearTextEdit?.Text), int.Parse(BirthdayMonthTextEdit?.Text), int.Parse(BirthdayDayTextEdit?.Text));
-        myStudent.Address = AddressTextEdit?.Text;
-        myStudent.Major = MajorTextEdit?.Text;
-        myStudent.FirstYearEnrolled = int.Parse(FirstYearEnrolledTextEdit?.Text);
-        myStudent.HighSchoolAttended = HighSchoolAttendedTextEdit?.Text;
-        myStudent.UndergraduateSchoolAttended = UndergraduateSchoolAttendedTextEdit?.Text;
+        int studentIdNumber;
+        if (int.TryParse(StudentIdNumberTextEdit?.Text, out studentIdNumber))
+        {
+            myStudent.StudentIdNumber = studentIdNumber;
+        }
+        string firstName = FirstNameTextEdit?.Text;
+        if (string.IsNullOrEmpty(firstName) == false)
+        {
+            myStudent.FirstName = firstName;
+        }
+        string lastName = LastNameTextEdit?.Text;
+        if (string.IsNullOrEmpty(lastName) == false)
+        {
+            myStudent.LastName = lastName;
+        }
+        int birthdayYear;
+        int birthdayMonth;
+        int birthdayDay;
+        if (int.TryParse(BirthdayYearTextEdit?.Text, out birthdayYear) && int.TryParse(BirthdayMonthTextEdit?.Text, out birthdayMonth) && int.TryParse(BirthdayDayTextEdit?.Text, out birthdayDay))
+        {
+            myStudent.Birthday = new DateTime(birthdayYear, birthdayMonth, birthdayDay);
+        }
+        string address = AddressTextEdit?.Text;
+        if (string.IsNullOrEmpty(address) == false)
+        {
+            myStudent.Address = address;
+        }
+        string major = MajorTextEdit?.Text;
+        if (string.IsNullOrEmpty(major) == false)
+        {
+            myStudent.Major = major;
+        }
+        int firstYearEnrolled;
+        if (int.TryParse(FirstYearEnrolledTextEdit?.Text, out firstYearEnrolled))
+        {
+            myStudent.FirstYearEnrolled = firstYearEnrolled;
+        }
+        string highSchoolAttended = HighSchoolAttendedTextEdit?.Text;
+        if (string.IsNullOrEmpty(highSchoolAttended) == false)
+        {
+            myStudent.HighSchoolAttended = highSchoolAttended;
+        }
+        string undergraduateSchoolAttended = UndergraduateSchoolAttendedTextEdit?.Text;
+        if (string.IsNullOrEmpty(undergraduateSchoolAttended) == false)
+        {
+            myStudent.UndergraduateSchoolAttended = undergraduateSchoolAttended;
+        }
 
-        // Update this Student
+
+        // Update this Student in the database
         try
         {
             // The API endpoint to call

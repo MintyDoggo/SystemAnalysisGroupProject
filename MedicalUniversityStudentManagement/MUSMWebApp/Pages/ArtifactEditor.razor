@@ -82,8 +82,7 @@
     Button DisplayDocButnRef;
 
 
-    // Blazor event
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? string.Empty;
         StateHasChanged();

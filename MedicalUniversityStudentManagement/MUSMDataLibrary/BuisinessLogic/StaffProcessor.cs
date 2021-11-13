@@ -75,5 +75,39 @@ namespace MUSMDataLibrary.BuisinessLogic
 
         }
 
+
+
+
+
+
+        public static async Task UpdateStaffByIdAsync(string connectionString, int id, StaffModel staff)
+        {
+            // Name of our stored procedure to execute
+            string procedureName = "spStaff_UpdateById";
+
+
+            // Create the Data Table representation of the user defined Staff table
+            DataTable staffTable = new DataTable("@inStaff");
+            staffTable.Columns.Add("StaffId", typeof(int));
+            staffTable.Columns.Add("FirstName", typeof(string));
+            staffTable.Columns.Add("LastName", typeof(string));
+            // Fill in the data
+            staffTable.Rows.Add(staff.Id, staff.FirstName, staff.LastName);
+
+            // Make parameters to pass to the stored procedure
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@inId", id, DbType.Int32);
+            parameters.Add("@inStaff", staffTable.AsTableValuedParameter("udtStaff"), DbType.Object);
+
+
+            // Execute our stored procedure with the parameters we made
+            await SqlDataAccess.ModifyDataAsync(connectionString, procedureName, parameters);
+        }
+
+
+
+
+
+
     }
 }

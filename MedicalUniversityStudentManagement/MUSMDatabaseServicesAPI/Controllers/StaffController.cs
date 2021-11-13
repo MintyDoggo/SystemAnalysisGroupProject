@@ -158,5 +158,63 @@ Example query parameters:
             return response;
         }
 
+
+
+
+
+
+
+
+        [Function("UpdateStaffById")]
+        public static async Task<HttpResponseData> UpdateStaffById([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req, FunctionContext executionContext)
+        {
+            ILogger logger = executionContext.GetLogger("StaffController");
+
+            // Get the body of the request
+            string requestBody = await req.ReadAsStringAsync();
+
+            // Get the Id and StaffModel from the request body
+            int id = -1;
+            StaffModel staff;
+            try
+            {
+                staff = JsonSerializer.Deserialize<StaffModel>(requestBody);
+                if (staff is null)
+                {
+                    throw new JsonException();
+                }
+
+                id = staff.Id;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                return badRequestResponse;
+            }
+
+            // Call on the data processor
+            try
+            {
+                string connectionString = Environment.GetEnvironmentVariable("SQLConnectionString");
+                await StaffProcessor.UpdateStaffByIdAsync(connectionString, id, staff);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                var conflictResponse = req.CreateResponse(HttpStatusCode.Conflict);
+                await conflictResponse.WriteStringAsync("Conflict when inserting into the database");
+                return conflictResponse;
+            }
+
+
+            // Successfully updated the Staff in the database
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            return response;
+        }
+
+
     }
 }

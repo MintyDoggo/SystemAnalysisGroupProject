@@ -13,25 +13,25 @@
         {
             currentArtifact = entry.Value;
             <Card>
-                <CardBody>
-                    <CardTitle Size="5">@entry.Key.Name</CardTitle>
-                    <Check TValue="bool" ReadOnly="IsCheckoffReadonly" @bind-Checked="entry.Value.CheckedOff">Checked off</Check>
-                    <InputFile OnChange="@LoadFiles" />
-                    @if (entry.Value.Document?.Length == 0)
-                    {
-                        <p class="text-danger">Document needs submiting!</p>
-                    }
-                    else if (entry.Value.Document?.Length > 0)
-                    {
-                        if (entry.Value.CheckedOff == false)
+                    <CardBody>
+                        <CardTitle Size="5">@entry.Key.Name</CardTitle>
+                        <Check TValue="bool" ReadOnly="IsCheckoffReadonly" @bind-Checked="entry.Value.CheckedOff">Checked off</Check>
+                        <InputFile OnChange="@LoadFiles" />
+                        @if (entry.Value?.Document?.Length == 0)
                         {
-                            <p class="text-warning">Submited, awaiting approval</p>
+                            <p class="text-danger">Document needs submiting!</p>
                         }
-                        else
+                        else if (entry.Value?.Document?.Length > 0)
                         {
-                            <p class="text-success">Submited and aproved!</p>
+                            if (entry.Value?.CheckedOff == false)
+                            {
+                                <p class="text-warning">Submited, awaiting approval</p>
+                            }
+                            else
+                            {
+                                <p class="text-success">Submited and aproved!</p>
+                            }
                         }
-                    }
 
                 </CardBody>
             </Card>
@@ -51,14 +51,41 @@
     public List<RequiredArtifactModel> RequiredArtifacts { get; set; } = new List<RequiredArtifactModel>();
 
     Dictionary<RequiredArtifactModel, ArtifactModel> RequiredArtifactToArtifactMap = new Dictionary<RequiredArtifactModel, ArtifactModel>();
-    public StudentModel myStudent { get; set; }
+    [Parameter]
+    public StudentModel myStudent { get; set; } = new StudentModel();
 
     private ArtifactModel currentArtifact { get; set; }
 
+    private string UserType = string.Empty;
 
-    async Task OnSubmitButtonClicked()
+
+
+
+    // Blazor event
+    protected override async Task OnInitializedAsync()
+    {    
+        UserType = (await sessionStorage.GetAsync<string>("UserType")).Value ?? string.Empty;
+        StateHasChanged();
+
+        if (UserType == "Student")
+        {
+            myStudent.Id = (await sessionStorage.GetAsync<Int32>("LoginId")).Value;
+        }
+
+
+        await Reload();
+    }
+
+
+    async Task LoadFiles(InputFileChangeEventArgs e)
     {
+        const int maxFileSize = 10 * 1000000; // 10MB
+        MemoryStream memory = new MemoryStream();
+        await e.File.OpenReadStream(maxFileSize).CopyToAsync(memory);
 
+        currentArtifact.Document = memory.ToArray();
+
+        
         //// Update this Artifact in the database
         //try
         //{
@@ -78,25 +105,6 @@
         //}
     }
 
-    async Task LoadFiles(InputFileChangeEventArgs e)
-    {
-        const int maxFileSize = 10 * 1000000; // 10MB
-        MemoryStream memory = new MemoryStream();
-        await e.File.OpenReadStream(maxFileSize).CopyToAsync(memory);
-
-        currentArtifact.Document = memory.ToArray();
-
-    }
-
-
-
-
-
-    // Blazor event
-    protected override async Task OnInitializedAsync()
-    {
-        await Reload();
-    }
 
 
 
@@ -126,10 +134,8 @@
         // Update our Artifacts list
         try
         {
-            Int32 loggedInId = -1;
-            loggedInId = (await sessionStorage.GetAsync<Int32>("LoginId")).Value;
             // The API endpoint to call
-            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifactsByStudentId/?studentId=" + loggedInId;
+            string endpoint = Configuration.GetValue<string>("MUSMDatabaseServicesAPI") + "GetArtifactsByStudentId/?studentId=" + myStudent.Id;
 
             IEnumerable<ArtifactModel> getArtifactsResponse = await _clientFactory.CreateClient().GetFromJsonAsync<IEnumerable<ArtifactModel>>(endpoint);
             student_artifacts = new List<ArtifactModel>(getArtifactsResponse);

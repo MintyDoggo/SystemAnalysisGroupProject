@@ -5,7 +5,6 @@
 
 
 <Button Color="Color.Info" Clicked="@OnStudentReportButtonClickedAsync">Generate a List of Students</Button>
-<Button Color="Color.Info" Clicked="@OnButtonClickedAsync2">Submission Status of Required Documents</Button>
 <Button Color="Color.Info" Clicked="@OnButtonClickedAsync3">List of Required Student Documents</Button>
 
 <hr />
@@ -50,10 +49,6 @@
             </Column>
         </Row>
     </CardBody>
-}
-else if (reportType == ReportType.CheckedOff)
-{
-
 }
 else if (reportType == ReportType.RequiredArtifacts && RequiredArtifacts?.Count > 0)
 {
@@ -131,11 +126,6 @@ else if (reportType == ReportType.RequiredArtifacts && RequiredArtifacts?.Count 
         reportType = ReportType.Students;
         // always call StateHasChanged!
         StateHasChanged();
-    }
-
-    async void OnButtonClickedAsync2()
-    {
-
     }
 
     async void OnButtonClickedAsync3()

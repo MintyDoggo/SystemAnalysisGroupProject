@@ -18,7 +18,7 @@ namespace MUSMDatabaseServicesAPI
          * 
 Example request body:
 
-{
+{update
     "Username": "PaulMorton27",
     "Password": "ihaveasecurepassword",
     "UserType": 2
